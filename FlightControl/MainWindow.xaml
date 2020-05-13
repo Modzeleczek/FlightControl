@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="512" Width="512"
+        Title="Flight Control" Height="512" Width="512"
         Background="Black">
     <Grid>
         <Image x:Name="image" Width="400" Height="400"

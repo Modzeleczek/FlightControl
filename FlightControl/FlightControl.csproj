@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Pixel.cs" />

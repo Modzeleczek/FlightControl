@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlightControl.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -18,21 +19,21 @@ namespace FlightControl
                 using (StreamReader reader = new StreamReader(fileName))
                 {
                     if (reader.EndOfStream)
-                        throw new Exception("File is empty.");
+                        throw new MapLoadingException("Input file empty.");
                     string line = reader.ReadLine();
                     if (!line.StartsWith("#"))
-                        throw new Exception("File not beginning with #.");
+                        throw new MapLoadingException("Input file not beginning with #.");
                     do
                     {
                         if (reader.EndOfStream)
-                            throw new Exception("No height after #.");
+                            throw new MapLoadingException("No height after #.");
                         line = reader.ReadLine();
                         int h = int.Parse(line);
                         List<Point> obstaclePoints = new List<Point>();
                         while (true)
                         {
                             if (reader.EndOfStream)
-                                throw new Exception("File not ending with #.");
+                                throw new MapLoadingException("Input file not ending with #.");
                             line = reader.ReadLine();
                             if (!line.StartsWith("#"))
                             {
@@ -44,7 +45,7 @@ namespace FlightControl
                                     obstaclePoints.Add(new Point(x, y));
                                 }
                                 else
-                                    throw new Exception("Missing coordinates.");
+                                    throw new MapLoadingException("Missing coordinates.");
                             }
                             else
                                 break;
