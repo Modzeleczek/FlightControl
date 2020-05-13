@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace FlightControl
 {
-    class Plane
+    class Plane : Aircraft
     {
+        public Plane(double initialX, double initialY, double initialAltitude)
+            : base(initialX, initialY, initialAltitude)
+        {
+
+        }
     }
 }

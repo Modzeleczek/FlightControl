@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,11 @@ namespace FlightControl
         public MainWindow()
         {
             InitializeComponent();
+
+            textBlock.Text = "";
+
+            Map map = new Map("obstacles.txt");
+            textBlock.Text = map.ToString();
         }
     }
 }

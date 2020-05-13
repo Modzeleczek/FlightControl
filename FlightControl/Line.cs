@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace FlightControl
 {
-    class Helicopter : Aircraft
+    class Line
     {
-        public Helicopter(double initialX, double initialY, double initialAltitude)
-            : base(initialX, initialY, initialAltitude)
+        public Point A, B;
+        public Line(double x1, double y1, double x2, double y2)
         {
-
+            A = new Point(x1, y1);
+            B = new Point(x2, y2);
         }
     }
 }

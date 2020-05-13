@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TextBlock x:Name="textBlock" Width="700" Height="390"
+                Margin="10,20,0,0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                   TextWrapping="Wrap"></TextBlock>
     </Grid>
 </Window>

@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlightControl.Classes
+namespace FlightControl
 {
-    class Glider
+    class Glider : Aircraft
     {
+        public Glider(double initialX, double initialY, double initialAltitude)
+            : base(initialX, initialY, initialAltitude)
+        {
+
+        }
     }
 }
