@@ -4,10 +4,10 @@ using System.IO;
 
 namespace FlightControl
 {
-    class Map
+    class Map// : IDisposable
     {
-        const int Width = 512, Height = 512;
-        List<Obstacle> Obstacles;
+        public readonly int Width = 512, Height = 512;
+        private List<Obstacle> Obstacles;
         //Pixel[] Pixels;
         public Map(string fileName)
         {
@@ -37,9 +37,14 @@ namespace FlightControl
                             if (!line.StartsWith("#"))
                             {
                                 string[] parts = line.Split(';');
-                                int x = int.Parse(parts[0]);
-                                int y = int.Parse(parts[1]);
-                                obstaclePoints.Add(new Point(x, y));
+                                if (parts.Length == 2)
+                                {
+                                    int x = int.Parse(parts[0]);
+                                    int y = int.Parse(parts[1]);
+                                    obstaclePoints.Add(new Point(x, y));
+                                }
+                                else
+                                    throw new Exception("Missing coordinates.");
                             }
                             else
                                 break;
@@ -52,6 +57,20 @@ namespace FlightControl
             else
                 throw new Exception($"Cannot open file {fileName}.");
         }
+
+        public Obstacle this[int index]
+        {
+            get
+            {
+                return Obstacles[index];
+            }
+        }
+
+        public int GetNoObstacles()
+        {
+            return Obstacles.Count;
+        }
+
         public override string ToString()
         {
             string result = $"(Map: {Width}x{Height}; ";
@@ -61,5 +80,10 @@ namespace FlightControl
             }
             return result + ")";
         }
+
+        /*public void Dispose()
+        {
+
+        }*/
     }
 }
