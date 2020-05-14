@@ -25,6 +25,11 @@ namespace FlightControl
 
         //public static Line[] LineArrayFromPoints(Point[] points) { }
 
+        public override string ToString()
+        {
+            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
+        }
+
         //https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {

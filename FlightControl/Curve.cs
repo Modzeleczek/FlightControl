@@ -41,7 +41,7 @@ namespace FlightControl
                 throw new NotEnoughElementsException("Points array length is less than 2.");
 
             Lines = new List<Line>(points.Length - 1);
-            Lines.Add(new Line(points[0].X, points[1].Y, points[1].X, points[1].Y));
+            Lines.Add(new Line(points[0].X, points[0].Y, points[1].X, points[1].Y));
             for (int i = 1; i < points.Length - 1; ++i)
             {
                 Line line = new Line(points[i].X, points[i].Y, points[i + 1].X, points[i + 1].Y);
