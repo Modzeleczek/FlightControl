@@ -5,15 +5,13 @@ namespace FlightControl
     class Obstacle
     {
         public double Height { get; private set; }
-        public Point[] Vertices { get; private set; }
-        public Obstacle(double height, List<Point> vertices)
+        public Line[] Walls { get; private set; }
+        public Obstacle(double height, Line[] walls)
         {
             Height = height;
-            Vertices = new Point[vertices.Count];
-            for(int i = 0; i < Vertices.Length; ++i)
-            {
-                Vertices[i] = new Point(vertices[i]);
-            }
+            Walls = new Line[walls.Length];
+            for(int i = 0; i < Walls.Length; ++i)
+                Walls[i] = new Line(walls[i]);
         }
         public bool Collides(Aircraft aircraft)
         {
@@ -22,10 +20,8 @@ namespace FlightControl
         public override string ToString()
         {
             string result = $"(Obstacle: {Height}; ";
-            foreach (var v in Vertices)
-            {
-                result += $"{v.X},{v.Y}; ";
-            }
+            foreach (var w in Walls)
+                result += $"({w.Start.X},{w.Start.Y})->({w.End.X},{w.End.Y}); ";
             return result + ")";
         }
     }

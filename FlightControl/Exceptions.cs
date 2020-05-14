@@ -4,7 +4,6 @@ namespace FlightControl
 {
     namespace Exceptions
     {
-        //[Serializable]
         class MapLoadingException : Exception
         {
             public MapLoadingException() { }

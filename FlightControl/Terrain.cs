@@ -27,12 +27,20 @@ namespace FlightControl
         private void Generate()
         {
             FastNoise fastNoise = new FastNoise();
+            fastNoise.SetCellularDistanceFunction(FastNoise.CellularDistanceFunction.Euclidean);
+            fastNoise.SetCellularReturnType(FastNoise.CellularReturnType.Distance2Sub);
+            fastNoise.SetFrequency(0.01);
+            fastNoise.SetInterp(FastNoise.Interp.Quintic);
+
+            fastNoise.SetFractalOctaves(5);
+            fastNoise.SetFractalLacunarity(2.0);
+            fastNoise.SetFractalGain(0.5);
             int i = 0;
             for (int y = 0; y < Height; ++y)
             {
                 for (int x = 0; x < Width; ++x)
                 {
-                    Heights[i++] = 300 + (int)(300 * fastNoise.GetCubicFractal(x, y));
+                    Heights[i++] = 20 + (int)(128 * fastNoise.GetSimplexFractal(x, y));
                 }
             }
         }

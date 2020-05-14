@@ -1,4 +1,5 @@
 ﻿using FlightControl.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -26,7 +27,7 @@ namespace FlightControl
                         throw new MapLoadingException("No height after #.");
                     line = reader.ReadLine();
                     int h = int.Parse(line);
-                    List<Point> obstaclePoints = new List<Point>();
+                    List<Point> obstacleVertices = new List<Point>();
                     while (true)
                     {
                         if (reader.EndOfStream)
@@ -39,7 +40,7 @@ namespace FlightControl
                             {
                                 int x = int.Parse(parts[0]);
                                 int y = int.Parse(parts[1]);
-                                obstaclePoints.Add(new Point(x, y));
+                                obstacleVertices.Add(new Point(x, y));
                             }
                             else
                                 throw new MapLoadingException("Missing coordinates.");
@@ -47,8 +48,9 @@ namespace FlightControl
                         else
                             break;
                     }
-                    Obstacles.Add(new Obstacle(h, obstaclePoints));
-                    obstaclePoints.Clear();
+                    Line[] obstacleWalls = Line.CurveFromPoints(obstacleVertices.ToArray());
+                    Obstacles.Add(new Obstacle(h, obstacleWalls));
+                    obstacleVertices.Clear();
                 } while (!reader.EndOfStream);
             }
         }
