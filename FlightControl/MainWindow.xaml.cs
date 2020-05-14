@@ -23,7 +23,7 @@ namespace FlightControl
         Map map;
         public MainWindow()
         {
-            InitializeComponent();
+            /*InitializeComponent();
 
             int w = 500, h = 480;
             writeableBitmap = new WriteableBitmap(w, h, 96, 96, PixelFormats.Bgra32, null);
@@ -53,7 +53,7 @@ namespace FlightControl
             {
                 for (int x = 0; x < 5; ++x)
                     Debug.WriteLine(100*fan.GetPerlin(x, y));
-            }*/
+            }
 
 
             map = new Map("obstacles.txt");
@@ -66,7 +66,41 @@ namespace FlightControl
 
             writeableBitmap.AddDirtyRect(new Int32Rect(0, 0,
                 writeableBitmap.PixelWidth, writeableBitmap.PixelHeight));
-            writeableBitmap.Unlock();
+            writeableBitmap.Unlock();*/
+        }
+
+        private void StartSimulation(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ChangeAmount(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Random(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void RandomRoutes(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Egg(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Gratulację odkryłeś EasterEgg'a");
+        }
+
+        private void RandomVelocity(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void CloseProgram(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

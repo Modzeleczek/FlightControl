@@ -5,18 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightControl"
         mc:Ignorable="d"
-        Title="Flight Control" Height="606.5" Width="1053.5"
+        Title="Flight Control" Height="720" Width="1280"
         Background="Black">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="0*"/>
-      <ColumnDefinition Width="0*"/>
-      <ColumnDefinition Width="193*"/>
-      <ColumnDefinition Width="854*"/>
-    </Grid.ColumnDefinitions>
-    <Image x:Name="image" Width="1046" Height="564"
+    <Window.Resources>
+        <Color x:Key="Color1">#FFA40E1C</Color>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <Image x:Name="image" Height="720"
                 VerticalAlignment="Top"
-                HorizontalAlignment="Left" Grid.ColumnSpan="4" Margin="0,1,0,0"
-        />
+                HorizontalAlignment="Left" RenderTransformOrigin="0.518,0.5" Margin="0,0,0,0" Width="1280" Grid.ColumnSpan="2" Source="3efd779bd9c078b6845ba164beae7602.jpg"
+        >
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <Button x:Name="Run_Button" Content="Uruchom symulację" HorizontalAlignment="Center" Margin="479,136,477,485" Width="316" Click="StartSimulation" Grid.ColumnSpan="2" VerticalAlignment="Center" Height="68" FontSize="30" BorderThickness="1" BorderBrush="{x:Null}" FontWeight="Medium" FontStretch="Condensed" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" AutomationProperties.IsOffscreenBehavior="FromClip" Background="{x:Null}">
+            <Button.Foreground>
+                <SolidColorBrush Color="Red"/>
+            </Button.Foreground>
+        </Button>
+        <TextBlock x:Name="Main_inscription" TextWrapping="Wrap" VerticalAlignment="Top" Margin="406,24,404,0" Height="78" Width="462" FrameworkElement.FlowDirection="RightToLeft" FontSize="48" Grid.ColumnSpan="2" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Center" FontFamily="Calibri"><Run Text="System kontroli lotu"/></TextBlock>
+        <Button x:Name="Quantity1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="250" Margin="0,292,280,0" Height="145" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="28" FontFamily="Calibri" Foreground="Red" FontWeight="Bold" Click="ChangeAmount">
+            <TextBlock x:Name="Quantity" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Zmień ilość statków powietrznych" VerticalAlignment="Center" TextAlignment="Center" Foreground="Red"/>
+        </Button>
+        <Button Content="Losuj trasy" Grid.Column="1" HorizontalAlignment="Center" Height="145" Margin="280,292,126,252" VerticalAlignment="Center" Width="250" Foreground="Red" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="28" FontFamily="Calibri" FontWeight="Bold" Click="RandomRoutes"/>
+        <Button x:Name="EEgg" Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Grid.Column="1" Margin="610,664,0,0" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="Egg"/>
+        <Button x:Name="RVelocity" Content="Losuj prędkości" HorizontalAlignment="Center" VerticalAlignment="Center" Width="250" Margin="106,470,280,74" Height="145" FontFamily="Calibri" FontSize="28" FontWeight="Bold" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="RandomVelocity"/>
+        <Button Content="Zakończ program" Grid.Column="1" HorizontalAlignment="Left" Height="145" Margin="270,470,0,0" VerticalAlignment="Top" Width="250" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" FontSize="28" FontFamily="Calibri" FontWeight="Bold" Click="CloseProgram"/>
     </Grid>
 </Window>
