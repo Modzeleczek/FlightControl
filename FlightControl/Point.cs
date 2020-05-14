@@ -21,5 +21,9 @@ namespace FlightControl
                 return false;
             return (point.X == X && point.Y == Y);
         }
+        public override string ToString()
+        {
+            return $"({X},{Y})";
+        }
     }
 }

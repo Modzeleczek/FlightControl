@@ -18,7 +18,5 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left" Grid.ColumnSpan="4" Margin="0,1,0,0"
         />
-    <Button Grid.ColumnSpan="4" Content="Button" HorizontalAlignment="Left" Margin="36,131,0,358" Width="190" Click="Button_Click"/>
-    <TextBox HorizontalAlignment="Left" Height="101" TextWrapping="Wrap" Text="System kontroli lotu" VerticalAlignment="Top" Width="381" Grid.Column="3" Margin="59,10,0,0"/>
-  </Grid>
+    </Grid>
 </Window>
