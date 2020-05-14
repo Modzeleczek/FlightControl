@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 
 namespace FlightControl
 {
     class Route : Curve
     {
-        List<double> Altitude, Velocity, Direction;
+        List<double> Altitude, Velocity;
         public Route(List<Point> points) : base(points)
         {
         }
@@ -15,7 +14,7 @@ namespace FlightControl
         public Route(Route o) : base(o)
         {
         }
-        public void AddDestination(Point destination, double altitude, double velocity)
+        public void AddFlight(Point destination, double altitude, double velocity)
         {
             Lines.Add(new Line(Lines[Lines.Count - 1].End.X, Lines[Lines.Count - 1].End.Y, 
                 destination.X, destination.Y));

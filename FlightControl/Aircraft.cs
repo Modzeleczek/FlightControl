@@ -4,23 +4,19 @@ namespace FlightControl
 {
     abstract class Aircraft
     {
-        public Route Route { get; protected set; }
-        protected Point Position;
-        protected double Altitude;
-        protected Aircraft(double initialX, double initialY, double initialAltitude)
+        protected Route Route;
+        protected Hitbox Hitbox;
+        protected Aircraft(Route route, double width, double length)
         {
-            Position = new Point(initialX, initialY);
-            Altitude = initialAltitude;
+            Hitbox = new Hitbox(route[0].Start.X, route[0].Start.Y, width, length);
         }
-        public void Move(double dx, double dy, double dAlt)
+        public void Move(double dx, double dy)
         {
-            Position.X += dx;
-            Position.Y += dy;
-            Altitude += dAlt;
+            Hitbox.Move(dx, dy);
         }
-        public void AddDestination(Point destination)
+        public void AddFlight(Point destination, double altitude, double velocity)
         {
-            
+            Route.AddFlight(destination, altitude, velocity);
         }
     }
 }

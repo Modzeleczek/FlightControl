@@ -42,7 +42,7 @@ namespace FlightControl
             {
                 for (int x = 0; x < Width; ++x)
                 {
-                    Heights[i++] = 20 + (int)(64 * fastNoise.GetSimplexFractal(x, y));
+                    Heights[i++] = 20 + (int)(64 * fastNoise.GetCellular(x, y));
                 }
             }
         }

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Threading;
+using System;
+using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
@@ -6,9 +9,36 @@ namespace FlightControl
     {
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
-        public Radar(int width, int height)
+        private DispatcherTimer Timer;
+        private WriteableBitmap Bitmap;
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, WriteableBitmap bitmap)
         {
-            //ObstaclesMap = new Map(width, height);
+            ObstaclesMap = new Map(mapFileName);
+            Aircrafts = new List<Aircraft>();
+            Bitmap = bitmap;
+
+            Timer = new DispatcherTimer();
+            Timer.Tick += new EventHandler(TimerTick);
+            //timer.Tick += TimerTick;
+            Timer.Interval = TimeSpan.FromMilliseconds(refreshingRateInMilliseconds);
+        }
+        private void TimerTick(object sender, EventArgs e)
+        {
+            ObstaclesMap.Draw()
+        }
+        public void Start()
+        {
+            Timer.Start();
+        }
+        public void Stop()
+        {
+            Timer.Stop();
+        }
+        public void SetRefreshingRate(int milliseconds)
+        {
+            Timer.Stop();
+            Timer.Interval = TimeSpan.FromMilliseconds(milliseconds);
+            Timer.Start();
         }
     }
 }
