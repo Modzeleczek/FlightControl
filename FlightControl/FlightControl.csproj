@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,12 +59,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Exceptions.cs" />
+    <Compile Include="FastNoise.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
-    <Compile Include="Pixel.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Radar.cs" />
     <Compile Include="Route.cs" />
+    <Compile Include="Terrain.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

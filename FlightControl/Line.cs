@@ -10,5 +10,8 @@ namespace FlightControl
             A = new Point(x1, y1);
             B = new Point(x2, y2);
         }
+        public Line(Line o) : this(o.A.X, o.A.Y, o.B.X, o.B.Y)
+        {
+        }
     }
 }

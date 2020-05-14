@@ -17,54 +17,68 @@ using System.Windows.Shapes;
 
 namespace FlightControl
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         WriteableBitmap writeableBitmap;
-        Map map;
+        //Map map;
         public MainWindow()
         {
             InitializeComponent();
 
-            map = new Map("obstacles.txt");
+            //map = new Map("obstacles.txt");
             //textBlock.Text = map.ToString();
 
-            Debug.WriteLine(map[0]);
+            //Debug.WriteLine(map[0]);
 
-            writeableBitmap = new WriteableBitmap(map.Width, map.Height, 96, 96, PixelFormats.Bgra32, null);
+            int w = 500, h = 480;
+            writeableBitmap = new WriteableBitmap(w, h, 96, 96, PixelFormats.Bgra32, null);
             image.Source = writeableBitmap;
 
+            Terrain terrain = new Terrain("output.bmp");
+
+            FastNoise fn = new FastNoise();
             writeableBitmap.Lock();
             unsafe
             {
                 int* pBackBuffer = (int*)writeableBitmap.BackBuffer;
-                for (int i = 0; i < map.Width * map.Height; ++i)
-                    //*(pBackBuffer++) = (255 << 24) | (255 << 16);
-                    *(pBackBuffer++) = (255 << 24);
+                for (int y = 0; y < h; ++y)
+                {
+                    for (int x = 0; x < w; ++x)
+                    {
+                        int height = terrain[x, y];
+                        *(pBackBuffer++) = (255 << 24) | (height << 16) | (height << 8) | height;
+                    }
+                }
             }
-            writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, map.Width, map.Height));
+            writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, w, h));
             writeableBitmap.Unlock();
 
+            /*FastNoise fan = new FastNoise();
+            for (int y = 0; y < 5; ++y)
+            {
+                for (int x = 0; x < 5; ++x)
+                    Debug.WriteLine(100*fan.GetPerlin(x, y));
+            }*/
+
             //line(0, 100, 100, 0, (255 << 24) | (255 << 8));
-            for (int i = 0; i < map.GetNoObstacles(); ++i)
+            /*for (int i = 0; i < map.GetNumberOfObstacles(); ++i)
             {
                 for(int j = 0; j < map[i].Vertices.Length - 1; ++j)
-                    line((int)map[i].Vertices[j].X,
+                    DrawLine((int)map[i].Vertices[j].X,
                         (int)map[i].Vertices[j].Y,
                         (int)map[i].Vertices[j+1].X,
                         (int)map[i].Vertices[j+1].Y,
                         (255 << 24) | (255 << 8));
-                line((int)map[i].Vertices[map[i].Vertices.Length - 1].X,
+                DrawLine((int)map[i].Vertices[map[i].Vertices.Length - 1].X,
                     (int)map[i].Vertices[map[i].Vertices.Length - 1].Y,
                     (int)map[i].Vertices[0].X,
                     (int)map[i].Vertices[0].Y,
                     (255 << 24) | (255 << 8));
-            }
+            }*/
         }
 
-        public void line(int x, int y, int x2, int y2, int color)
+        //https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
+        public void DrawLine(int x, int y, int x2, int y2, int color)
         {
             int w = x2 - x;
             int h = y2 - y;

@@ -11,10 +11,8 @@ namespace FlightControl
             X = x;
             Y = y;
         }
-        public Point(Point original)
+        public Point(Point o) : this(o.X, o.Y)
         {
-            X = original.X;
-            Y = original.Y;
         }
     }
 }
