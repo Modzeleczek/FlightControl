@@ -20,7 +20,7 @@ namespace FlightControl
         }
         public void AddDestination(Point destination)
         {
-            Route.AddPoint(destination);
+            
         }
     }
 }

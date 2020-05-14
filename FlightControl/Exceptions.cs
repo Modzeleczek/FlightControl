@@ -14,5 +14,15 @@ namespace FlightControl
             public TerrainLoadingException() { }
             public TerrainLoadingException(string message) : base(message) { }
         }
+        class NotEnoughElementsException : Exception
+        {
+            public NotEnoughElementsException() { }
+            public NotEnoughElementsException(string message) : base(message) { }
+        }
+        class LinesNotConnectedException : Exception
+        {
+            public LinesNotConnectedException() { }
+            public LinesNotConnectedException(string message) : base(message) { }
+        }
     }
 }

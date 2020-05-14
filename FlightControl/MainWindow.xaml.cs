@@ -61,10 +61,9 @@ namespace FlightControl
             Debug.WriteLine(map);
 
             //line(0, 100, 100, 0, (255 << 24) | (255 << 8));
-            for (int i = 0; i < map.GetNumberOfObstacles(); ++i)
+            for (int i = 0; i < map.ObstaclesCount; ++i)
             {
-                foreach(var wall in map[i].Walls)
-                    wall.Draw(writeableBitmap, (255 << 24) | (255 << 8));
+                map[i].Draw(writeableBitmap, (255 << 24) | (255 << 8));
             }
 
             writeableBitmap.AddDirtyRect(new Int32Rect(0, 0,

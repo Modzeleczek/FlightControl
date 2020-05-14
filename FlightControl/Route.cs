@@ -1,17 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace FlightControl
 {
-    class Route
+    class Route : Curve
     {
-        private List<Point> Points;
-        public Route()
+        List<double> Altitude, Velocity, Direction;
+        public Route(Point[] points) : base(points)
         {
-            Points = new List<Point>();
         }
-        public void AddPoint(Point point)
+        public Route(Line[] lines) : base(lines)
         {
-            Points.Add(new Point(point));
+        }
+        public Route(Route o) : base(o)
+        {
+        }
+        public void AddDestination(Point destination, double altitude, double velocity)
+        {
+            Lines.Add(new Line(Lines[Lines.Count - 1].End.X, Lines[Lines.Count - 1].End.Y, 
+                destination.X, destination.Y));
+            Altitude.Add(altitude);
+            Velocity.Add(velocity);
         }
     }
 }

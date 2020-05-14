@@ -35,12 +35,14 @@ namespace FlightControl
             fastNoise.SetFractalOctaves(5);
             fastNoise.SetFractalLacunarity(2.0);
             fastNoise.SetFractalGain(0.5);
+
+            fastNoise.SetFractalType(FastNoise.FractalType.FBM);
             int i = 0;
             for (int y = 0; y < Height; ++y)
             {
                 for (int x = 0; x < Width; ++x)
                 {
-                    Heights[i++] = 20 + (int)(128 * fastNoise.GetSimplexFractal(x, y));
+                    Heights[i++] = 20 + (int)(64 * fastNoise.GetSimplexFractal(x, y));
                 }
             }
         }

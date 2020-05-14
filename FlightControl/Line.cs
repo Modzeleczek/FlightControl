@@ -16,9 +16,17 @@ namespace FlightControl
         public Line(Line o) : this(o.Start.X, o.Start.Y, o.End.X, o.End.Y)
         {
         }
+        public bool IsContinuedBy(Line next)
+        {
+            if (End.Equals(next.Start))
+                return true;
+            return false;
+        }
+
+        //public static Line[] LineArrayFromPoints(Point[] points) { }
 
         //https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
-        public void Draw(WriteableBitmap bitmap, int color)
+        unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             //(int x, int y, int x2, int y2, int color)
             int x = (int)Start.X, y = (int)Start.Y, x2 = (int)End.X, y2 = (int)End.Y;
@@ -39,14 +47,12 @@ namespace FlightControl
             }
             int numerator = longest >> 1;
 
+            int* pBackBuffer = (int*)bitmap.BackBuffer;
             for (int i = 0; i <= longest; i++)
             {
                 //PutPixel(x, y, color);
-                unsafe
-                {
-                    int* pBackBuffer = (int*)bitmap.BackBuffer;
-                    *(pBackBuffer + x + y * bitmap.PixelWidth) = color;
-                }
+                *(pBackBuffer + x + y * bitmap.PixelWidth) = color;
+
                 numerator += shortest;
                 if (!(numerator < longest))
                 {
@@ -60,21 +66,6 @@ namespace FlightControl
                     y += dy2;
                 }
             }
-        }
-        public static Line[] CurveFromPoints(Point[] points)
-        {
-            if (points.Length == 0)
-                throw new System.Exception("Points array is 0 length.");
-
-            Line[] curve = new Line[points.Length];
-            for (int i = 0; i < curve.Length - 1; ++i)
-            {
-                curve[i] = new Line(points[i].X, points[i].Y,
-                    points[i + 1].X, points[i + 1].Y);
-            }
-            curve[curve.Length - 1] = new Line(points[points.Length - 1].X, points[points.Length - 1].Y,
-                points[0].X, points[0].X);
-            return curve;
         }
     }
 }

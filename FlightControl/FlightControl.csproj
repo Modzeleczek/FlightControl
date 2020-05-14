@@ -58,6 +58,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClosedCurve.cs" />
+    <Compile Include="Curve.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FastNoise.cs" />
     <Compile Include="Line.cs" />

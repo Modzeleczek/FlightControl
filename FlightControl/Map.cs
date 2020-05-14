@@ -1,5 +1,4 @@
 ﻿using FlightControl.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -48,8 +47,7 @@ namespace FlightControl
                         else
                             break;
                     }
-                    Line[] obstacleWalls = Line.CurveFromPoints(obstacleVertices.ToArray());
-                    Obstacles.Add(new Obstacle(h, obstacleWalls));
+                    Obstacles.Add(new Obstacle(h, new ClosedCurve(obstacleVertices.ToArray())));
                     obstacleVertices.Clear();
                 } while (!reader.EndOfStream);
             }
@@ -63,9 +61,12 @@ namespace FlightControl
             }
         }
 
-        public int GetNumberOfObstacles()
+        public int ObstaclesCount
         {
-            return Obstacles.Count;
+            get
+            {
+                return Obstacles.Count;
+            }
         }
 
         public override string ToString()
