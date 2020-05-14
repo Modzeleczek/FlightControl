@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Flight Control" Height="606.5" Width="1053.5"
+        Background="Black">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="0*"/>
+      <ColumnDefinition Width="0*"/>
+      <ColumnDefinition Width="193*"/>
+      <ColumnDefinition Width="854*"/>
+    </Grid.ColumnDefinitions>
+    <Image x:Name="image" Width="1046" Height="564"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left" Grid.ColumnSpan="4" Margin="0,1,0,0"
+        />
+    <Button Grid.ColumnSpan="4" Content="Button" HorizontalAlignment="Left" Margin="36,131,0,358" Width="190" Click="Button_Click"/>
+    <TextBox HorizontalAlignment="Left" Height="101" TextWrapping="Wrap" Text="System kontroli lotu" VerticalAlignment="Top" Width="381" Grid.Column="3" Margin="59,10,0,0"/>
+  </Grid>
 </Window>
