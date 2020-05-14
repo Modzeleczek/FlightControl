@@ -55,16 +55,14 @@ namespace FlightControl
                     Debug.WriteLine(100*fan.GetPerlin(x, y));
             }
 
-            writeableBitmap.Lock();
 
             map = new Map("obstacles.txt");
             Debug.WriteLine(map);
-
             //line(0, 100, 100, 0, (255 << 24) | (255 << 8));
-            for (int i = 0; i < map.ObstaclesCount; ++i)
-            {
-                map[i].Draw(writeableBitmap, (255 << 24) | (255 << 8));
-            }
+
+            writeableBitmap.Lock();
+
+            map.Draw(writeableBitmap, (255 << 24) | (255 << 8));
 
             writeableBitmap.AddDirtyRect(new Int32Rect(0, 0,
                 writeableBitmap.PixelWidth, writeableBitmap.PixelHeight));

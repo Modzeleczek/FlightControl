@@ -6,10 +6,10 @@ namespace FlightControl
     class Route : Curve
     {
         List<double> Altitude, Velocity, Direction;
-        public Route(Point[] points) : base(points)
+        public Route(List<Point> points) : base(points)
         {
         }
-        public Route(Line[] lines) : base(lines)
+        public Route(List<Line> lines) : base(lines)
         {
         }
         public Route(Route o) : base(o)
