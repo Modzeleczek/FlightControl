@@ -63,7 +63,6 @@ namespace FlightControl
             {
                 this.Close();
             }
-
         }
     }
 }

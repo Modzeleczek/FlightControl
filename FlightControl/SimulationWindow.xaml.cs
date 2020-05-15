@@ -30,15 +30,16 @@ namespace FlightControl
             aircraftBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
             AircraftImage.Source = aircraftBitmap;
 
-            radar = new Radar("obstacles.txt", 500, aircraftBitmap);
+            radar = new Radar("obstacles.txt", 50, aircraftBitmap);
 
-            List<Point> destinations = new List<Point>
+            List<Stage> stages = new List<Stage>
             {
-                new Point(0, 0),
-                new Point(50, 100),
-                new Point(130, 200)
+                new Stage(new Line(0, 0, 50, 100), 10, 10),
+                new Stage(new Line(50, 100, 130, 200), 10, 10),
+                new Stage(new Line(130, 200, 300, 252), 10, 10),
+                new Stage(new Line(300, 252, 500, 175), 10, 10)
             };
-            Route route = new Route(destinations);
+            Flight route = new Flight(stages);
             radar.AddAircraft(new Plane(route, 20, 20));
 
             mapBitmap.Lock();

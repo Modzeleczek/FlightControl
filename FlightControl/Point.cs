@@ -1,5 +1,7 @@
 ﻿
 
+using System.Windows.Media.Imaging;
+
 namespace FlightControl
 {
     public class Point
@@ -24,6 +26,10 @@ namespace FlightControl
         public override string ToString()
         {
             return $"({X},{Y})";
+        }
+        unsafe public void Draw(WriteableBitmap bitmap, int color)
+        {
+            *((int*)bitmap.BackBuffer + (int)X + (int)Y * bitmap.PixelWidth) = color;
         }
     }
 }

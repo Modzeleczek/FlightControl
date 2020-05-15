@@ -7,11 +7,11 @@ namespace FlightControl
     public class Obstacle
     {
         public double Height;
-        private ClosedCurve Walls;
-        public Obstacle(double height, ClosedCurve walls)
+        private Polygon Walls;
+        public Obstacle(double height, Polygon walls)
         {
             Height = height;
-            Walls = new ClosedCurve(walls);
+            Walls = new Polygon(walls);
         }
         public bool Collides(Aircraft aircraft)
         {

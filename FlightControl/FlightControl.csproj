@@ -60,7 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ClosedCurve.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="Curve.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FastNoise.cs" />
@@ -68,7 +68,8 @@
     <Compile Include="Obstacle.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Radar.cs" />
-    <Compile Include="Route.cs" />
+    <Compile Include="Flight.cs" />
+    <Compile Include="Stage.cs" />
     <Compile Include="SimulationWindow.xaml.cs">
       <DependentUpon>SimulationWindow.xaml</DependentUpon>
     </Compile>
