@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace FlightControl
 {
@@ -47,7 +48,7 @@ namespace FlightControl
 
         private void Egg(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.");
+            System.Windows.MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.");
         }
 
         private void RandomVelocity(object sender, RoutedEventArgs e)
@@ -57,7 +58,11 @@ namespace FlightControl
 
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
-            Application.Current.MainWindow.Close();
+            DialogResult dr = System.Windows.Forms.MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if (dr == System.Windows.Forms.DialogResult.Yes)
+            {
+                this.Close();
+            }
         }
     }
 }
