@@ -62,11 +62,15 @@
     <Compile Include="Curve.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FastNoise.cs" />
+    <Compile Include="Hitbox.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Radar.cs" />
     <Compile Include="Route.cs" />
+    <Compile Include="SimulationWindow.xaml.cs">
+      <DependentUpon>SimulationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Terrain.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -84,6 +88,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SimulationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Map.cs" />

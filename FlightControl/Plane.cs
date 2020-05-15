@@ -4,10 +4,9 @@ namespace FlightControl
 {
     class Plane : Aircraft
     {
-        public Plane(double initialX, double initialY, double initialAltitude)
-            : base(initialX, initialY, initialAltitude)
+        public Plane(Route route, double width, double length)
+            : base(route, width, length)
         {
-
         }
     }
 }

@@ -19,8 +19,6 @@ namespace FlightControl
 {
     public partial class MainWindow : Window
     {
-        WriteableBitmap writeableBitmap;
-        Map map;
         public MainWindow()
         {
             /*InitializeComponent();
@@ -67,6 +65,8 @@ namespace FlightControl
             writeableBitmap.AddDirtyRect(new Int32Rect(0, 0,
                 writeableBitmap.PixelWidth, writeableBitmap.PixelHeight));
             writeableBitmap.Unlock();*/
+
+
         }
 
         private void StartSimulation(object sender, RoutedEventArgs e)
@@ -90,7 +90,7 @@ namespace FlightControl
 
         private void Egg(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Gratulację odkryłeś EasterEgg'a");
+            MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.");
         }
 
         private void RandomVelocity(object sender, RoutedEventArgs e)

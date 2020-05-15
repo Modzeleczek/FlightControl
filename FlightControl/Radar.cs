@@ -10,12 +10,12 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private DispatcherTimer Timer;
-        private WriteableBitmap Bitmap;
-        public Radar(string mapFileName, int refreshingRateInMilliseconds, WriteableBitmap bitmap)
+        private WriteableBitmap BackgroundBitmap;
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, WriteableBitmap backgroundBitmap)
         {
             ObstaclesMap = new Map(mapFileName);
             Aircrafts = new List<Aircraft>();
-            Bitmap = bitmap;
+            BackgroundBitmap = backgroundBitmap;
 
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(TimerTick);
@@ -24,7 +24,7 @@ namespace FlightControl
         }
         private void TimerTick(object sender, EventArgs e)
         {
-            ObstaclesMap.Draw()
+            //ObstaclesMap.Draw()
         }
         public void Start()
         {
