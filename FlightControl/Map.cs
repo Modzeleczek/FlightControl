@@ -1,10 +1,11 @@
 ﻿using FlightControl.Exceptions;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Map
+    public class Map
     {
         public readonly int Width = 512, Height = 512;
         private List<Obstacle> Obstacles;
@@ -47,12 +48,12 @@ namespace FlightControl
                         else
                             break;
                     }
-                    Obstacles.Add(new Obstacle(h, new ClosedCurve(obstacleVertices.ToArray())));
+                    obstacleVertices.Add(new Point(obstacleVertices[0]));
+                    Obstacles.Add(new Obstacle(h, new Polygon(obstacleVertices)));
                     obstacleVertices.Clear();
                 } while (!reader.EndOfStream);
             }
         }
-
         public Obstacle this[int index]
         {
             get
@@ -60,7 +61,6 @@ namespace FlightControl
                 return Obstacles[index];
             }
         }
-
         public int ObstaclesCount
         {
             get
@@ -68,14 +68,16 @@ namespace FlightControl
                 return Obstacles.Count;
             }
         }
-
+        public void Draw(WriteableBitmap bitmap, int color)
+        {
+            foreach (var obstacle in Obstacles)
+                obstacle.Draw(bitmap, color);
+        }
         public override string ToString()
         {
             string result = $"(Map: {Width}x{Height}; ";
             foreach (var o in Obstacles)
-            {
                 result += o.ToString() + "; ";
-            }
             return result + ")";
         }
     }

@@ -2,12 +2,14 @@
 
 namespace FlightControl
 {
-    class Helicopter : Aircraft
+    public class Helicopter : Aircraft
     {
-        public Helicopter(double initialX, double initialY, double initialAltitude)
-            : base(initialX, initialY, initialAltitude)
+        public Helicopter(Flight route, double width, double length)
+            : base(route, width, length)
         {
-
+        }
+        public Helicopter(Helicopter o) : base(o)
+        {
         }
     }
 }

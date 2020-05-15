@@ -1,8 +1,10 @@
 ﻿
 
+using System.Windows.Media.Imaging;
+
 namespace FlightControl
 {
-    class Point
+    public class Point
     {
         public double X;
         public double Y;
@@ -20,6 +22,14 @@ namespace FlightControl
             if (!(point is Point))
                 return false;
             return (point.X == X && point.Y == Y);
+        }
+        public override string ToString()
+        {
+            return $"({X},{Y})";
+        }
+        unsafe public void Draw(WriteableBitmap bitmap, int color)
+        {
+            *((int*)bitmap.BackBuffer + (int)X + (int)Y * bitmap.PixelWidth) = color;
         }
     }
 }

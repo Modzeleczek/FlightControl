@@ -1,15 +1,18 @@
 ﻿
 
+using FlightControl.Exceptions;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Line
+    public class Line
     {
         public Point Start, End;
         public Line(double x1, double y1, double x2, double y2)
         {
+            if (x1 == x2 && y1 == y2)
+                throw new LineIsPointException($"Start: {Start} and end: {End} are equal.");
             Start = new Point(x1, y1);
             End = new Point(x2, y2);
         }
@@ -23,7 +26,10 @@ namespace FlightControl
             return false;
         }
 
-        //public static Line[] LineArrayFromPoints(Point[] points) { }
+        public override string ToString()
+        {
+            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
+        }
 
         //https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
         unsafe public void Draw(WriteableBitmap bitmap, int color)

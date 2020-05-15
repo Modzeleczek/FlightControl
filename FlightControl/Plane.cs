@@ -2,12 +2,14 @@
 
 namespace FlightControl
 {
-    class Plane : Aircraft
+    public class Plane : Aircraft
     {
-        public Plane(double initialX, double initialY, double initialAltitude)
-            : base(initialX, initialY, initialAltitude)
+        public Plane(Flight route, double width, double length)
+            : base(route, width, length)
         {
-
+        }
+        public Plane(Plane o) : base(o)
+        {
         }
     }
 }
