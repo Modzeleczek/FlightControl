@@ -62,7 +62,6 @@
     <Compile Include="Curve.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FastNoise.cs" />
-    <Compile Include="Hitbox.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Point.cs" />

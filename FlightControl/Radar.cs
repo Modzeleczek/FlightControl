@@ -27,7 +27,10 @@ namespace FlightControl
         {
             ForegroundBitmap.Lock();
             foreach (var aircraft in Aircrafts)
+            {
                 aircraft.Draw(ForegroundBitmap, (255 << 24) | (255 << 16));
+                aircraft.Advance();
+            }
             ForegroundBitmap.AddDirtyRect(new Int32Rect(0, 0,
                 ForegroundBitmap.PixelWidth, ForegroundBitmap.PixelHeight));
             ForegroundBitmap.Unlock();
@@ -65,6 +68,11 @@ namespace FlightControl
         public void AddAircraft(Balloon balloon)
         {
             Aircrafts.Add(new Balloon(balloon));
+        }
+        public void RemoveAircraft(int index)
+        {
+            //if(index >= 0 && index < Aircrafts.Count)
+                Aircrafts.RemoveAt(index);
         }
     }
 }

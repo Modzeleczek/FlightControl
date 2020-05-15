@@ -4,7 +4,7 @@ namespace FlightControl
 {
     public class Route : Curve
     {
-        List<double> Altitude, Velocity;
+        public List<double> Altitude, Velocity;
         public Route(List<Point> points) : base(points)
         {
         }
