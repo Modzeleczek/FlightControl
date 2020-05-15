@@ -46,13 +46,11 @@ namespace FlightControl
         {
             Route.AddStage(destination, altitude, velocity);
         }
-        public void Draw(WriteableBitmap bitmap, int color)
+        public abstract void Draw(WriteableBitmap bitmap);
+        public abstract void DrawRoute(WriteableBitmap bitmap);
+        /*public void ClearGraphics(WriteableBitmap aircraftsBitmap, WriteableBitmap routesBitmap)
         {
-            Position.Draw(bitmap, color);
-        }
-        public void DrawRoute(WriteableBitmap bitmap, int color)
-        {
-            Route.Draw(bitmap, color);
-        }
+            
+        }*/
     }
 }

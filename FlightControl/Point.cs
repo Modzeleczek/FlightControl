@@ -15,6 +15,11 @@ namespace FlightControl
         public Point(Point o) : this(o.X, o.Y)
         {
         }
+        public void Move(double dx, double dy)
+        {
+            X += dx;
+            Y += dy;
+        }
         public override bool Equals(object obj)
         {
             Point point = obj as Point;

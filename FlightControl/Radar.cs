@@ -59,16 +59,16 @@ namespace FlightControl
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
+                Aircrafts[i].Draw(AircraftsBitmap);//transparent
                 if (!Aircrafts[i].Advance(1.0 / 32.0))
                 {
-                    Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
-                    Aircrafts[i].DrawRoute(RoutesBitmap, 0);//transparent
+                    Aircrafts[i].Draw(AircraftsBitmap);//transparent
+                    Aircrafts[i].DrawRoute(RoutesBitmap);//transparent
                     Aircrafts.RemoveAt(i);
                 }
                 else
                 {
-                    Aircrafts[i].Draw(AircraftsBitmap, (255 << 24) | (255 << 8));//green
+                    Aircrafts[i].Draw(AircraftsBitmap);//green
                     ++i;
                 }
             }

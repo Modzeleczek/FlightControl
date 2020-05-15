@@ -17,12 +17,12 @@ namespace FlightControl
     public partial class SimulationWindow : Window
     {
         private Radar radar;
+        bool Running;
         public SimulationWindow()
         {
             InitializeComponent();
 
             radar = new Radar("obstacles.txt", 16, MapImage, RoutesImage, AircraftsImage);
-
             List<Stage> stages = new List<Stage>
             {
                 new Stage(new Line(0, 0, 50, 100), 90, 10),
@@ -34,11 +34,27 @@ namespace FlightControl
             radar.AddAircraft(new Plane(route, 15, 10));
 
             radar.Start();
+            Running = true;
         }
         protected override void OnClosed(EventArgs e)
         {
             radar.Stop();
             radar = null;
+        }
+
+        private void PauseButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Running)
+            {
+                radar.Stop();
+                (sender as Button).Content = "Start";
+            }
+            else
+            {
+                radar.Start();
+                (sender as Button).Content = "Stop";
+            }
+            Running = !Running;
         }
     }
 }

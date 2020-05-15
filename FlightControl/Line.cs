@@ -24,7 +24,11 @@ namespace FlightControl
                 return true;
             return false;
         }
-
+        public void Move(double dx, double dy)
+        {
+            Start.Move(dx, dy);
+            End.Move(dx, dy);
+        }
         public override string ToString()
         {
             return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
