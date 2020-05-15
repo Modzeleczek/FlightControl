@@ -9,6 +9,7 @@ namespace FlightControl
     {
         public Line Track;
         public double Direction;
+        public double Length;
         public double Velocity, Altitude;
         public Stage(Line line, double velocity, double altitude)
         {
@@ -22,7 +23,7 @@ namespace FlightControl
                 else
                     Direction = -Math.PI / 2.0;
             }
-
+            Length = Math.Sqrt(Math.Pow(Track.End.X - Track.Start.X, 2.0) + Math.Pow(Track.End.Y - Track.Start.Y, 2.0));
             Velocity = velocity;
             Altitude = altitude;
         }

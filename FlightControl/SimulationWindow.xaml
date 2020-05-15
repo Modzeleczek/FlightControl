@@ -14,12 +14,17 @@
                Margin="0,0,0,0"
                Width="1280"
                Height="690"/>
-        <Image x:Name="AircraftImage"
+        <Image x:Name="RoutesImage"
                VerticalAlignment="Top"
                HorizontalAlignment="Left"
                Margin="0,0,0,0"
                Width="1280"
                Height="690"/>
-
+        <Image x:Name="AircraftsImage"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="0,0,0,0"
+               Width="1280"
+               Height="690"/>
     </Grid>
 </Window>

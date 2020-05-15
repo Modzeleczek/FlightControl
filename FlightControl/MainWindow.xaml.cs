@@ -31,12 +31,10 @@ namespace FlightControl
             SecondWindow = new SimulationWindow();
             SecondWindow.Show();
         }
-
         private void ChangeAmount(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void Random(object sender, RoutedEventArgs e)
         {
 
@@ -45,7 +43,6 @@ namespace FlightControl
         {
 
         }
-
         private void Egg(object sender, RoutedEventArgs e)
         {
             System.Windows.MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.");
@@ -55,7 +52,6 @@ namespace FlightControl
         {
             
         }
-
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
             DialogResult dr = System.Windows.Forms.MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);

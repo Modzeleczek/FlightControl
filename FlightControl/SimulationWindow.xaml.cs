@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,42 +11,29 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FlightControl
 {
-    /// <summary>
-    /// Interaction logic for SimulationWindow.xaml
-    /// </summary>
     public partial class SimulationWindow : Window
     {
-        public Radar radar;
-        private WriteableBitmap mapBitmap, aircraftBitmap;
+        private Radar radar;
         public SimulationWindow()
         {
             InitializeComponent();
 
-            mapBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
-            MapImage.Source = mapBitmap;
-            aircraftBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
-            AircraftImage.Source = aircraftBitmap;
-
-            radar = new Radar("obstacles.txt", 50, aircraftBitmap);
+            radar = new Radar("obstacles.txt", 100, MapImage, RoutesImage, AircraftsImage);
 
             List<Stage> stages = new List<Stage>
             {
-                new Stage(new Line(0, 0, 50, 100), 10, 10),
+                new Stage(new Line(0, 0, 50, 100), 5, 10),
                 new Stage(new Line(50, 100, 130, 200), 10, 10),
-                new Stage(new Line(130, 200, 300, 252), 10, 10),
-                new Stage(new Line(300, 252, 500, 175), 10, 10)
+                new Stage(new Line(130, 200, 300, 252), 15, 10),
+                new Stage(new Line(300, 252, 500, 175), 20, 10)
             };
             Flight route = new Flight(stages);
-            radar.AddAircraft(new Plane(route, 20, 20));
+            radar.AddAircraft(new Plane(route, 15, 10));
 
-            mapBitmap.Lock();
-            radar.DrawMap(mapBitmap);
-            mapBitmap.AddDirtyRect(new Int32Rect(0, 0, mapBitmap.PixelWidth, mapBitmap.PixelHeight));
-            mapBitmap.Unlock();
+            Debug.WriteLine(radar.RefreshingRate);
 
             radar.Start();
         }
@@ -53,7 +41,6 @@ namespace FlightControl
         {
             radar.Stop();
             radar = null;
-            mapBitmap = null;
         }
     }
 }

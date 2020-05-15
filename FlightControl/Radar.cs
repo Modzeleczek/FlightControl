@@ -3,6 +3,8 @@ using System.Windows.Threading;
 using System;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace FlightControl
 {
@@ -11,37 +13,68 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private DispatcherTimer Timer;
-        private WriteableBitmap ForegroundBitmap;
-        public Radar(string mapFileName, int refreshingRateInMilliseconds, WriteableBitmap aircraftBitmap)
+        private WriteableBitmap MapBitmap, RoutesBitmap, AircraftsBitmap;
+        public int RefreshingRate
         {
+            get
+            {
+                return (int)Timer.Interval.TotalMilliseconds;
+            }
+            set
+            {
+                Timer.Stop();
+                Timer.Interval = TimeSpan.FromMilliseconds(value);
+                Timer.Start();
+            }
+        }
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image routesImage, Image aircraftsImage)
+        {
+            MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
+                96, 96, PixelFormats.Bgra32, null);
+            mapImage.Source = MapBitmap;
+
+            RoutesBitmap = new WriteableBitmap((int)routesImage.Width, (int)routesImage.Height,
+                96, 96, PixelFormats.Bgra32, null);
+            routesImage.Source = RoutesBitmap;
+
+            AircraftsBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
+                96, 96, PixelFormats.Bgra32, null);
+            aircraftsImage.Source = AircraftsBitmap;
+
             ObstaclesMap = new Map(mapFileName);
+            MapBitmap.Lock();
+            ObstaclesMap.Draw(MapBitmap, (255 << 24) | (255 << 8));//green
+            MapBitmap.AddDirtyRect(new Int32Rect(0, 0, MapBitmap.PixelWidth, MapBitmap.PixelHeight));
+            MapBitmap.Unlock();
+
             Aircrafts = new List<Aircraft>();
-            ForegroundBitmap = aircraftBitmap;
 
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(TimerTick);
-            //timer.Tick += TimerTick;
-            Timer.Interval = TimeSpan.FromMilliseconds(refreshingRateInMilliseconds);
+            RefreshingRate = refreshingRateInMilliseconds;
         }
         private void TimerTick(object sender, EventArgs e)
         {
-            ForegroundBitmap.Lock();
+            AircraftsBitmap.Lock();
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                Aircrafts[i].Advance();
-                Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | (255 << 16));
-                if (Aircrafts[i].CompletedRoute)
+                Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
+                if (!Aircrafts[i].Advance())
                 {
-                    Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | 255);
+                    Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
+                    Aircrafts[i].DrawRoute(RoutesBitmap, 0);//transparent
                     Aircrafts.RemoveAt(i);
                 }
                 else
+                {
+                    Aircrafts[i].Draw(AircraftsBitmap, (255 << 24) | (255 << 8));//green
                     ++i;
+                }
             }
-            ForegroundBitmap.AddDirtyRect(new Int32Rect(0, 0,
-                ForegroundBitmap.PixelWidth, ForegroundBitmap.PixelHeight));
-            ForegroundBitmap.Unlock();
+            AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0,
+                AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));
+            AircraftsBitmap.Unlock();
         }
         public void Start()
         {
@@ -51,27 +84,26 @@ namespace FlightControl
         {
             Timer.Stop();
         }
-        public void SetRefreshingRate(int milliseconds)
+        /*public void SetRefreshingRate(int milliseconds)
         {
             Timer.Stop();
             Timer.Interval = TimeSpan.FromMilliseconds(milliseconds);
             Timer.Start();
-        }
-        public void DrawMap(WriteableBitmap bitmap)
-        {
-            ObstaclesMap.Draw(bitmap, (255 << 24) | (255 << 8));
-        }
+        }*/
         public void AddAircraft(Plane plane)
         {
             Aircrafts.Add(new Plane(plane));
+            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Helicopter helicopter)
         {
             Aircrafts.Add(new Helicopter(helicopter));
+            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Glider glider)
         {
             Aircrafts.Add(new Glider(glider));
+            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Balloon balloon)
         {
