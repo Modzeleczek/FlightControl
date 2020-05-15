@@ -19,11 +19,29 @@ namespace FlightControl
     /// </summary>
     public partial class SimulationWindow : Window
     {
-        
+        public Radar radar;
+        private WriteableBitmap mapBitmap, aircraftBitmap;
         public SimulationWindow()
         {
             InitializeComponent();
 
+            mapBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
+            MapImage.Source = mapBitmap;
+            aircraftBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
+
+
+            radar = new Radar("obstacles.txt", 30, aircraftBitmap);
+
+            mapBitmap.Lock();
+            radar.DrawMap(mapBitmap);
+            mapBitmap.AddDirtyRect(new Int32Rect(0, 0, mapBitmap.PixelWidth, mapBitmap.PixelHeight));
+            mapBitmap.Unlock();
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            radar.Stop();
+            radar = null;
+            mapBitmap = null;
         }
     }
 }

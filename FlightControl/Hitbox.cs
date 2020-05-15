@@ -2,9 +2,9 @@
 
 namespace FlightControl
 {
-    class Hitbox
+    public class Hitbox
     {
-        private double Width, Height;
+        readonly public double Width, Height;
         private Point Position;
         public Hitbox(double x, double y, double width, double height)
         {

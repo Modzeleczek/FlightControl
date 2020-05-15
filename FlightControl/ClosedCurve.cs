@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FlightControl
 {
-    class ClosedCurve : Curve
+    public class ClosedCurve : Curve
     {
         public ClosedCurve(List<Line> lines) : base(lines)
         {

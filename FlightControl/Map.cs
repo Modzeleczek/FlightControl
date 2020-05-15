@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Map
+    public class Map
     {
         public readonly int Width = 512, Height = 512;
         private List<Obstacle> Obstacles;

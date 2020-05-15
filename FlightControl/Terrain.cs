@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace FlightControl
 {
-    class Terrain
+    public class Terrain
     {
         public readonly int Width = 512, Height = 512;
         private int[] Heights;

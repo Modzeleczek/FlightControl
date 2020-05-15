@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightControl"
         mc:Ignorable="d"
-        Title="SimulationWindow" Height="720" Width="1280">
+        Title="SimulationWindow" Height="720" Width="1280"
+        Background="Black">
     <Grid>
-        
+        <Image x:Name="MapImage"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="0,0,0,0"
+               Width="1280"
+               Height="690"/>
+        <Image x:Name="AircraftImage"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="0,0,0,0"
+               Width="1280"
+               Height="690"/>
+
     </Grid>
 </Window>
