@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Curve
+    public class Curve
     {
         protected List<Line> Lines;
         public Line this[int index]

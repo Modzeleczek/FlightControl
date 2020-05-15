@@ -2,12 +2,14 @@
 
 namespace FlightControl
 {
-    class Glider : Aircraft
+    public class Glider : Aircraft
     {
-        public Glider(double initialX, double initialY, double initialAltitude)
-            : base(initialX, initialY, initialAltitude)
+        public Glider(Route route, double width, double length)
+            : base(route, width, length)
         {
-
+        }
+        public Glider(Glider o) : base(o)
+        {
         }
     }
 }

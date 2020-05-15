@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Line
+    public class Line
     {
         public Point Start, End;
         public Line(double x1, double y1, double x2, double y2)

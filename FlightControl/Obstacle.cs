@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    class Obstacle
+    public class Obstacle
     {
         public double Height;
         private ClosedCurve Walls;
