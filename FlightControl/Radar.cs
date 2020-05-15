@@ -12,7 +12,7 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private DispatcherTimer Timer;
-        private WriteableBitmap MapBitmap, RoutesBitmap, AircraftsBitmap;
+        private WriteableBitmap MapBitmap, FrontBitmap;
         public int RefreshingRate
         {
             get
@@ -26,19 +26,15 @@ namespace FlightControl
                 Timer.Start();
             }
         }
-        public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image routesImage, Image aircraftsImage)
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image aircraftsImage)
         {
             MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
             mapImage.Source = MapBitmap;
 
-            RoutesBitmap = new WriteableBitmap((int)routesImage.Width, (int)routesImage.Height,
+            FrontBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
-            routesImage.Source = RoutesBitmap;
-
-            AircraftsBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
-                96, 96, PixelFormats.Bgra32, null);
-            aircraftsImage.Source = AircraftsBitmap;
+            aircraftsImage.Source = FrontBitmap;
 
             ObstaclesMap = new Map(mapFileName);
             MapBitmap.Lock();
@@ -55,22 +51,17 @@ namespace FlightControl
         
         private void TimerTick(object sender, EventArgs e)
         {
-            AircraftsBitmap.Lock();
-            RoutesBitmap.Lock();
+            FrontBitmap.Lock();
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                if (!Aircrafts[i].Advance(1.0 / 32.0, AircraftsBitmap, RoutesBitmap))
+                if (!Aircrafts[i].Advance(1.0 / 32.0, FrontBitmap))
                     Aircrafts.RemoveAt(i);
                 else
-                {
-                    //Aircrafts[i].Draw(AircraftsBitmap);
                     ++i;
-                }
             }
             //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
-            AircraftsBitmap.Unlock();
-            RoutesBitmap.Unlock();
+            FrontBitmap.Unlock();
         }
         public void Start()
         {

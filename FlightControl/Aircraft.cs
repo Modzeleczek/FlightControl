@@ -22,23 +22,21 @@ namespace FlightControl
         protected Aircraft(Aircraft o) : this(o.Route, o.Width, o.Height)
         {
         }
-        public bool Advance(double deltaTime, WriteableBitmap ab, WriteableBitmap rb)
+        public bool Advance(double deltaTime, WriteableBitmap bitmap)
         {
-            Position.Draw(ab, 0);
+            Route.Draw(bitmap, 0);//remove old route pixels
+            Position.Draw(bitmap, 0);//remove old position pixel
             Position.X += Route[0].Velocity.X * deltaTime;
             Position.Y += Route[0].Velocity.Y * deltaTime;
-            Draw(ab);
             StageProgress += Route[0].Velocity.Length * deltaTime;
             if (StageProgress >= Route[0].Length)
             {
                 if (!Route.RemoveStage(0))
-                {
-                    Position.Draw(ab, 0);
-                    Route.Draw(rb, 0);
                     return false;
-                }
                 StageProgress = 0;
             }
+            DrawRoute(bitmap);
+            Draw(bitmap);
             return true;
         }
         public bool Collides(Aircraft aircraft)
