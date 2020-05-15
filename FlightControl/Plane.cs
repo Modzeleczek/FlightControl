@@ -4,7 +4,7 @@ namespace FlightControl
 {
     public class Plane : Aircraft
     {
-        public Plane(Route route, double width, double length)
+        public Plane(Flight route, double width, double length)
             : base(route, width, length)
         {
         }

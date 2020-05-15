@@ -57,7 +57,7 @@ namespace FlightControl
 
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
-
+            Application.Current.MainWindow.Close();
         }
     }
 }

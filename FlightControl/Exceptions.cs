@@ -24,5 +24,10 @@ namespace FlightControl
             public LinesNotConnectedException() { }
             public LinesNotConnectedException(string message) : base(message) { }
         }
+        public class LineIsPointException : Exception
+        {
+            public LineIsPointException() { }
+            public LineIsPointException(string message) : base(message) { }
+        }
     }
 }

@@ -26,10 +26,18 @@ namespace FlightControl
         private void TimerTick(object sender, EventArgs e)
         {
             ForegroundBitmap.Lock();
-            foreach (var aircraft in Aircrafts)
+            int i = 0;
+            while(i < Aircrafts.Count)
             {
-                aircraft.Draw(ForegroundBitmap, (255 << 24) | (255 << 16));
-                aircraft.Advance();
+                Aircrafts[i].Advance();
+                Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | (255 << 16));
+                if (Aircrafts[i].CompletedRoute)
+                {
+                    Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | 255);
+                    Aircrafts.RemoveAt(i);
+                }
+                else
+                    ++i;
             }
             ForegroundBitmap.AddDirtyRect(new Int32Rect(0, 0,
                 ForegroundBitmap.PixelWidth, ForegroundBitmap.PixelHeight));

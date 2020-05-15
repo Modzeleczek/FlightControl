@@ -49,7 +49,7 @@ namespace FlightControl
                             break;
                     }
                     obstacleVertices.Add(new Point(obstacleVertices[0]));
-                    Obstacles.Add(new Obstacle(h, new ClosedCurve(obstacleVertices)));
+                    Obstacles.Add(new Obstacle(h, new Polygon(obstacleVertices)));
                     obstacleVertices.Clear();
                 } while (!reader.EndOfStream);
             }
