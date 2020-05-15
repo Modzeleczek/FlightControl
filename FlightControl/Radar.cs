@@ -2,7 +2,6 @@
 using System.Windows.Threading;
 using System;
 using System.Windows.Media.Imaging;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 
@@ -44,7 +43,7 @@ namespace FlightControl
             ObstaclesMap = new Map(mapFileName);
             MapBitmap.Lock();
             ObstaclesMap.Draw(MapBitmap, (255 << 24) | (255 << 8));//green
-            MapBitmap.AddDirtyRect(new Int32Rect(0, 0, MapBitmap.PixelWidth, MapBitmap.PixelHeight));
+            //MapBitmap.AddDirtyRect(new Int32Rect(0, 0, MapBitmap.PixelWidth, MapBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
             MapBitmap.Unlock();
 
             Aircrafts = new List<Aircraft>();
@@ -56,6 +55,7 @@ namespace FlightControl
         private void TimerTick(object sender, EventArgs e)
         {
             AircraftsBitmap.Lock();
+            RoutesBitmap.Lock();
             int i = 0;
             while(i < Aircrafts.Count)
             {
@@ -72,9 +72,9 @@ namespace FlightControl
                     ++i;
                 }
             }
-            AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0,
-                AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));
+            //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
             AircraftsBitmap.Unlock();
+            RoutesBitmap.Unlock();
         }
         public void Start()
         {
@@ -102,8 +102,7 @@ namespace FlightControl
         }
         public void RemoveAircraft(int index)
         {
-            //if(index >= 0 && index < Aircrafts.Count)
-                Aircrafts.RemoveAt(index);
+            Aircrafts.RemoveAt(index);
         }
     }
 }

@@ -76,8 +76,8 @@ namespace FlightControl
         public override string ToString()
         {
             string result = $"(Map: {Width}x{Height}; ";
-            foreach (var o in Obstacles)
-                result += o.ToString() + "; ";
+            foreach (var obstacle in Obstacles)
+                result += obstacle.ToString() + "; ";
             return result + ")";
         }
     }

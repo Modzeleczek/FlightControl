@@ -58,14 +58,14 @@ namespace FlightControl
         }
         public void Draw(WriteableBitmap bitmap, int color)
         {
-            foreach (var l in Lines)
-                l.Draw(bitmap, color);
+            foreach (var line in Lines)
+                line.Draw(bitmap, color);
         }
         public override string ToString()
         {
             string result = "(Curve: ";
-            foreach (var l in Lines)
-                result += l.ToString() + "; ";
+            foreach (var line in Lines)
+                result += line.ToString() + "; ";
             return result + "); ";
         }
     }

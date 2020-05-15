@@ -1,8 +1,7 @@
-﻿
-
-using FlightControl.Exceptions;
+﻿using FlightControl.Exceptions;
 using System;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace FlightControl
 {
@@ -31,7 +30,7 @@ namespace FlightControl
             return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
         }
 
-        //https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
+        //Algorithm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             //(int x, int y, int x2, int y2, int color)
@@ -71,6 +70,29 @@ namespace FlightControl
                     x += dx2;
                     y += dy2;
                 }
+            }
+            //Essential to update locked WriteableBitmap after editing its BackBuffer and before unlocking it.
+            if (Start.X < End.X)
+            {
+                if (Start.Y < End.Y)
+                    bitmap.AddDirtyRect(
+                        new Int32Rect((int)Start.X, (int)Start.Y, (int)(End.X - Start.X), (int)(End.Y - Start.Y)
+                        ));
+                else
+                    bitmap.AddDirtyRect(
+                        new Int32Rect((int)Start.X, (int)End.Y, (int)(End.X - Start.X), (int)(Start.Y - End.Y)
+                        ));
+            }
+            else
+            {
+                if (Start.Y < End.Y)
+                    bitmap.AddDirtyRect(
+                        new Int32Rect((int)End.X, (int)Start.Y, (int)(Start.X - End.X), (int)(End.Y - Start.Y)
+                        ));
+                else
+                    bitmap.AddDirtyRect(
+                        new Int32Rect((int)End.X, (int)End.Y, (int)(Start.X - End.X), (int)(Start.Y - End.Y)
+                        ));
             }
         }
     }

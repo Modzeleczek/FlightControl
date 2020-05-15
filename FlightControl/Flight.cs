@@ -7,7 +7,6 @@ namespace FlightControl
     public class Flight
     {
         private List<Stage> Stages;
-        public bool IsCompleted;
         public Stage this[int index]
         {
             get
@@ -23,8 +22,6 @@ namespace FlightControl
             Stages = new List<Stage>(stages.Count);
             for (int i = 0; i < stages.Count; ++i)
                 Stages.Add(new Stage(stages[i]));
-
-            IsCompleted = false;
         }
         public Flight(Flight o) : this(o.Stages)
         {
@@ -35,14 +32,12 @@ namespace FlightControl
                 destination.X, destination.Y);
             Stages.Add(new Stage(line, velocity, altitude));
         }
-        public void RemoveStage(int index)
+        public bool RemoveStage(int index)
         {
-            if (index >= 0 && index < Stages.Count)
-            {
-                Stages.RemoveAt(index);
-                if (Stages.Count == 0)
-                    IsCompleted = true;
-            }
+            Stages.RemoveAt(index);
+            if (Stages.Count == 0)
+                return false;
+            return true;
         }
         public void Draw(WriteableBitmap bitmap, int color)
         {

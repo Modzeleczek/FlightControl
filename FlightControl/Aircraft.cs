@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace FlightControl
@@ -28,10 +29,9 @@ namespace FlightControl
             StageProgress += Route[0].Velocity.Length * deltaTime;
             if (StageProgress >= Route[0].Length)
             {
-                Route.RemoveStage(0);
-                StageProgress = 0;
-                if (Route.IsCompleted)
+                if (!Route.RemoveStage(0))
                     return false;
+                StageProgress = 0;
             }
             return true;
         }

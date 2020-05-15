@@ -1,6 +1,5 @@
-﻿
-
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace FlightControl
 {
@@ -30,6 +29,7 @@ namespace FlightControl
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             *((int*)bitmap.BackBuffer + (int)X + (int)Y * bitmap.PixelWidth) = color;
+            bitmap.AddDirtyRect(new Int32Rect((int)X, (int)Y, 1, 1));
         }
     }
 }
