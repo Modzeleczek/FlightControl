@@ -52,6 +52,7 @@ namespace FlightControl
             Timer.Tick += new EventHandler(TimerTick);
             RefreshingRate = refreshingRateInMilliseconds;
         }
+        
         private void TimerTick(object sender, EventArgs e)
         {
             AircraftsBitmap.Lock();
@@ -59,16 +60,11 @@ namespace FlightControl
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                Aircrafts[i].Draw(AircraftsBitmap);//transparent
-                if (!Aircrafts[i].Advance(1.0 / 32.0))
-                {
-                    Aircrafts[i].Draw(AircraftsBitmap);//transparent
-                    Aircrafts[i].DrawRoute(RoutesBitmap);//transparent
+                if (!Aircrafts[i].Advance(1.0 / 32.0, AircraftsBitmap, RoutesBitmap))
                     Aircrafts.RemoveAt(i);
-                }
                 else
                 {
-                    Aircrafts[i].Draw(AircraftsBitmap);//green
+                    //Aircrafts[i].Draw(AircraftsBitmap);
                     ++i;
                 }
             }

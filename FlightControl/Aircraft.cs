@@ -22,15 +22,21 @@ namespace FlightControl
         protected Aircraft(Aircraft o) : this(o.Route, o.Width, o.Height)
         {
         }
-        public bool Advance(double deltaTime)
+        public bool Advance(double deltaTime, WriteableBitmap ab, WriteableBitmap rb)
         {
+            Position.Draw(ab, 0);
             Position.X += Route[0].Velocity.X * deltaTime;
             Position.Y += Route[0].Velocity.Y * deltaTime;
+            Draw(ab);
             StageProgress += Route[0].Velocity.Length * deltaTime;
             if (StageProgress >= Route[0].Length)
             {
                 if (!Route.RemoveStage(0))
+                {
+                    Position.Draw(ab, 0);
+                    Route.Draw(rb, 0);
                     return false;
+                }
                 StageProgress = 0;
             }
             return true;
@@ -48,9 +54,5 @@ namespace FlightControl
         }
         public abstract void Draw(WriteableBitmap bitmap);
         public abstract void DrawRoute(WriteableBitmap bitmap);
-        /*public void ClearGraphics(WriteableBitmap aircraftsBitmap, WriteableBitmap routesBitmap)
-        {
-            
-        }*/
     }
 }
