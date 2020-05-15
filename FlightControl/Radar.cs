@@ -60,7 +60,7 @@ namespace FlightControl
             while(i < Aircrafts.Count)
             {
                 Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
-                if (!Aircrafts[i].Advance())
+                if (!Aircrafts[i].Advance(1.0 / 32.0))
                 {
                     Aircrafts[i].Draw(AircraftsBitmap, 0);//transparent
                     Aircrafts[i].DrawRoute(RoutesBitmap, 0);//transparent
@@ -84,26 +84,17 @@ namespace FlightControl
         {
             Timer.Stop();
         }
-        /*public void SetRefreshingRate(int milliseconds)
-        {
-            Timer.Stop();
-            Timer.Interval = TimeSpan.FromMilliseconds(milliseconds);
-            Timer.Start();
-        }*/
         public void AddAircraft(Plane plane)
         {
             Aircrafts.Add(new Plane(plane));
-            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Helicopter helicopter)
         {
             Aircrafts.Add(new Helicopter(helicopter));
-            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Glider glider)
         {
             Aircrafts.Add(new Glider(glider));
-            Aircrafts[Aircrafts.Count - 1].DrawRoute(RoutesBitmap, (255 << 24) | (255 << 16));
         }
         public void AddAircraft(Balloon balloon)
         {

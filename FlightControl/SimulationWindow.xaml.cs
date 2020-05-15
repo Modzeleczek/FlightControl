@@ -21,7 +21,7 @@ namespace FlightControl
         {
             InitializeComponent();
 
-            radar = new Radar("obstacles.txt", 100, MapImage, RoutesImage, AircraftsImage);
+            radar = new Radar("obstacles.txt", 32, MapImage, RoutesImage, AircraftsImage);
 
             List<Stage> stages = new List<Stage>
             {

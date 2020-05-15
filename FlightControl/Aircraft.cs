@@ -21,11 +21,11 @@ namespace FlightControl
         protected Aircraft(Aircraft o) : this(o.Route, o.Width, o.Height)
         {
         }
-        public bool Advance()
+        public bool Advance(double deltaTime)
         {
-            StageProgress += Route[0].Velocity;
-            Position.X += Route[0].Velocity * Math.Cos(Route[0].Direction);
-            Position.Y += Route[0].Velocity * Math.Sin(Route[0].Direction);
+            Position.X += Route[0].Velocity.X * deltaTime;
+            Position.Y += Route[0].Velocity.Y * deltaTime;
+            StageProgress += Route[0].Velocity.Length * deltaTime;
             if (StageProgress >= Route[0].Length)
             {
                 Route.RemoveStage(0);
