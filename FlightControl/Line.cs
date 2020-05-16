@@ -24,10 +24,14 @@ namespace FlightControl
                 return true;
             return false;
         }
-
+        public void Move(double dx, double dy)
+        {
+            Start.Move(dx, dy);
+            End.Move(dx, dy);
+        }
         public override string ToString()
         {
-            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
+            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y}))";
         }
 
         //Algorithm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
@@ -76,22 +80,22 @@ namespace FlightControl
             {
                 if (Start.Y < End.Y)
                     bitmap.AddDirtyRect(
-                        new Int32Rect((int)Start.X, (int)Start.Y, (int)(End.X - Start.X), (int)(End.Y - Start.Y)
+                        new Int32Rect((int)Start.X, (int)Start.Y, (int)(End.X - Start.X) + 1, (int)(End.Y - Start.Y) + 1
                         ));
                 else
                     bitmap.AddDirtyRect(
-                        new Int32Rect((int)Start.X, (int)End.Y, (int)(End.X - Start.X), (int)(Start.Y - End.Y)
+                        new Int32Rect((int)Start.X, (int)End.Y, (int)(End.X - Start.X) + 1, (int)(Start.Y - End.Y) + 1
                         ));
             }
             else
             {
                 if (Start.Y < End.Y)
                     bitmap.AddDirtyRect(
-                        new Int32Rect((int)End.X, (int)Start.Y, (int)(Start.X - End.X), (int)(End.Y - Start.Y)
+                        new Int32Rect((int)End.X, (int)Start.Y, (int)(Start.X - End.X) + 1, (int)(End.Y - Start.Y) + 1
                         ));
                 else
                     bitmap.AddDirtyRect(
-                        new Int32Rect((int)End.X, (int)End.Y, (int)(Start.X - End.X), (int)(Start.Y - End.Y)
+                        new Int32Rect((int)End.X, (int)End.Y, (int)(Start.X - End.X) + 1, (int)(Start.Y - End.Y) + 1
                         ));
             }
         }

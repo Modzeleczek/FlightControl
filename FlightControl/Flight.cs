@@ -20,8 +20,13 @@ namespace FlightControl
                 throw new NotEnoughElementsException("Flight cannot be created, because stages' list is empty.");
 
             Stages = new List<Stage>(stages.Count);
-            for (int i = 0; i < stages.Count; ++i)
+            Stages.Add(new Stage(stages[0]));
+            for (int i = 1; i < stages.Count; ++i)
+            {
+                if(!stages[i - 1].Track.IsContinuedBy(stages[i].Track))
+                    throw new LinesNotConnectedException($"{stages[i - 1].Track} is not continued by {stages[i].Track}");
                 Stages.Add(new Stage(stages[i]));
+            }
         }
         public Flight(Flight o) : this(o.Stages)
         {
