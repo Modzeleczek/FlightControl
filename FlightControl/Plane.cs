@@ -11,11 +11,11 @@ namespace FlightControl
         public Plane(Plane o) : base(o)
         {
         }
-        public override void Draw(WriteableBitmap bitmap)
+        protected override void Draw(WriteableBitmap bitmap)
         {
             Position.Draw(bitmap, (255 << 24) | (255 << 16) | (85 << 8));
         }
-        public override void DrawRoute(WriteableBitmap bitmap)
+        protected override void DrawRoute(WriteableBitmap bitmap)
         {
             Route.Draw(bitmap, (255 << 24) | (255 << 16) | (85 << 8));
         }

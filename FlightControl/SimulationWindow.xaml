@@ -27,7 +27,7 @@
                Width="1280"
                Height="690"/>
         <Button x:Name="PauseButton"
-                Content="Pause"
+                Content="Stop"
                 HorizontalAlignment="Left"
                 Margin="1187,10,0,0"
                 VerticalAlignment="Top"

@@ -31,7 +31,7 @@ namespace FlightControl
         }
         public override string ToString()
         {
-            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y})); ";
+            return $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y}))";
         }
 
         //Algorithm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm

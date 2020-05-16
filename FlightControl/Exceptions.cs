@@ -29,5 +29,10 @@ namespace FlightControl
             public LineIsPointException() { }
             public LineIsPointException(string message) : base(message) { }
         }
+        public class StageOutOfBoundsException : Exception
+        {
+            public StageOutOfBoundsException() { }
+            public StageOutOfBoundsException(string message) : base(message) { }
+        }
     }
 }

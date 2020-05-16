@@ -71,7 +71,7 @@ namespace FlightControl
             string result = "(Curve: ";
             foreach (var line in Lines)
                 result += line.ToString() + "; ";
-            return result + "); ";
+            return result + ")";
         }
     }
 }
