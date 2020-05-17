@@ -56,17 +56,22 @@ namespace FlightControl
             for (int i = 0; i < o.Lines.Count; ++i)
                 Lines.Add(new Line(o.Lines[i]));
         }
+        public void Move(double dx, double dy)
+        {
+            foreach (var line in Lines)
+                line.Move(dx, dy);
+        }
         public void Draw(WriteableBitmap bitmap, int color)
         {
-            foreach (var l in Lines)
-                l.Draw(bitmap, color);
+            foreach (var line in Lines)
+                line.Draw(bitmap, color);
         }
         public override string ToString()
         {
             string result = "(Curve: ";
-            foreach (var l in Lines)
-                result += l.ToString() + "; ";
-            return result + "); ";
+            foreach (var line in Lines)
+                result += line.ToString() + "; ";
+            return result + ")";
         }
     }
 }

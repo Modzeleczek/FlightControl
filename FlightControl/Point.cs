@@ -1,6 +1,5 @@
-﻿
-
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace FlightControl
 {
@@ -16,6 +15,11 @@ namespace FlightControl
         public Point(Point o) : this(o.X, o.Y)
         {
         }
+        public void Move(double dx, double dy)
+        {
+            X += dx;
+            Y += dy;
+        }
         public override bool Equals(object obj)
         {
             Point point = obj as Point;
@@ -30,6 +34,7 @@ namespace FlightControl
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             *((int*)bitmap.BackBuffer + (int)X + (int)Y * bitmap.PixelWidth) = color;
+            bitmap.AddDirtyRect(new Int32Rect((int)X, (int)Y, 1, 1));
         }
     }
 }

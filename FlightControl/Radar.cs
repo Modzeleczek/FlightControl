@@ -2,7 +2,8 @@
 using System.Windows.Threading;
 using System;
 using System.Windows.Media.Imaging;
-using System.Windows;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace FlightControl
 {
@@ -11,37 +12,56 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private DispatcherTimer Timer;
-        private WriteableBitmap ForegroundBitmap;
-        public Radar(string mapFileName, int refreshingRateInMilliseconds, WriteableBitmap aircraftBitmap)
+        private WriteableBitmap MapBitmap, FrontBitmap;
+        public int RefreshingRate
         {
+            get
+            {
+                return (int)Timer.Interval.TotalMilliseconds;
+            }
+            set
+            {
+                Timer.Stop();
+                Timer.Interval = TimeSpan.FromMilliseconds(value);
+                Timer.Start();
+            }
+        }
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image aircraftsImage)
+        {
+            MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
+                96, 96, PixelFormats.Bgra32, null);
+            mapImage.Source = MapBitmap;
+
+            FrontBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
+                96, 96, PixelFormats.Bgra32, null);
+            aircraftsImage.Source = FrontBitmap;
+
             ObstaclesMap = new Map(mapFileName);
+            MapBitmap.Lock();
+            ObstaclesMap.Draw(MapBitmap, (255 << 24) | (255 << 8));//green
+            //MapBitmap.AddDirtyRect(new Int32Rect(0, 0, MapBitmap.PixelWidth, MapBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
+            MapBitmap.Unlock();
+
             Aircrafts = new List<Aircraft>();
-            ForegroundBitmap = aircraftBitmap;
 
             Timer = new DispatcherTimer();
             Timer.Tick += new EventHandler(TimerTick);
-            //timer.Tick += TimerTick;
-            Timer.Interval = TimeSpan.FromMilliseconds(refreshingRateInMilliseconds);
+            RefreshingRate = refreshingRateInMilliseconds;
         }
+        
         private void TimerTick(object sender, EventArgs e)
         {
-            ForegroundBitmap.Lock();
+            FrontBitmap.Lock();
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                Aircrafts[i].Advance();
-                Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | (255 << 16));
-                if (Aircrafts[i].CompletedRoute)
-                {
-                    Aircrafts[i].Draw(ForegroundBitmap, (255 << 24) | 255);
+                if (!Aircrafts[i].Advance(1.0 / 32.0, FrontBitmap))
                     Aircrafts.RemoveAt(i);
-                }
                 else
                     ++i;
             }
-            ForegroundBitmap.AddDirtyRect(new Int32Rect(0, 0,
-                ForegroundBitmap.PixelWidth, ForegroundBitmap.PixelHeight));
-            ForegroundBitmap.Unlock();
+            //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
+            FrontBitmap.Unlock();
         }
         public void Start()
         {
@@ -50,16 +70,6 @@ namespace FlightControl
         public void Stop()
         {
             Timer.Stop();
-        }
-        public void SetRefreshingRate(int milliseconds)
-        {
-            Timer.Stop();
-            Timer.Interval = TimeSpan.FromMilliseconds(milliseconds);
-            Timer.Start();
-        }
-        public void DrawMap(WriteableBitmap bitmap)
-        {
-            ObstaclesMap.Draw(bitmap, (255 << 24) | (255 << 8));
         }
         public void AddAircraft(Plane plane)
         {
@@ -79,8 +89,7 @@ namespace FlightControl
         }
         public void RemoveAircraft(int index)
         {
-            //if(index >= 0 && index < Aircrafts.Count)
-                Aircrafts.RemoveAt(index);
+            Aircrafts.RemoveAt(index);
         }
     }
 }

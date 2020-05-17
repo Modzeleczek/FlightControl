@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,50 +11,83 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FlightControl
 {
-    /// <summary>
-    /// Interaction logic for SimulationWindow.xaml
-    /// </summary>
     public partial class SimulationWindow : Window
     {
-        public Radar radar;
-        private WriteableBitmap mapBitmap, aircraftBitmap;
+        private Radar radar;
+        bool Running;
         public SimulationWindow()
         {
             InitializeComponent();
 
-            mapBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
-            MapImage.Source = mapBitmap;
-            aircraftBitmap = new WriteableBitmap((int)MapImage.Width, (int)MapImage.Height, 96, 96, PixelFormats.Bgra32, null);
-            AircraftImage.Source = aircraftBitmap;
-
-            radar = new Radar("obstacles.txt", 50, aircraftBitmap);
-
-            List<Stage> stages = new List<Stage>
-            {
-                new Stage(new Line(0, 0, 50, 100), 10, 10),
-                new Stage(new Line(50, 100, 130, 200), 10, 10),
-                new Stage(new Line(130, 200, 300, 252), 10, 10),
+            radar = new Radar("obstacles.txt", 32, MapImage, AircraftsImage);
+            List<Stage> stages = new List<Stage>(10);
+            /*{
+                new Stage(new Line(0, 0, 50, 100), 90, 10),
+                new Stage(new Line(50, 100, 130, 200), 30, 10),
+                new Stage(new Line(130, 200, 300, 252), 60, 10),
                 new Stage(new Line(300, 252, 500, 175), 10, 10)
-            };
-            Flight route = new Flight(stages);
-            radar.AddAircraft(new Plane(route, 20, 20));
+            };*/
+            //radar.AddAircraft(new Plane(new Flight(stages), 15, 10));
 
-            mapBitmap.Lock();
-            radar.DrawMap(mapBitmap);
-            mapBitmap.AddDirtyRect(new Int32Rect(0, 0, mapBitmap.PixelWidth, mapBitmap.PixelHeight));
-            mapBitmap.Unlock();
+            Random random = new Random();
+            int x, y, prevX = random.Next(0, 1280), prevY = random.Next(0, 690);
+            //stages.Clear();
+            for(int i = 1; i < 10; ++i)
+            {
+                x = random.Next(0, 1280);
+                y = random.Next(0, 690);
+                stages.Add(new Stage(
+                    new Line(prevX, prevY,
+                    x, y),
+                    50.0 + 100.0 * random.NextDouble(),
+                    10));
+                prevX = x;
+                prevY = y;
+            }
+            radar.AddAircraft(new Helicopter(new Flight(stages), 20, 20));
+
+            /*stages.Clear();
+            for (int i = 1; i < 10; ++i)
+            {
+                x = random.Next(0, 1280);
+                y = random.Next(0, 690);
+                stages.Add(new Stage(
+                    new Line(prevX, prevY,
+                    x, y),
+                    50.0 + 100.0 * random.NextDouble(),
+                    10));
+                prevX = x;
+                prevY = y;
+            }
+            radar.AddAircraft(new Glider(new Flight(stages), 20, 20));
+            stages.Clear();
+            radar.AddAircraft(new Balloon(new Flight(stages), 20, 20));*/
 
             radar.Start();
+            Running = true;
         }
         protected override void OnClosed(EventArgs e)
         {
             radar.Stop();
             radar = null;
-            mapBitmap = null;
+        }
+
+        private void PauseButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Running)
+            {
+                radar.Stop();
+                (sender as Button).Content = "Start";
+            }
+            else
+            {
+                radar.Start();
+                (sender as Button).Content = "Stop";
+            }
+            Running = !Running;
         }
     }
 }

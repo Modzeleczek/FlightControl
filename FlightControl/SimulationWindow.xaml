@@ -14,12 +14,24 @@
                Margin="0,0,0,0"
                Width="1280"
                Height="690"/>
-        <Image x:Name="AircraftImage"
+        <Image x:Name="RoutesImage"
                VerticalAlignment="Top"
                HorizontalAlignment="Left"
                Margin="0,0,0,0"
                Width="1280"
                Height="690"/>
-
+        <Image x:Name="AircraftsImage"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="0,0,0,0"
+               Width="1280"
+               Height="690"/>
+        <Button x:Name="PauseButton"
+                Content="Stop"
+                HorizontalAlignment="Left"
+                Margin="1187,10,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Click="PauseButtonClick"/>
     </Grid>
 </Window>
