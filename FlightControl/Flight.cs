@@ -1,4 +1,5 @@
 ﻿using FlightControl.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
@@ -13,6 +14,10 @@ namespace FlightControl
             {
                 return Stages[index];
             }
+        }
+        private Flight()
+        {
+            Stages = new List<Stage>();
         }
         public Flight(List<Stage> stages)
         {
@@ -31,7 +36,7 @@ namespace FlightControl
         public Flight(Flight o) : this(o.Stages)
         {
         }
-        public void AddStage(Point destination, double velocity, double altitude)
+        public void AppendStage(Point destination, double velocity, double altitude)
         {
             Line line = new Line(Stages[Stages.Count - 1].Track.End.X, Stages[Stages.Count - 1].Track.End.Y,
                 destination.X, destination.Y);
@@ -48,6 +53,27 @@ namespace FlightControl
         {
             foreach (var stage in Stages)
                 stage.Draw(bitmap, color);
+        }
+        public static Flight GetRandom(int stagesCount, int mapWidth, int mapHeight, 
+            double fromVelocity, double toVelocity, 
+            double fromAltitude, double toAltitude,
+            Random rng)
+        {
+            Flight result = new Flight();
+            int x, y, prevX = rng.Next(0, mapWidth), prevY = rng.Next(0, mapHeight);
+            for (int i = 0; i < stagesCount; ++i)
+            {
+                x = rng.Next(0, mapWidth);
+                y = rng.Next(0, mapHeight);
+                result.Stages.Add(new Stage(
+                    new Line(prevX, prevY,
+                    x, y),
+                    fromVelocity + toVelocity * rng.NextDouble(),
+                    fromAltitude + toAltitude * rng.NextDouble()));
+                prevX = x;
+                prevY = y;
+            }
+            return result;
         }
     }
 }

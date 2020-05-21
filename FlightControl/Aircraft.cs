@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Collections.Generic;
 
 namespace FlightControl
 {
@@ -18,7 +19,7 @@ namespace FlightControl
             Width = width;
             Height = height;
             Hitbox = new Polygon(
-                new System.Collections.Generic.List<Point>
+                new List<Point>
                 {
                     new Point(Position.X - width/2, Position.Y - height/2),
                     new Point(Position.X - width/2, Position.Y + height - 1 - height/2),
@@ -62,9 +63,9 @@ namespace FlightControl
                     return true;
             return false;
         }
-        public void AddStage(Point destination, double altitude, double velocity)
+        public void AppendStage(Point destination, double altitude, double velocity)
         {
-            Route.AddStage(destination, altitude, velocity);
+            Route.AppendStage(destination, altitude, velocity);
         }
         protected abstract void Draw(WriteableBitmap bitmap);
         protected abstract void DrawRoute(WriteableBitmap bitmap);

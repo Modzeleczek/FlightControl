@@ -7,10 +7,13 @@ namespace FlightControl
 {
     public class Map
     {
-        public readonly int Width = 512, Height = 512;
+        public readonly int Width, Height;
         private List<Obstacle> Obstacles;
-        public Map(string fileName)
+        public Map(string fileName, int width, int height)
         {
+            Width = width;
+            Height = height;
+
             Obstacles = new List<Obstacle>();
             if (!File.Exists(fileName))
                 throw new MapLoadingException($"Cannot open file {fileName}.");
