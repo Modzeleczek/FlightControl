@@ -49,6 +49,11 @@ namespace FlightControl
                 return false;
             return true;
         }
+        public void ScaleVelocity(double factor)
+        {
+            foreach (var stage in Stages)
+                stage.ScaleVelocity(factor);
+        }
         public void Draw(WriteableBitmap bitmap, int color)
         {
             foreach (var stage in Stages)

@@ -34,6 +34,10 @@ namespace FlightControl
         public Stage(Stage o) : this(o.Track, o.Velocity.Length, o.Altitude)
         {
         }
+        public void ScaleVelocity(double factor)
+        {
+            Velocity *= factor;
+        }
         public void Draw(WriteableBitmap bitmap, int color)
         {
             Track.Draw(bitmap, color);

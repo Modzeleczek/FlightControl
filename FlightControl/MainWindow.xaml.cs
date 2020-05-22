@@ -45,7 +45,7 @@ namespace FlightControl
         }
         private void Egg(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.");
+            System.Windows.MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
         }
 
         private void RandomVelocity(object sender, RoutedEventArgs e)

@@ -53,7 +53,7 @@ namespace FlightControl
             int i = 0;
             while(i < Aircrafts.Count)
             {
-                if (!Aircrafts[i].Advance(1.0 / 32.0, FrontBitmap))
+                if (!Aircrafts[i].Advance(FrontBitmap))
                     Aircrafts.RemoveAt(i);
                 else
                     ++i;
@@ -118,6 +118,7 @@ namespace FlightControl
                 else
                     Aircrafts.Add(new Balloon(
                         flight, fromWidth + toWidth * rng.NextDouble(), fromHeight + toHeight * rng.NextDouble()));
+                Aircrafts[Aircrafts.Count - 1].ScaleVelocity(1.0 / (double)RefreshingRate);
             }
         }
     }

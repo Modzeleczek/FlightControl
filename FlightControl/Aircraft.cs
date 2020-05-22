@@ -34,15 +34,15 @@ namespace FlightControl
         protected Aircraft(Aircraft o) : this(o.Route, o.Width, o.Height)
         {
         }
-        public bool Advance(double deltaTime, WriteableBitmap bitmap)
+        public bool Advance(WriteableBitmap bitmap)
         {
             Route.Draw(bitmap, 0);//remove old route pixels
             Position.Draw(bitmap, 0);//remove old position pixel
             Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
-            Position.X += Route[0].Velocity.X * deltaTime;
-            Position.Y += Route[0].Velocity.Y * deltaTime;
-            Hitbox.Move(Route[0].Velocity.X * deltaTime, Route[0].Velocity.Y * deltaTime);
-            StageProgress += Route[0].Velocity.Length * deltaTime;
+            Position.X += Route[0].Velocity.X;
+            Position.Y += Route[0].Velocity.Y;
+            Hitbox.Move(Route[0].Velocity.X, Route[0].Velocity.Y);
+            StageProgress += Route[0].Velocity.Length;
             if (StageProgress >= Route[0].Length)
             {
                 Position.X = Route[0].Track.End.X;
@@ -66,6 +66,10 @@ namespace FlightControl
         public void AppendStage(Point destination, double altitude, double velocity)
         {
             Route.AppendStage(destination, altitude, velocity);
+        }
+        public void ScaleVelocity(double factor)
+        {
+            Route.ScaleVelocity(factor);
         }
         protected abstract void Draw(WriteableBitmap bitmap);
         protected abstract void DrawRoute(WriteableBitmap bitmap);
