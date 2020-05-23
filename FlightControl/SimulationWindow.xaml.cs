@@ -24,19 +24,38 @@ namespace FlightControl
             InitializeComponent();
 
             Rng = new Random();
-
             radar = new Radar("obstacles.txt", 32, MapImage, AircraftsImage);
-            radar.RandomizeAircrafts(1, 2, 5, 10, 20, 10, 20, 200, 300, 10, 100, Rng);
+            //radar.RandomizeAircrafts(5, 2, 5, 50, 100, 50, 100, 200, 300, 10, 100, Rng);
+
+            List<Stage> stages = new List<Stage>();
+            stages.Add(new Stage(new Line(50, 50, 500, 600), 200, 10));
+            Flight flight = new Flight(stages);
+
+            radar.AddAircraft(new Plane(flight, 30, 30));
+
+            stages.Clear();
+            stages.Add(new Stage(new Line(50, 50, 500, 400), 200, 10));
+            flight = new Flight(stages);
+            radar.AddAircraft(new Helicopter(flight, 30, 30));
 
             radar.Start();
             Running = true;
+
+            AircraftsImage.MouseLeftButtonDown += AircraftsImage_MouseLeftButtonDown;
         }
+
+        private void AircraftsImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            /*int x = (int)e.GetPosition(sender as Image).X,
+                y = (int)e.GetPosition(sender as Image).Y;*/
+            radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             radar.Stop();
             radar = null;
         }
-
         private void PauseButtonClick(object sender, RoutedEventArgs e)
         {
             if (Running)

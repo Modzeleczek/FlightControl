@@ -8,13 +8,6 @@ namespace FlightControl
     public class Flight
     {
         private List<Stage> Stages;
-        public Stage this[int index]
-        {
-            get
-            {
-                return Stages[index];
-            }
-        }
         private Flight()
         {
             Stages = new List<Stage>();
@@ -42,12 +35,26 @@ namespace FlightControl
                 destination.X, destination.Y);
             Stages.Add(new Stage(line, velocity, altitude));
         }
+        public int StagesCount
+        {
+            get
+            {
+                return Stages.Count;
+            }
+        }
         public bool RemoveStage(int index)
         {
             Stages.RemoveAt(index);
             if (Stages.Count == 0)
                 return false;
             return true;
+        }
+        public Stage ActualStage
+        {
+            get
+            {
+                return Stages[0];
+            }
         }
         public void ScaleVelocity(double factor)
         {
@@ -59,17 +66,17 @@ namespace FlightControl
             foreach (var stage in Stages)
                 stage.Draw(bitmap, color);
         }
-        public static Flight GetRandom(int stagesCount, int mapWidth, int mapHeight, 
+        public static Flight GetRandom(int stagesCount, int beginX, int beginY, int endX, int endY, 
             double fromVelocity, double toVelocity, 
             double fromAltitude, double toAltitude,
             Random rng)
         {
             Flight result = new Flight();
-            int x, y, prevX = rng.Next(0, mapWidth), prevY = rng.Next(0, mapHeight);
+            int x, y, prevX = rng.Next(beginX, endX), prevY = rng.Next(beginY, endY);
             for (int i = 0; i < stagesCount; ++i)
             {
-                x = rng.Next(0, mapWidth);
-                y = rng.Next(0, mapHeight);
+                x = rng.Next(beginX, endX);
+                y = rng.Next(beginY, endY);
                 result.Stages.Add(new Stage(
                     new Line(prevX, prevY,
                     x, y),

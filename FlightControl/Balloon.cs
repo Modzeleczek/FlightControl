@@ -13,7 +13,10 @@ namespace FlightControl
         }
         protected override void Draw(WriteableBitmap bitmap)
         {
-            Position.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
+            if (!Colliding)
+                Hitbox.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
+            else
+                Hitbox.Draw(bitmap, (255 << 24) | (255 << 16));//red
         }
         protected override void DrawRoute(WriteableBitmap bitmap)
         {

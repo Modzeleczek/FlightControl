@@ -7,13 +7,10 @@ namespace FlightControl
 {
     public class Map
     {
-        public readonly int Width, Height;
         private List<Obstacle> Obstacles;
-        public Map(string fileName, int width, int height)
+        public Map(string fileName, WriteableBitmap bitmapToDraw)
         {
-            Width = width;
-            Height = height;
-
+            /* Loading immobile obstacles from file. */
             Obstacles = new List<Obstacle>();
             if (!File.Exists(fileName))
                 throw new MapLoadingException($"Cannot open file {fileName}.");
@@ -21,67 +18,41 @@ namespace FlightControl
             {
                 if (reader.EndOfStream)
                     throw new MapLoadingException("Input file empty.");
-                string line = reader.ReadLine();
-                if (!line.StartsWith("#"))
-                    throw new MapLoadingException("Input file not beginning with #.");
                 do
                 {
-                    if (reader.EndOfStream)
-                        throw new MapLoadingException("No height after #.");
-                    line = reader.ReadLine();
-                    int h = int.Parse(line);
-                    List<Point> obstacleVertices = new List<Point>();
-                    while (true)
-                    {
-                        if (reader.EndOfStream)
-                            throw new MapLoadingException("Input file not ending with #.");
-                        line = reader.ReadLine();
-                        if (!line.StartsWith("#"))
-                        {
-                            string[] parts = line.Split(';');
-                            if (parts.Length == 2)
-                            {
-                                int x = int.Parse(parts[0]);
-                                int y = int.Parse(parts[1]);
-                                obstacleVertices.Add(new Point(x, y));
-                            }
-                            else
-                                throw new MapLoadingException("Missing coordinates.");
-                        }
-                        else
-                            break;
-                    }
-                    obstacleVertices.Add(new Point(obstacleVertices[0]));
-                    Obstacles.Add(new Obstacle(h, new Polygon(obstacleVertices)));
-                    obstacleVertices.Clear();
+                    string[] parts = reader.ReadLine().Split(';');
+                    if (parts[0].Length != 1)
+                        throw new MapLoadingException("Ambigious obstacle type.");
+
+                    char type = parts[0][0];
+                    int h = int.Parse(parts[1]),
+                        x = int.Parse(parts[2]),
+                        y = int.Parse(parts[3]),
+                        rectangleWidth = int.Parse(parts[4]),
+                        rectangleHeight = int.Parse(parts[5]);
+
+                    if (x - rectangleWidth < 0 || x + rectangleWidth >= bitmapToDraw.PixelWidth)
+                        throw new MapLoadingException("Obstacle's hitbox is out of bitmap's bounds (x).");
+                    if (y - rectangleHeight < 0 || y + rectangleHeight >= bitmapToDraw.PixelHeight)
+                        throw new MapLoadingException("Obstacle's hitbox is out of bitmap's bounds (y).");
+
+                    Rectangle hitbox = new Rectangle(new Point(x, y), rectangleWidth, rectangleHeight);
+
+                    if (type == 't')
+                        Obstacles.Add(new Tree(h, hitbox, bitmapToDraw));
+                    else if (type == 'b')
+                        Obstacles.Add(new Building(h, hitbox, bitmapToDraw));
+                    else
+                        throw new MapLoadingException("Unspecified obstacle type.");
                 } while (!reader.EndOfStream);
             }
         }
-        public Obstacle this[int index]
+        public List<Obstacle> ObstaclesList
         {
             get
             {
-                return Obstacles[index];
+                return Obstacles;
             }
-        }
-        public int ObstaclesCount
-        {
-            get
-            {
-                return Obstacles.Count;
-            }
-        }
-        public void Draw(WriteableBitmap bitmap, int color)
-        {
-            foreach (var obstacle in Obstacles)
-                obstacle.Draw(bitmap, color);
-        }
-        public override string ToString()
-        {
-            string result = $"(Map: {Width}x{Height}; ";
-            foreach (var obstacle in Obstacles)
-                result += obstacle.ToString() + "; ";
-            return result + ")";
         }
     }
 }

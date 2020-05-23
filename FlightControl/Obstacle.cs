@@ -1,29 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    public class Obstacle
+    public abstract class Obstacle
     {
-        public double Height;
-        private Polygon Walls;
-        public Obstacle(double height, Polygon walls)
+        public double Height { get; protected set; }
+        public Rectangle Hitbox { get; protected set; }
+        protected Obstacle(double height, Rectangle hitbox)
         {
             Height = height;
-            Walls = new Polygon(walls);
+            Hitbox = new Rectangle(hitbox);
         }
-        public bool Collides(Aircraft aircraft)
+    }
+
+    public class Building : Obstacle
+    {
+        public Building(double height, Rectangle hitbox, WriteableBitmap bitmap) : base(height, hitbox)
         {
-            return false;
+            Hitbox.Draw(bitmap, (255 << 24) | (128 << 16) | (128 << 8) | 128);
         }
-        public override string ToString()
+    }
+
+    public class Tree : Obstacle
+    {
+        public Tree(double height, Rectangle hitbox, WriteableBitmap bitmap) : base(height, hitbox)
         {
-            return $"(Obstacle: Height: {Height}; {Walls}); ";
-        }
-        public void Draw(WriteableBitmap bitmap, int color)
-        {
-            Walls.Draw(bitmap, color);
+            Hitbox.Draw(bitmap, (255 << 24) | (255 << 8));
         }
     }
 }
