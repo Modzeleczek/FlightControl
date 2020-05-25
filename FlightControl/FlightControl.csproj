@@ -65,7 +65,6 @@
     <Compile Include="Polygon.cs" />
     <Compile Include="Curve.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="FastNoise.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Point.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="SimulationWindow.xaml.cs">
       <DependentUpon>SimulationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Terrain.cs" />
     <Compile Include="WriteableBitmapExtensions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PlaneBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="obstacles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

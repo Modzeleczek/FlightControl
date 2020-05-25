@@ -24,7 +24,7 @@ namespace FlightControl
             InitializeComponent();
 
             Rng = new Random();
-            radar = new Radar("obstacles.txt", 32, MapImage, AircraftsImage);
+            radar = new Radar("../../obstacles.txt", 32, MapImage, AircraftsImage);
             //radar.RandomizeAircrafts(5, 2, 5, 50, 100, 50, 100, 200, 300, 10, 100, Rng);
 
             List<Stage> stages = new List<Stage>();
