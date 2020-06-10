@@ -15,15 +15,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
-
+using System.Media;
 namespace FlightControl
 {
     public partial class MainWindow : Window
     {
         private SimulationWindow SecondWindow;
+        public int counter = 0;
         public MainWindow()
         {
             InitializeComponent();
+           
         }
 
         private void StartSimulation(object sender, RoutedEventArgs e)
@@ -58,6 +60,26 @@ namespace FlightControl
             if (dr == System.Windows.Forms.DialogResult.Yes)
             {
                 this.Close();
+            }
+        }
+
+        private void musicStartStop(object sender, RoutedEventArgs e)
+        {
+            if (counter % 2 == 0)
+            {
+                SoundPlayer player = new SoundPlayer();
+                player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav";
+                player.PlayLooping();
+                counter++;
+                MusicButton.Content = "Wyłącz muzykę";
+            }
+            else if ( counter % 2 != 0)
+            {
+                SoundPlayer player = new SoundPlayer();
+                player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav";
+                player.Stop();
+                counter++;
+                MusicButton.Content = "Włącz muzykę";
             }
         }
     }
