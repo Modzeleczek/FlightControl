@@ -35,27 +35,15 @@ namespace FlightControl
                 destination.X, destination.Y);
             Stages.Add(new Stage(line, velocity, altitude));
         }
-        public int StagesCount
-        {
-            get
-            {
-                return Stages.Count;
-            }
-        }
+
+        public int StagesCount => Stages.Count;
         public bool RemoveStage(int index)
         {
             Stages.RemoveAt(index);
-            if (Stages.Count == 0)
-                return false;
-            return true;
+            return Stages.Count > 0;
         }
-        public Stage ActualStage
-        {
-            get
-            {
-                return Stages[0];
-            }
-        }
+        public Stage ActualStage => Stages[0];
+
         public void ScaleVelocity(double factor)
         {
             foreach (var stage in Stages)
@@ -66,7 +54,10 @@ namespace FlightControl
             foreach (var stage in Stages)
                 stage.Draw(bitmap, color);
         }
-        public static Flight GetRandom(int stagesCount, int beginX, int beginY, int endX, int endY, 
+        public static Flight GetRandom(
+            int stagesCount,
+            int beginX, int beginY,
+            int endX, int endY,
             double fromVelocity, double toVelocity, 
             double fromAltitude, double toAltitude,
             Random rng)
@@ -78,8 +69,7 @@ namespace FlightControl
                 x = rng.Next(beginX, endX);
                 y = rng.Next(beginY, endY);
                 result.Stages.Add(new Stage(
-                    new Line(prevX, prevY,
-                    x, y),
+                    new Line(prevX, prevY, x, y),
                     fromVelocity + toVelocity * rng.NextDouble(),
                     fromAltitude + toAltitude * rng.NextDouble()));
                 prevX = x;

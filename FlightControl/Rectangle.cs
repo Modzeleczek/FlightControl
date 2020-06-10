@@ -4,8 +4,9 @@ namespace FlightControl
 {
     public class Rectangle
     {
-        public Point Position;
-        public readonly double Width, Height;
+        public Point Position { get; }
+        public double Width { get; }
+        public double Height { get; }
         public Rectangle(Point position, double width, double height)
         {
             Position = new Point(position);

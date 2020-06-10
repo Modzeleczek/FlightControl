@@ -41,21 +41,28 @@ namespace FlightControl
             radar.Start();
             Running = true;
 
-            AircraftsImage.MouseLeftButtonDown += AircraftsImage_MouseLeftButtonDown;
+            AircraftsImage.MouseLeftButtonDown += new MouseButtonEventHandler((s, e) =>
+            {
+                /*int x = (int)e.GetPosition(sender as Image).X,
+                y = (int)e.GetPosition(sender as Image).Y;*/
+                radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
+            });
         }
 
-        private void AircraftsImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        /*private void AircraftsImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             /*int x = (int)e.GetPosition(sender as Image).X,
-                y = (int)e.GetPosition(sender as Image).Y;*/
+                y = (int)e.GetPosition(sender as Image).Y;* /
             radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
-        }
+        }*/
 
         protected override void OnClosed(EventArgs e)
         {
             radar.Stop();
+            radar.Dispose();
             radar = null;
         }
+
         private void PauseButtonClick(object sender, RoutedEventArgs e)
         {
             if (Running)
@@ -69,6 +76,14 @@ namespace FlightControl
                 (sender as Button).Content = "Stop";
             }
             Running = !Running;
+        }
+        private void RandomizeRoutes(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void RandomizeVelocities(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

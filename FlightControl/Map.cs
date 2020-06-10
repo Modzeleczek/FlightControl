@@ -7,7 +7,7 @@ namespace FlightControl
 {
     public class Map
     {
-        private List<Obstacle> Obstacles;
+        public List<Obstacle> Obstacles { get; protected set; }
         public Map(string fileName, WriteableBitmap bitmapToDraw)
         {
             /* Loading immobile obstacles from file. */
@@ -45,13 +45,6 @@ namespace FlightControl
                     else
                         throw new MapLoadingException("Unspecified obstacle type.");
                 } while (!reader.EndOfStream);
-            }
-        }
-        public List<Obstacle> ObstaclesList
-        {
-            get
-            {
-                return Obstacles;
             }
         }
     }

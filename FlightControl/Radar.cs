@@ -8,11 +8,11 @@ using System.Windows.Controls;
 
 namespace FlightControl
 {
-    public class Radar : DispatcherTimer
+    public class Radar : DispatcherTimer, IDisposable
     {
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
-        private WriteableBitmap MapBitmap, FrontBitmap;
+        private WriteableBitmap MapBitmap, AircraftsBitmap;
         public int RefreshingRate
         {
             get
@@ -28,17 +28,17 @@ namespace FlightControl
         }
         public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image aircraftsImage) : base()
         {
+
             MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
             mapImage.Source = MapBitmap;
 
-            FrontBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
+            AircraftsBitmap = new WriteableBitmap((int)aircraftsImage.Width, (int)aircraftsImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
-            aircraftsImage.Source = FrontBitmap;
+            aircraftsImage.Source = AircraftsBitmap;
 
             MapBitmap.Lock();
             ObstaclesMap = new Map(mapFileName, MapBitmap);
-            //MapBitmap.AddDirtyRect(new Int32Rect(0, 0, MapBitmap.PixelWidth, MapBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
             MapBitmap.Unlock();
 
             Aircrafts = new List<Aircraft>();
@@ -49,7 +49,7 @@ namespace FlightControl
         
         private void TimerTick(object sender, EventArgs e)
         {
-            FrontBitmap.Lock();
+            AircraftsBitmap.Lock();
             int i = 0, j;
             while(i < Aircrafts.Count)
             {
@@ -58,23 +58,16 @@ namespace FlightControl
                     for (j = i + 1; j < Aircrafts.Count; ++j)
                     {
                         if (Aircrafts[i].Collides(Aircrafts[j]))
-                        {
-                            Aircrafts[i].Colliding = true;
-                            Aircrafts[j].Colliding = true;
                             break;
-                        }
                     }
                 }
-                if (!Aircrafts[i].Advance(FrontBitmap))
+                if (!Aircrafts[i].Advance(AircraftsBitmap))
                     Aircrafts.RemoveAt(i);
                 else
-                {
-                    Aircrafts[i].Colliding = false;
                     ++i;
-                }
             }
             //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
-            FrontBitmap.Unlock();
+            AircraftsBitmap.Unlock();
         }
         public void AddAircraft(Plane plane)
         {
@@ -107,18 +100,19 @@ namespace FlightControl
         {
             Aircrafts.RemoveAt(index);
         }
-        public void RandomizeAircrafts(int aircraftsCount, int fromStagesCount, int toStagesCount,
+        public void RandomizeAircrafts(
+            int aircraftsCount, int fromStagesCount, int toStagesCount,
             double fromWidth, double toWidth,
             double fromHeight, double toHeight,
             double fromVelocity, double toVelocity,
             double fromAltitude, double toAltitude,
             Random rng)
         {
-            FrontBitmap.Lock();
+            AircraftsBitmap.Lock();
             foreach (var aircraft in Aircrafts)
-                aircraft.ClearDrawings(FrontBitmap);
+                aircraft.ClearDrawings(AircraftsBitmap);
             Aircrafts.Clear();
-            FrontBitmap.Unlock();
+            AircraftsBitmap.Unlock();
 
             for (int i = 0; i < aircraftsCount; ++i)
             {
@@ -127,7 +121,8 @@ namespace FlightControl
                 Flight flight = Flight.GetRandom(
                         rng.Next(fromStagesCount, toStagesCount),
                         (int)Math.Ceiling(width), (int)Math.Ceiling(height),
-                        (int)Math.Floor(FrontBitmap.PixelWidth-1 - width), (int)Math.Floor(FrontBitmap.PixelHeight-1 - height),
+                        (int)Math.Floor(AircraftsBitmap.PixelWidth-1 - width),
+                        (int)Math.Floor(AircraftsBitmap.PixelHeight-1 - height),
                         fromVelocity, toVelocity, fromAltitude, toAltitude, rng);
 
                 double random = rng.NextDouble();
@@ -141,6 +136,11 @@ namespace FlightControl
                     Aircrafts.Add(new Balloon(flight, width, height));
                 Aircrafts[i].ScaleVelocity(1.0 / RefreshingRate);
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

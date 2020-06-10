@@ -6,7 +6,7 @@ namespace FlightControl
     {
         protected Flight Route;
         protected Rectangle Hitbox;
-        public bool Colliding;
+        public bool Colliding { get; protected set; }
         protected double StageProgress;
         protected Aircraft(Flight route, double width, double height)
         {
@@ -39,6 +39,7 @@ namespace FlightControl
 
             DrawRoute(bitmap);
             Draw(bitmap);
+            Colliding = false;
             return true;
         }
         public void AppendStage(Point destination, double velocity, double altitude)
@@ -63,12 +64,16 @@ namespace FlightControl
         public bool Collides(Aircraft aircraft)
         {
             if (aircraft.Route.ActualStage.Altitude == this.Route.ActualStage.Altitude)
-                return this.Hitbox.Collides(aircraft.Hitbox);
+                return aircraft.Colliding = this.Colliding = this.Hitbox.Collides(aircraft.Hitbox);
+                //return true;
             return false;
         }
         public bool Collides(Obstacle obstacle)
         {
-            return this.Hitbox.Collides(obstacle.Hitbox);
+            if (obstacle.Height >= this.Route.ActualStage.Altitude)
+                return this.Colliding = this.Hitbox.Collides(obstacle.Hitbox);
+                //return true;
+            return false;
         }
         public void ScaleVelocity(double factor)
         {

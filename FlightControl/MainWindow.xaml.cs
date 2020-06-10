@@ -14,40 +14,36 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Forms;
 using System.Media;
 namespace FlightControl
 {
     public partial class MainWindow : Window
     {
         private SimulationWindow SecondWindow;
-        public int counter = 0;
+        private bool MusicPlaying = false;
+        private SoundPlayer Player = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav");
         public MainWindow()
         {
             InitializeComponent();
-           
         }
 
         private void StartSimulation(object sender, RoutedEventArgs e)
         {
-            SecondWindow = new SimulationWindow();
-            SecondWindow.Show();
+            if (StartSimulationButton.IsEnabled)
+            {
+                StartSimulationButton.IsEnabled = false;
+                SecondWindow = new SimulationWindow();
+                SecondWindow.Show();
+                SecondWindow.Closing += new System.ComponentModel.CancelEventHandler((closingSender, closingE) =>
+                {
+                    StartSimulationButton.IsEnabled = true;
+                });
+            }
         }
-        private void ChangeAmount(object sender, RoutedEventArgs e)
-        {
 
-        }
-        private void Random(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void RandomRoutes(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void Egg(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
+            MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
         }
 
         private void RandomVelocity(object sender, RoutedEventArgs e)
@@ -56,31 +52,23 @@ namespace FlightControl
         }
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
-            DialogResult dr = System.Windows.Forms.MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
-            if (dr == System.Windows.Forms.DialogResult.Yes)
-            {
+            if (MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 this.Close();
-            }
         }
 
-        private void musicStartStop(object sender, RoutedEventArgs e)
+        private void MusicStartStop(object sender, RoutedEventArgs e)
         {
-            if (counter % 2 == 0)
+            if (!MusicPlaying)
             {
-                SoundPlayer player = new SoundPlayer();
-                player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav";
-                player.PlayLooping();
-                counter++;
+                Player.PlayLooping();
                 MusicButton.Content = "Wyłącz muzykę";
             }
-            else if ( counter % 2 != 0)
+            else
             {
-                SoundPlayer player = new SoundPlayer();
-                player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav";
-                player.Stop();
-                counter++;
+                Player.Stop();
                 MusicButton.Content = "Włącz muzykę";
             }
+            MusicPlaying = !MusicPlaying;
         }
     }
 }
