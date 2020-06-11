@@ -13,9 +13,7 @@ namespace FlightControl
             Width = width;
             Height = height;
         }
-        public Rectangle(Rectangle o) : this(o.Position, o.Width, o.Height)
-        {
-        }
+        public Rectangle(Rectangle o) : this(o.Position, o.Width, o.Height) { }
         public bool Collides(Rectangle rectangle)
         {
             if (rectangle.Position.X + rectangle.Width >= Position.X
@@ -25,9 +23,7 @@ namespace FlightControl
                     return true;
             return false;
         }
-        public void Draw(WriteableBitmap bitmap, int color)
-        {
+        public void Draw(WriteableBitmap bitmap, int color) =>
             bitmap.DrawRectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height, color);
-        }
     }
 }

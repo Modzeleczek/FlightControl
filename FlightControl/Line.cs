@@ -16,9 +16,7 @@ namespace FlightControl
             Start = new Point(x1, y1);
             End = new Point(x2, y2);
         }
-        public Line(Line o) : this(o.Start.X, o.Start.Y, o.End.X, o.End.Y)
-        {
-        }
+        public Line(Line o) : this(o.Start.X, o.Start.Y, o.End.X, o.End.Y) { }
         public bool IsContinuedBy(Line next)
         {
             if (End.Equals(next.Start))

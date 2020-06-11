@@ -45,8 +45,8 @@
                 Background="LightBlue"
                 BorderBrush="#FF0080FF"
                 Click="RandomizeRoutes"/>
-        <Button x:Name="RandomizeVelocityButton"
-                Content="Losuj prędkości"
+        <Button x:Name="RandomizeAircraftsButton"
+                Content="Losuj statki"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 HorizontalAlignment="Right"
@@ -56,6 +56,6 @@
                 Foreground="Black"
                 Background="LightBlue"
                 BorderBrush="#FF0080FF"
-                Click="RandomizeVelocities"/>
+                Click="RandomizeAircrafts"/>
     </Grid>
 </Window>

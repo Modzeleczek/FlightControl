@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System;
+using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
@@ -16,9 +17,7 @@ namespace FlightControl
             StageProgress = 0;
             Colliding = false;
         }
-        protected Aircraft(Aircraft o) : this(o.Route, o.Hitbox.Width, o.Hitbox.Height)
-        {
-        }
+        protected Aircraft(Aircraft o) : this(o.Route, o.Hitbox.Width, o.Hitbox.Height) { }
         public bool Advance(WriteableBitmap bitmap)
         {
             Route.Draw(bitmap, 0);//remove old route pixels
@@ -42,25 +41,10 @@ namespace FlightControl
             Colliding = false;
             return true;
         }
-        public void AppendStage(Point destination, double velocity, double altitude)
-        {
+        public void AppendStage(Point destination, double velocity, double altitude) =>
             Route.AppendStage(destination, velocity, altitude);
-        }
-        public int StagesCount
-        {
-            get
-            {
-                return Route.StagesCount;
-            }
-        }
-        public bool RemoveStage(int index)
-        {
-            return Route.RemoveStage(index);
-        }
-        public void ChangeFlight(Flight newFlight)
-        {
-            Route = new Flight(newFlight);
-        }
+        public int StagesCount => Route.StagesCount;
+        public bool RemoveStage(int index) => Route.RemoveStage(index);
         public bool Collides(Aircraft aircraft)
         {
             if (aircraft.Route.ActualStage.Altitude == this.Route.ActualStage.Altitude)
@@ -75,17 +59,25 @@ namespace FlightControl
                 //return true;
             return false;
         }
-        public void ScaleVelocity(double factor)
-        {
-            Route.ScaleVelocity(factor);
-        }
+        public void ScaleVelocity(double factor) => Route.ScaleVelocity(factor);
         protected abstract void Draw(WriteableBitmap bitmap);
         protected abstract void DrawRoute(WriteableBitmap bitmap);
-        public void ClearDrawings(WriteableBitmap bitmap)
+        public void ClearGraphics(WriteableBitmap bitmap)
         {
             Route.Draw(bitmap, 0);//remove old route pixels
-            //Position.Draw(bitmap, 0);//remove old position pixel
             Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
+        }
+        public void RandomizeFlight(int fromStagesCount, int toStagesCount, int mapWidth, int mapHeight, int fps, Random rng)
+        {
+            Route = Flight.GetRandom(
+                rng.Next(fromStagesCount, toStagesCount),
+                (int)Math.Ceiling(Hitbox.Width), (int)Math.Ceiling(Hitbox.Height),
+                (int)Math.Floor(mapWidth - 1 - Hitbox.Width),
+                (int)Math.Floor(mapHeight - 1 - Hitbox.Height),
+                100, 100, 5, 100, rng);
+            Hitbox.Position.X = Route.ActualStage.Track.Start.X;
+            Hitbox.Position.Y = Route.ActualStage.Track.Start.Y;
+            ScaleVelocity(1.0 / fps);
         }
     }
 }

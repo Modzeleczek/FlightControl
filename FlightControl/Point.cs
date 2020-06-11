@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media.Imaging;
-using System.Windows;
 
 namespace FlightControl
 {
@@ -12,9 +11,7 @@ namespace FlightControl
             X = x;
             Y = y;
         }
-        public Point(Point o) : this(o.X, o.Y)
-        {
-        }
+        public Point(Point o) : this(o.X, o.Y) { }
         public void Move(double dx, double dy)
         {
             X += dx;
@@ -27,13 +24,7 @@ namespace FlightControl
                 return false;
             return (point.X == X && point.Y == Y);
         }
-        public override string ToString()
-        {
-            return $"({X},{Y})";
-        }
-        unsafe public void Draw(WriteableBitmap bitmap, int color)
-        {
-            bitmap.DrawPoint((int)X, (int)Y, color);
-        }
+        public override string ToString() => $"({X},{Y})";
+        unsafe public void Draw(WriteableBitmap bitmap, int color) => bitmap.DrawPoint((int)X, (int)Y, color);
     }
 }

@@ -20,9 +20,9 @@ namespace FlightControl
         /// <param name="altitude">Flight altitude on this stage.</param>
         public Stage(Line track, double velocityValue, double altitude)
         {
-            if (track.Start.X < 0 || track.Start.X >= 1280 || track.Start.Y < 0 || track.Start.Y >= 690)
+            if (track.Start.X < 0 || track.Start.X >= 1280 || track.Start.Y < 0 || track.Start.Y >= 720)
                 throw new StageOutOfBoundsException($"Track.Start: {Track.Start} is beyond map's boundaries.");
-            if (track.End.X < 0 || track.End.X >= 1280 || track.End.Y < 0 || track.End.Y >= 690)
+            if (track.End.X < 0 || track.End.X >= 1280 || track.End.Y < 0 || track.End.Y >= 720)
                 throw new StageOutOfBoundsException($"Track.End: {Track.End} is beyond map's boundaries.");
 
             Track = new Line(track);
@@ -32,16 +32,8 @@ namespace FlightControl
                 velocityValue * (Track.End.Y - Track.Start.Y) / Length);
             Altitude = altitude;
         }
-        public Stage(Stage o) : this(o.Track, o.Velocity.Length, o.Altitude)
-        {
-        }
-        public void ScaleVelocity(double factor)
-        {
-            Velocity *= factor;
-        }
-        public void Draw(WriteableBitmap bitmap, int color)
-        {
-            Track.Draw(bitmap, color);
-        }
+        public Stage(Stage o) : this(o.Track, o.Velocity.Length, o.Altitude) { }
+        public void ScaleVelocity(double factor) => Velocity *= factor;
+        public void Draw(WriteableBitmap bitmap, int color) => Track.Draw(bitmap, color);
     }
 }

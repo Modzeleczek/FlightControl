@@ -15,10 +15,7 @@ namespace FlightControl
         private WriteableBitmap MapBitmap, AircraftsBitmap;
         public int RefreshingRate
         {
-            get
-            {
-                return (int)Interval.TotalMilliseconds;
-            }
+            get => (int)Interval.TotalMilliseconds;
             set
             {
                 Stop();
@@ -60,6 +57,11 @@ namespace FlightControl
                         if (Aircrafts[i].Collides(Aircrafts[j]))
                             break;
                     }
+                    for (j = 0; j < ObstaclesMap.Obstacles.Count; ++j)
+                    {
+                        if (Aircrafts[i].Collides(ObstaclesMap.Obstacles[j]))
+                            break;
+                    }
                 }
                 if (!Aircrafts[i].Advance(AircraftsBitmap))
                     Aircrafts.RemoveAt(i);
@@ -89,31 +91,22 @@ namespace FlightControl
             balloon.ScaleVelocity(1.0 / RefreshingRate);
             Aircrafts.Add(new Balloon(balloon));
         }
-        public int AircraftsCount
+        public int AircraftsCount => Aircrafts.Count;
+        public void RemoveAircraft(int index) => Aircrafts.RemoveAt(index);
+
+        public void RandomizeAircrafts(Random rng)
         {
-            get
-            {
-                return Aircrafts.Count;
-            }
-        }
-        public void RemoveAircraft(int index)
-        {
-            Aircrafts.RemoveAt(index);
-        }
-        public void RandomizeAircrafts(
-            int aircraftsCount, int fromStagesCount, int toStagesCount,
-            double fromWidth, double toWidth,
-            double fromHeight, double toHeight,
-            double fromVelocity, double toVelocity,
-            double fromAltitude, double toAltitude,
-            Random rng)
-        {
+            int aircraftsCount = 20, fromStagesCount = 5, toStagesCount = 10,
+            fromWidth = 10, toWidth = 10,
+            fromHeight = 20, toHeight = 40,
+            fromVelocity = 150, toVelocity = 100,
+            fromAltitude = 50, toAltitude = 100;
+
             AircraftsBitmap.Lock();
             foreach (var aircraft in Aircrafts)
-                aircraft.ClearDrawings(AircraftsBitmap);
+                aircraft.ClearGraphics(AircraftsBitmap);
             Aircrafts.Clear();
             AircraftsBitmap.Unlock();
-
             for (int i = 0; i < aircraftsCount; ++i)
             {
                 double width = fromWidth + toWidth * rng.NextDouble(),
@@ -136,6 +129,16 @@ namespace FlightControl
                     Aircrafts.Add(new Balloon(flight, width, height));
                 Aircrafts[i].ScaleVelocity(1.0 / RefreshingRate);
             }
+        }
+        public void RandomizeFlights(Random rng)
+        {
+            AircraftsBitmap.Lock();
+            foreach (var aircraft in Aircrafts)
+            {
+                aircraft.ClearGraphics(AircraftsBitmap);
+                aircraft.RandomizeFlight(3, 10, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, RefreshingRate, rng);
+            }
+            AircraftsBitmap.Unlock();
         }
 
         public void Dispose()
