@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Media;
+using FlightControl.Exceptions;
 namespace FlightControl
 {
     public partial class MainWindow : Window
@@ -32,9 +33,21 @@ namespace FlightControl
             if (StartSimulationButton.IsEnabled)
             {
                 StartSimulationButton.IsEnabled = false;
-                SecondWindow = new SimulationWindow();
-                SecondWindow.Show();
-                SecondWindow.Closing += SecondWindowClosing;
+                try
+                {
+                    SecondWindow = new SimulationWindow();
+                    SecondWindow.Show();
+                    SecondWindow.Closing += SecondWindowClosing;
+                }
+                catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
+                {
+                    MessageBox.Show(
+                        $"Program zakończy się, ponieważ nie udało się wczytać mapy.\nSzczegóły:\n{ex.Message}",
+                        "Błąd",
+                        MessageBoxButton.OK);
+                    this.Close();
+                    App.Current.Shutdown();
+                }
             }
         }
 

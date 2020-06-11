@@ -13,9 +13,9 @@ namespace FlightControl
         public Map(string fileName, WriteableBitmap bitmapToDraw)
         {
             /* Loading immobile obstacles from file. */
-            Obstacles = new List<Obstacle>();
             if (!File.Exists(fileName))
                 throw new MapLoadingException($"Cannot open file {fileName}.");
+            Obstacles = new List<Obstacle>();
             using (StreamReader reader = new StreamReader(fileName))
             {
                 if (reader.EndOfStream)
@@ -24,7 +24,7 @@ namespace FlightControl
                 {
                     string[] parts = reader.ReadLine().Split(';');
                     if (parts[0].Length != 1)
-                        throw new MapLoadingException("Ambigious obstacle type.");
+                        throw new MapLoadingException("Ambiguous obstacle type.");
 
                     char type = parts[0][0];
                     int h = int.Parse(parts[1]),
@@ -45,7 +45,7 @@ namespace FlightControl
                     else if (type == 'b')
                         Obstacles.Add(new Building(h, hitbox, bitmapToDraw));
                     else
-                        throw new MapLoadingException("Unspecified obstacle type.");
+                        throw new MapLoadingException("Unknown obstacle type.");
                 } while (!reader.EndOfStream);
             }
         }
@@ -61,14 +61,7 @@ namespace FlightControl
             Obstacles = null;
         }
 
-        public IEnumerator<Obstacle> GetEnumerator()
-        {
-            return Obstacles.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Obstacles.GetEnumerator();
-        }
+        public IEnumerator<Obstacle> GetEnumerator() => Obstacles.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Obstacles.GetEnumerator();
     }
 }

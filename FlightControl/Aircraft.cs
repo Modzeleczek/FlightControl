@@ -9,6 +9,7 @@ namespace FlightControl
         protected Rectangle Hitbox;
         public bool Colliding { get; protected set; }
         protected double StageProgress;
+
         protected Aircraft(Flight route, double width, double height)
         {
             Route = new Flight(route);
@@ -18,19 +19,15 @@ namespace FlightControl
             Colliding = false;
         }
         protected Aircraft(Aircraft o) : this(o.Route, o.Hitbox.Width, o.Hitbox.Height) { }
+
         public bool Advance(WriteableBitmap bitmap)
         {
-            Route.Draw(bitmap, 0);//remove old route pixels
-            //Position.Draw(bitmap, 0);//remove old position pixel
-            Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
-
-            Hitbox.Position.X += Route.ActualStage.Velocity.X;
-            Hitbox.Position.Y += Route.ActualStage.Velocity.Y;
+            ClearGraphics(bitmap);
+            Hitbox.Position.Move(Route.ActualStage.Velocity.X, Route.ActualStage.Velocity.Y);
             StageProgress += Route.ActualStage.Velocity.Length;
             if (StageProgress >= Route.ActualStage.Length)
             {
-                Hitbox.Position.X = Route.ActualStage.Track.End.X;
-                Hitbox.Position.Y = Route.ActualStage.Track.End.Y;
+                Hitbox.Place(Route.ActualStage.Track.End);
                 if (!Route.RemoveStage(0))
                     return false;
                 StageProgress = 0;
@@ -41,31 +38,37 @@ namespace FlightControl
             Colliding = false;
             return true;
         }
+
         public void AppendStage(Point destination, double velocity, double altitude) =>
             Route.AppendStage(destination, velocity, altitude);
+
         public int StagesCount => Route.StagesCount;
+
         public bool RemoveStage(int index) => Route.RemoveStage(index);
+
         public bool Collides(Aircraft aircraft)
         {
             if (aircraft.Route.ActualStage.Altitude == this.Route.ActualStage.Altitude)
                 return aircraft.Colliding = this.Colliding = this.Hitbox.Collides(aircraft.Hitbox);
-                //return true;
             return false;
         }
         public bool Collides(Obstacle obstacle)
         {
             if (obstacle.Height >= this.Route.ActualStage.Altitude)
                 return this.Colliding = this.Hitbox.Collides(obstacle.Hitbox);
-                //return true;
             return false;
         }
+
         public void ScaleVelocity(double factor) => Route.ScaleVelocity(factor);
-        protected abstract void Draw(WriteableBitmap bitmap);
-        protected abstract void DrawRoute(WriteableBitmap bitmap);
+
+        public abstract void Draw(WriteableBitmap bitmap);
+
+        public abstract void DrawRoute(WriteableBitmap bitmap);
+
         public void ClearGraphics(WriteableBitmap bitmap)
         {
-            Route.Draw(bitmap, 0);//remove old route pixels
-            Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
+            Route.Draw(bitmap, 0);
+            Hitbox.Draw(bitmap, 0);
         }
 
         public void Dispose()

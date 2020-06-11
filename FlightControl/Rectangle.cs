@@ -8,6 +8,7 @@ namespace FlightControl
         public Point Position { get; private set; }
         public double Width { get; }
         public double Height { get; }
+
         public Rectangle(Point position, double width, double height)
         {
             Position = new Point(position);
@@ -15,6 +16,7 @@ namespace FlightControl
             Height = height;
         }
         public Rectangle(Rectangle o) : this(o.Position, o.Width, o.Height) { }
+
         public bool Collides(Rectangle rectangle)
         {
             if (rectangle.Position.X + rectangle.Width >= Position.X
@@ -24,12 +26,16 @@ namespace FlightControl
                     return true;
             return false;
         }
+
+        public void Place(Point position)
+        {
+            Position.X = position.X - Width / 2;
+            Position.Y = position.Y - Height / 2;
+        }
+
         public void Draw(WriteableBitmap bitmap, int color) =>
             bitmap.DrawRectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height, color);
 
-        public void Dispose()
-        {
-            Position = null;
-        }
+        public void Dispose() => Position = null;
     }
 }

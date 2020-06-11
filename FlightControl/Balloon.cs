@@ -1,26 +1,40 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System;
+using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
     public class Balloon : Aircraft
     {
-        public Balloon(Flight route, double width, double length)
-            : base(route, width, length)
+        public Balloon(Flight route)
+            : base(route, 15, 15)
         {
         }
-        public Balloon(Balloon o) : base(o)
-        {
-        }
-        protected override void Draw(WriteableBitmap bitmap)
+        public Balloon(Balloon o) : base(o) { }
+
+        public override void Draw(WriteableBitmap bitmap)
         {
             if (!Colliding)
                 Hitbox.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
             else
                 Hitbox.Draw(bitmap, (255 << 24) | (255 << 16));//red
         }
-        protected override void DrawRoute(WriteableBitmap bitmap)
+
+        public override void DrawRoute(WriteableBitmap bitmap)
         {
             Route.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
+        }
+
+        public static Balloon GetRandom(int mapWidth, int mapHeight, Random rng, int refreshingRate)
+        {
+            Flight flight = Flight.GetRandom(
+                rng.Next(5, 10),
+                15, 15,
+                mapWidth - 1 - 15,
+                mapHeight - 1 - 15,
+                50, 100, 20, 100, rng);
+            Balloon balloon = new Balloon(flight);
+            balloon.ScaleVelocity(1.0 / refreshingRate);
+            return balloon;
         }
     }
 }

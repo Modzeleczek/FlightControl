@@ -13,6 +13,7 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private WriteableBitmap MapBitmap, AircraftsBitmap;
+
         public int RefreshingRate
         {
             get => (int)Interval.TotalMilliseconds;
@@ -23,9 +24,9 @@ namespace FlightControl
                 Start();
             }
         }
+
         public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image aircraftsImage) : base()
         {
-
             MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
             mapImage.Source = MapBitmap;
@@ -71,13 +72,17 @@ namespace FlightControl
                     }
                 }
                 if (!Aircrafts[i].Advance(AircraftsBitmap))
+                {
+                    Aircrafts[i].Dispose();
+                    Aircrafts[i] = null;
                     Aircrafts.RemoveAt(i);
+                }
                 else
                     ++i;
             }
-            //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight));//Unnecessary after doing it in Line.Draw;
             AircraftsBitmap.Unlock();
         }
+
         public void AddAircraft(Plane plane)
         {
             plane.ScaleVelocity(1.0 / RefreshingRate);
@@ -98,44 +103,41 @@ namespace FlightControl
             balloon.ScaleVelocity(1.0 / RefreshingRate);
             Aircrafts.Add(new Balloon(balloon));
         }
+
         public int AircraftsCount => Aircrafts.Count;
+
         public void RemoveAircraft(int index) => Aircrafts.RemoveAt(index);
 
         public void RandomizeAircrafts(Random rng)
         {
-            int aircraftsCount = 20, fromStagesCount = 5, toStagesCount = 10,
-            fromWidth = 10, toWidth = 10,
-            fromHeight = 20, toHeight = 40,
-            fromVelocity = 150, toVelocity = 100,
-            fromAltitude = 50, toAltitude = 100;
+            int aircraftsCount = 20;
 
             AircraftsBitmap.Lock();
-            foreach (var aircraft in Aircrafts)
-                aircraft.ClearGraphics(AircraftsBitmap);
+            for(int i = 0; i < Aircrafts.Count; ++i)
+            {
+                Aircrafts[i].ClearGraphics(AircraftsBitmap);
+                Aircrafts[i].Dispose();
+                Aircrafts[i] = null;
+            }
             Aircrafts.Clear();
-            AircraftsBitmap.Unlock();
+
             for (int i = 0; i < aircraftsCount; ++i)
             {
-                double width = fromWidth + toWidth * rng.NextDouble(),
-                    height = fromHeight + toHeight * rng.NextDouble();
-                Flight flight = Flight.GetRandom(
-                        rng.Next(fromStagesCount, toStagesCount),
-                        (int)Math.Ceiling(width), (int)Math.Ceiling(height),
-                        (int)Math.Floor(AircraftsBitmap.PixelWidth-1 - width),
-                        (int)Math.Floor(AircraftsBitmap.PixelHeight-1 - height),
-                        fromVelocity, toVelocity, fromAltitude, toAltitude, rng);
-
                 double random = rng.NextDouble();
-                if(random >= 0.75)
-                    Aircrafts.Add(new Plane(flight, width, height));
-                else if(random >= 0.5)
-                    Aircrafts.Add(new Helicopter(flight, width, height));
+                Aircraft generated;
+                if (random >= 0.75)
+                    generated = Plane.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng, RefreshingRate);
+                else if (random >= 0.5)
+                    generated = Helicopter.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng, RefreshingRate);
                 else if (random >= 0.25)
-                    Aircrafts.Add(new Glider(flight, width, height));
+                    generated = Glider.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng, RefreshingRate);
                 else
-                    Aircrafts.Add(new Balloon(flight, width, height));
-                Aircrafts[i].ScaleVelocity(1.0 / RefreshingRate);
+                    generated = Balloon.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng, RefreshingRate);
+                generated.Draw(AircraftsBitmap);
+                generated.DrawRoute(AircraftsBitmap);
+                Aircrafts.Add(generated);
             }
+            AircraftsBitmap.Unlock();
         }
 
         public void Dispose()

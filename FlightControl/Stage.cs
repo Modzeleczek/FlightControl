@@ -12,12 +12,6 @@ namespace FlightControl
         public Vector Velocity { get; private set; }
         public double Altitude { get; private set; }
 
-        /// <summary>
-        /// Flight stage constructor.
-        /// </summary>
-        /// <param name="track">Line from start to end.</param>
-        /// <param name="velocityValue">Velocity vector norm in pixels per second.</param>
-        /// <param name="altitude">Flight altitude on this stage.</param>
         public Stage(Line track, double velocityValue, double altitude)
         {
             if (track.Start.X < 0 || track.Start.X >= 1280 || track.Start.Y < 0 || track.Start.Y >= 720)
@@ -33,8 +27,11 @@ namespace FlightControl
             Altitude = altitude;
         }
         public Stage(Stage o) : this(o.Track, o.Velocity.Length, o.Altitude) { }
+
         public void ScaleVelocity(double factor) => Velocity *= factor;
+
         public void Draw(WriteableBitmap bitmap, int color) => Track.Draw(bitmap, color);
+
         public void Dispose()
         {
             Track.Dispose();

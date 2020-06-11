@@ -32,12 +32,12 @@ namespace FlightControl
             };
             Flight flight = new Flight(stages);
 
-            radar.AddAircraft(new Plane(flight, 30, 30));
+            radar.AddAircraft(new Plane(flight));
 
             stages.Clear();
             stages.Add(new Stage(new Line(50, 50, 500, 400), 200, 10));
             flight = new Flight(stages);
-            radar.AddAircraft(new Helicopter(flight, 30, 30));
+            radar.AddAircraft(new Helicopter(flight));
 
             AircraftsImage.MouseLeftButtonDown += LeftClick;
 
@@ -50,7 +50,6 @@ namespace FlightControl
             int x = (int)e.GetPosition(AircraftsImage).X,
                 y = (int)e.GetPosition(AircraftsImage).Y;
             debugTB.Text = $"{x}, {y}";
-            //debugTB.Text = $"{AircraftsImage.ActualWidth}, {AircraftsImage.ActualHeight}";
         }
 
         private void PauseButtonClick(object sender, RoutedEventArgs e)

@@ -8,21 +8,17 @@ namespace FlightControl
     public class Flight : IDisposable
     {
         private List<Stage> Stages;
-        private Flight()
-        {
-            Stages = new List<Stage>();
-        }
-        public Flight(List<Stage> stages)
+        private Flight() => Stages = new List<Stage>();
+        public Flight(List<Stage> stages) : this()
         {
             if (stages.Count == 0)
                 throw new NotEnoughElementsException("Flight cannot be created, because stages' list is empty.");
 
-            Stages = new List<Stage>(stages.Count);
             Stages.Add(new Stage(stages[0]));
             for (int i = 1; i < stages.Count; ++i)
             {
                 if(!stages[i - 1].Track.IsContinuedBy(stages[i].Track))
-                    throw new LinesNotConnectedException($"{stages[i - 1].Track} is not continued by {stages[i].Track}");
+                    throw new LinesNotConnectedException($"Line {stages[i - 1].Track} is not continued by {stages[i].Track}");
                 Stages.Add(new Stage(stages[i]));
             }
         }
@@ -56,7 +52,7 @@ namespace FlightControl
             int stagesCount,
             int beginX, int beginY,
             int endX, int endY,
-            double fromVelocity, double toVelocity, 
+            double fromVelocity, double toVelocity,
             double fromAltitude, double toAltitude,
             Random rng)
         {
@@ -68,8 +64,8 @@ namespace FlightControl
                 y = rng.Next(beginY, endY);
                 result.Stages.Add(new Stage(
                     new Line(prevX, prevY, x, y),
-                    fromVelocity + toVelocity * rng.NextDouble(),
-                    fromAltitude + toAltitude * rng.NextDouble()));
+                    fromVelocity + (toVelocity - fromVelocity) * rng.NextDouble(),
+                    fromAltitude + (toAltitude - fromAltitude) * rng.NextDouble()));
                 prevX = x;
                 prevY = y;
             }
