@@ -1,10 +1,11 @@
 ﻿using System.Windows.Media.Imaging;
+using System;
 
 namespace FlightControl
 {
-    public class Rectangle
+    public class Rectangle : IDisposable
     {
-        public Point Position { get; }
+        public Point Position { get; private set; }
         public double Width { get; }
         public double Height { get; }
         public Rectangle(Point position, double width, double height)
@@ -25,5 +26,10 @@ namespace FlightControl
         }
         public void Draw(WriteableBitmap bitmap, int color) =>
             bitmap.DrawRectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height, color);
+
+        public void Dispose()
+        {
+            Position = null;
+        }
     }
 }

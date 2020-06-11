@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    public partial class SimulationWindow : Window
+    public partial class SimulationWindow : Window, IDisposable
     {
         private Radar radar;
         private bool Running;
@@ -56,27 +56,29 @@ namespace FlightControl
             radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
         }*/
 
-        protected override void OnClosed(EventArgs e)
-        {
-            radar.Stop();
-            radar.Dispose();
-            radar = null;
-        }
+        //protected override void OnClosed(EventArgs e) => Dispose();
 
         private void PauseButtonClick(object sender, RoutedEventArgs e)
         {
             if (Running)
             {
                 radar.Stop();
-                (sender as Button).Content = "Start";
+                PauseButton.Content = "Start";
             }
             else
             {
                 radar.Start();
-                (sender as Button).Content = "Stop";
+                PauseButton.Content = "Stop";
             }
             Running = !Running;
         }
         private void RandomizeAircrafts(object sender, RoutedEventArgs e) => radar.RandomizeAircrafts(Rng);
+
+        public void Dispose()
+        {
+            radar.Dispose();
+            radar = null;
+            Rng = null;
+        }
     }
 }

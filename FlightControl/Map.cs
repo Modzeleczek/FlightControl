@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System;
 
 namespace FlightControl
 {
-    public class Map
+    public class Map : IDisposable
     {
         public List<Obstacle> Obstacles { get; protected set; }
         public Map(string fileName, WriteableBitmap bitmapToDraw)
@@ -46,6 +47,17 @@ namespace FlightControl
                         throw new MapLoadingException("Unspecified obstacle type.");
                 } while (!reader.EndOfStream);
             }
+        }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < Obstacles.Count; ++i)
+            {
+                Obstacles[i].Dispose();
+                Obstacles[i] = null;
+            }
+            Obstacles.Clear();
+            Obstacles = null;
         }
     }
 }

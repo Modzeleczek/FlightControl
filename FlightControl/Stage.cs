@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    public class Stage
+    public class Stage : IDisposable
     {
         public Line Track { get; private set; }
         public double Length { get; private set; }
@@ -35,5 +35,10 @@ namespace FlightControl
         public Stage(Stage o) : this(o.Track, o.Velocity.Length, o.Altitude) { }
         public void ScaleVelocity(double factor) => Velocity *= factor;
         public void Draw(WriteableBitmap bitmap, int color) => Track.Draw(bitmap, color);
+        public void Dispose()
+        {
+            Track.Dispose();
+            Track = null;
+        }
     }
 }

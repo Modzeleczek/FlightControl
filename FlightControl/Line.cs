@@ -1,11 +1,10 @@
 ﻿using FlightControl.Exceptions;
-using System;
 using System.Windows.Media.Imaging;
-using System.Windows;
+using System;
 
 namespace FlightControl
 {
-    public class Line
+    public class Line : IDisposable
     {
         public Point Start { get; private set; }
         public Point End { get; private set; }
@@ -30,6 +29,11 @@ namespace FlightControl
         public void Draw(WriteableBitmap bitmap, int color)
         {
             bitmap.DrawLine((int)Start.X, (int)Start.Y, (int)End.X, (int)End.Y, color);
+        }
+        public void Dispose()
+        {
+            Start = null;
+            End = null;
         }
     }
 }

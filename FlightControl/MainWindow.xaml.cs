@@ -34,11 +34,17 @@ namespace FlightControl
                 StartSimulationButton.IsEnabled = false;
                 SecondWindow = new SimulationWindow();
                 SecondWindow.Show();
-                SecondWindow.Closing += new System.ComponentModel.CancelEventHandler((closingSender, closingE) =>
-                {
-                    StartSimulationButton.IsEnabled = true;
-                });
+                SecondWindow.Closing += SecondWindowClosing;
             }
+        }
+
+        private void SecondWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            StartSimulationButton.IsEnabled = true;
+            SecondWindow.Closing -= SecondWindowClosing;
+            SecondWindow.Dispose();
+            SecondWindow = null;
+            GC.Collect();
         }
 
         private void Egg(object sender, RoutedEventArgs e)
@@ -46,10 +52,6 @@ namespace FlightControl
             MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
         }
 
-        private void RandomVelocity(object sender, RoutedEventArgs e)
-        {
-            
-        }
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)

@@ -3,7 +3,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    public abstract class Aircraft
+    public abstract class Aircraft : IDisposable
     {
         protected Flight Route;
         protected Rectangle Hitbox;
@@ -66,6 +66,12 @@ namespace FlightControl
         {
             Route.Draw(bitmap, 0);//remove old route pixels
             Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
+        }
+
+        public void Dispose()
+        {
+            Route.Dispose();
+            Hitbox.Dispose();
         }
     }
 }

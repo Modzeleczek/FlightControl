@@ -1,8 +1,9 @@
 ﻿using System.Windows.Media.Imaging;
+using System;
 
 namespace FlightControl
 {
-    public abstract class Obstacle
+    public abstract class Obstacle : IDisposable
     {
         public double Height { get; protected set; }
         public Rectangle Hitbox { get; protected set; }
@@ -10,6 +11,11 @@ namespace FlightControl
         {
             Height = height;
             Hitbox = new Rectangle(hitbox);
+        }
+        public void Dispose()
+        {
+            Hitbox.Dispose();
+            Hitbox = null;
         }
     }
 

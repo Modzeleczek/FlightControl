@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace FlightControl
 {
-    public class Flight
+    public class Flight : IDisposable
     {
         private List<Stage> Stages;
         private Flight()
@@ -26,9 +26,7 @@ namespace FlightControl
                 Stages.Add(new Stage(stages[i]));
             }
         }
-        public Flight(Flight o) : this(o.Stages)
-        {
-        }
+        public Flight(Flight o) : this(o.Stages) { }
         public void AppendStage(Point destination, double velocity, double altitude)
         {
             Line line = new Line(Stages[Stages.Count - 1].Track.End.X, Stages[Stages.Count - 1].Track.End.Y,
@@ -76,6 +74,17 @@ namespace FlightControl
                 prevY = y;
             }
             return result;
+        }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < Stages.Count; ++i)
+            {
+                Stages[i].Dispose();
+                Stages[i] = null;
+            }
+            Stages.Clear();
+            Stages = null;
         }
     }
 }

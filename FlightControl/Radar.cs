@@ -40,7 +40,7 @@ namespace FlightControl
 
             Aircrafts = new List<Aircraft>();
 
-            Tick += new EventHandler(TimerTick);
+            Tick += TimerTick;
             Interval = TimeSpan.FromMilliseconds(refreshingRateInMilliseconds);
         }
         
@@ -133,7 +133,20 @@ namespace FlightControl
 
         public void Dispose()
         {
-            
+            Stop();
+            //Dispatcher.CurrentDispatcher.InvokeShutdown();// BeginInvokeShutdown();
+            Tick -= TimerTick;
+            ObstaclesMap.Dispose();
+            ObstaclesMap = null;
+            for (int i = 0; i < Aircrafts.Count; ++i)
+            {
+                Aircrafts[i].Dispose();
+                Aircrafts[i] = null;
+            }
+            Aircrafts.Clear();
+            Aircrafts = null;
+            MapBitmap = null;
+            AircraftsBitmap = null;
         }
     }
 }
