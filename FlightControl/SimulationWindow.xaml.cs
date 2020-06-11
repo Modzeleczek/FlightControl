@@ -77,7 +77,6 @@ namespace FlightControl
             }
             Running = !Running;
         }
-        private void RandomizeRoutes(object sender, RoutedEventArgs e) => radar.RandomizeFlights(Rng);
         private void RandomizeAircrafts(object sender, RoutedEventArgs e) => radar.RandomizeAircrafts(Rng);
     }
 }

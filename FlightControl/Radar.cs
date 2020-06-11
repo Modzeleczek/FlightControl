@@ -130,16 +130,6 @@ namespace FlightControl
                 Aircrafts[i].ScaleVelocity(1.0 / RefreshingRate);
             }
         }
-        public void RandomizeFlights(Random rng)
-        {
-            AircraftsBitmap.Lock();
-            foreach (var aircraft in Aircrafts)
-            {
-                aircraft.ClearGraphics(AircraftsBitmap);
-                aircraft.RandomizeFlight(3, 10, AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, RefreshingRate, rng);
-            }
-            AircraftsBitmap.Unlock();
-        }
 
         public void Dispose()
         {

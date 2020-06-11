@@ -67,17 +67,5 @@ namespace FlightControl
             Route.Draw(bitmap, 0);//remove old route pixels
             Hitbox.Draw(bitmap, 0);//remove old hitbox pixels
         }
-        public void RandomizeFlight(int fromStagesCount, int toStagesCount, int mapWidth, int mapHeight, int fps, Random rng)
-        {
-            Route = Flight.GetRandom(
-                rng.Next(fromStagesCount, toStagesCount),
-                (int)Math.Ceiling(Hitbox.Width), (int)Math.Ceiling(Hitbox.Height),
-                (int)Math.Floor(mapWidth - 1 - Hitbox.Width),
-                (int)Math.Floor(mapHeight - 1 - Hitbox.Height),
-                100, 100, 5, 100, rng);
-            Hitbox.Position.X = Route.ActualStage.Track.Start.X;
-            Hitbox.Position.Y = Route.ActualStage.Track.Start.Y;
-            ScaleVelocity(1.0 / fps);
-        }
     }
 }
