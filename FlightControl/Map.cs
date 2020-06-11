@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System;
+using System.Collections;
 
 namespace FlightControl
 {
-    public class Map : IDisposable
+    public class Map : IDisposable, IEnumerable<Obstacle>
     {
-        public List<Obstacle> Obstacles { get; protected set; }
+        protected List<Obstacle> Obstacles { get; set; }
         public Map(string fileName, WriteableBitmap bitmapToDraw)
         {
             /* Loading immobile obstacles from file. */
@@ -58,6 +59,16 @@ namespace FlightControl
             }
             Obstacles.Clear();
             Obstacles = null;
+        }
+
+        public IEnumerator<Obstacle> GetEnumerator()
+        {
+            return Obstacles.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Obstacles.GetEnumerator();
         }
     }
 }

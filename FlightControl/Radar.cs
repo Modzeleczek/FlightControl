@@ -48,7 +48,8 @@ namespace FlightControl
         {
             AircraftsBitmap.Lock();
             int i = 0, j;
-            while(i < Aircrafts.Count)
+            IEnumerator<Obstacle> obstacles = ObstaclesMap.GetEnumerator();
+            while (i < Aircrafts.Count)
             {
                 if (!Aircrafts[i].Colliding)
                 {
@@ -57,9 +58,15 @@ namespace FlightControl
                         if (Aircrafts[i].Collides(Aircrafts[j]))
                             break;
                     }
-                    for (j = 0; j < ObstaclesMap.Obstacles.Count; ++j)
+                    /*for (j = 0; j < ObstaclesMap.Obstacles.Count; ++j)
                     {
                         if (Aircrafts[i].Collides(ObstaclesMap.Obstacles[j]))
+                            break;
+                    }*/
+                    obstacles.Reset();
+                    while(obstacles.MoveNext())
+                    {
+                        if (Aircrafts[i].Collides(obstacles.Current))
                             break;
                     }
                 }
@@ -134,7 +141,6 @@ namespace FlightControl
         public void Dispose()
         {
             Stop();
-            //Dispatcher.CurrentDispatcher.InvokeShutdown();// BeginInvokeShutdown();
             Tick -= TimerTick;
             ObstaclesMap.Dispose();
             ObstaclesMap = null;

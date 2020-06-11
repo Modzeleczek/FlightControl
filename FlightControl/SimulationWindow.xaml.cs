@@ -25,10 +25,11 @@ namespace FlightControl
 
             Rng = new Random();
             radar = new Radar("../../obstacles.txt", 32, MapImage, AircraftsImage);
-            //radar.RandomizeAircrafts(5, 2, 5, 50, 100, 50, 100, 200, 300, 10, 100, Rng);
 
-            List<Stage> stages = new List<Stage>();
-            stages.Add(new Stage(new Line(50, 50, 500, 600), 200, 10));
+            List<Stage> stages = new List<Stage>
+            {
+                new Stage(new Line(50, 50, 500, 600), 200, 10)
+            };
             Flight flight = new Flight(stages);
 
             radar.AddAircraft(new Plane(flight, 30, 30));
@@ -38,25 +39,19 @@ namespace FlightControl
             flight = new Flight(stages);
             radar.AddAircraft(new Helicopter(flight, 30, 30));
 
+            AircraftsImage.MouseLeftButtonDown += LeftClick;
+
             radar.Start();
             Running = true;
-
-            /*AircraftsImage.MouseLeftButtonDown += new MouseButtonEventHandler((s, e) =>
-            {
-                /*int x = (int)e.GetPosition(sender as Image).X,
-                y = (int)e.GetPosition(sender as Image).Y;* /
-                //radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
-            });*/
         }
 
-        /*private void AircraftsImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void LeftClick(object sender, MouseButtonEventArgs e)
         {
-            /*int x = (int)e.GetPosition(sender as Image).X,
-                y = (int)e.GetPosition(sender as Image).Y;* /
-            radar.RandomizeAircrafts(20, 5, 10, 10, 20, 20, 40, 150, 100, 50, 100, Rng);
-        }*/
-
-        //protected override void OnClosed(EventArgs e) => Dispose();
+            int x = (int)e.GetPosition(AircraftsImage).X,
+                y = (int)e.GetPosition(AircraftsImage).Y;
+            debugTB.Text = $"{x}, {y}";
+            //debugTB.Text = $"{AircraftsImage.ActualWidth}, {AircraftsImage.ActualHeight}";
+        }
 
         private void PauseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -76,6 +71,7 @@ namespace FlightControl
 
         public void Dispose()
         {
+            AircraftsImage.MouseLeftButtonDown -= LeftClick;
             radar.Dispose();
             radar = null;
             Rng = null;

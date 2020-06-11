@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightControl"
         mc:Ignorable="d"
-        Title="SimulationWindow" Height="751" Width="1400"
+        Title="Radar" Height="751" Width="1400"
         Background="Black" ResizeMode="CanMinimize">
     <Grid>
         <Image x:Name="MapImage"
@@ -45,5 +45,13 @@
                 Background="LightBlue"
                 BorderBrush="#FF0080FF"
                 Click="RandomizeAircrafts"/>
+
+        <TextBlock x:Name="debugTB"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,60,0,0"
+                Width="114"
+                   Height="100"
+                Foreground="White"/>
     </Grid>
 </Window>
