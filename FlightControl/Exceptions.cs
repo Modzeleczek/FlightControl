@@ -9,11 +9,6 @@ namespace FlightControl
             public MapLoadingException() { }
             public MapLoadingException(string message) : base(message) { }
         }
-        public class TerrainLoadingException : Exception
-        {
-            public TerrainLoadingException() { }
-            public TerrainLoadingException(string message) : base(message) { }
-        }
         public class NotEnoughElementsException : Exception
         {
             public NotEnoughElementsException() { }
@@ -23,11 +18,6 @@ namespace FlightControl
         {
             public LinesNotConnectedException() { }
             public LinesNotConnectedException(string message) : base(message) { }
-        }
-        public class LineIsPointException : Exception
-        {
-            public LineIsPointException() { }
-            public LineIsPointException(string message) : base(message) { }
         }
         public class StageOutOfBoundsException : Exception
         {

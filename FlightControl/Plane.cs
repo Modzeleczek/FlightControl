@@ -24,7 +24,7 @@ namespace FlightControl
             Route.Draw(bitmap, (255 << 24) | (255 << 8));
         }
 
-        public static Plane GetRandom(int mapWidth, int mapHeight, Random rng, int refreshingRate)
+        public static Plane GetRandom(int mapWidth, int mapHeight, Random rng)
         {
             Flight flight = Flight.GetRandom(
                 rng.Next(10, 30),
@@ -33,7 +33,6 @@ namespace FlightControl
                 mapHeight - 1 - 40,
                 100, 300, 300, 1000, rng);
             Plane plane = new Plane(flight);
-            plane.ScaleVelocity(1.0 / refreshingRate);
             return plane;
         }
     }

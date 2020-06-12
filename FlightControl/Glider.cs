@@ -24,7 +24,7 @@ namespace FlightControl
             Route.Draw(bitmap, (255 << 24) | (255 << 16) | (191 << 8));
         }
 
-        public static Glider GetRandom(int mapWidth, int mapHeight, Random rng, int refreshingRate)
+        public static Glider GetRandom(int mapWidth, int mapHeight, Random rng)
         {
             Flight flight = Flight.GetRandom(
                 rng.Next(3, 6),
@@ -33,7 +33,6 @@ namespace FlightControl
                 mapHeight - 1 - 30,
                 80, 150, 100, 300, rng);
             Glider glider = new Glider(flight);
-            glider.ScaleVelocity(1.0 / refreshingRate);
             return glider;
         }
     }

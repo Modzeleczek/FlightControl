@@ -8,6 +8,7 @@ namespace FlightControl
     public class Flight : IDisposable
     {
         private List<Stage> Stages;
+
         private Flight() => Stages = new List<Stage>();
         public Flight(List<Stage> stages) : this()
         {
@@ -23,6 +24,7 @@ namespace FlightControl
             }
         }
         public Flight(Flight o) : this(o.Stages) { }
+
         public void AppendStage(Point destination, double velocity, double altitude)
         {
             Line line = new Line(Stages[Stages.Count - 1].Track.End.X, Stages[Stages.Count - 1].Track.End.Y,
@@ -31,23 +33,38 @@ namespace FlightControl
         }
 
         public int StagesCount => Stages.Count;
+
         public bool RemoveStage(int index)
         {
             Stages.RemoveAt(index);
             return Stages.Count > 0;
         }
-        public Stage ActualStage => Stages[0];
+
+        public Stage CurrentStage => Stages[0];
 
         public void ScaleVelocity(double factor)
         {
             foreach (var stage in Stages)
                 stage.ScaleVelocity(factor);
         }
+
         public void Draw(WriteableBitmap bitmap, int color)
         {
             foreach (var stage in Stages)
                 stage.Draw(bitmap, color);
         }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < Stages.Count; ++i)
+            {
+                Stages[i].Dispose();
+                Stages[i] = null;
+            }
+            Stages.Clear();
+            Stages = null;
+        }
+
         public static Flight GetRandom(
             int stagesCount,
             int beginX, int beginY,
@@ -70,17 +87,6 @@ namespace FlightControl
                 prevY = y;
             }
             return result;
-        }
-
-        public void Dispose()
-        {
-            for (int i = 0; i < Stages.Count; ++i)
-            {
-                Stages[i].Dispose();
-                Stages[i] = null;
-            }
-            Stages.Clear();
-            Stages = null;
         }
     }
 }

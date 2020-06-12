@@ -33,25 +33,40 @@
                 Background="LightBlue"
                 BorderBrush="#FF0080FF"
                 Click="PauseButtonClick"/>
+        <TextBlock x:Name="AircraftsCountTextBlock"
+                Text="Liczba statków:"
+                TextAlignment="Center"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,30,0,0"
+                Width="114"
+                Foreground="White"/>
+        <TextBox x:Name="AircraftsCountInputTextBox"
+                TextAlignment="Center"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,50,0,0"
+                Width="114"/>
         <Button x:Name="RandomizeAircraftsButton"
                 Content="Losuj statki"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,30,0,0"
+                Margin="0,70,0,0"
                 Width="114"
                 Foreground="Black"
                 Background="LightBlue"
                 BorderBrush="#FF0080FF"
-                Click="RandomizeAircrafts"/>
+                Click="RandomizeAircraftsClick"/>
 
         <TextBlock x:Name="debugTB"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,60,0,0"
+                Margin="0,95,0,0"
                 Width="114"
-                   Height="100"
-                Foreground="White"/>
+                Height="100"
+                Foreground="White"
+                TextWrapping="Wrap"/>
     </Grid>
 </Window>

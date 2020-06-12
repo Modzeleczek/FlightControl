@@ -32,23 +32,29 @@ namespace FlightControl
             }
             int numerator = longest >> 1;
 
-            int* pBackBuffer = (int*)bitmap.BackBuffer;
+            int width = bitmap.PixelWidth;
+            //int* pBackBuffer = (int*)bitmap.BackBuffer;// + x + y * width;
+            int* pBackBuffer = (int*)bitmap.BackBuffer + x + y * width;
             for (int i = 0; i <= longest; i++)
             {
-                //PutPixel(x, y, color);
-                *(pBackBuffer + x + y * bitmap.PixelWidth) = color;
+                //*(pBackBuffer + x + y * width) = color;
+                *pBackBuffer = color;
 
                 numerator += shortest;
                 if (!(numerator < longest))
                 {
                     numerator -= longest;
-                    x += dx1;
-                    y += dy1;
+                    //x += dx1;
+                    pBackBuffer += dx1;
+                    //y += dy1;
+                    pBackBuffer += width * dy1;
                 }
                 else
                 {
-                    x += dx2;
-                    y += dy2;
+                    //x += dx2;
+                    pBackBuffer += dx2;
+                    //y += dy2;
+                    pBackBuffer += width * dy2;
                 }
             }
             //It is essential to update locked WriteableBitmap after editing its BackBuffer and before unlocking it.

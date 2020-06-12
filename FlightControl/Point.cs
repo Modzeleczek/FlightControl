@@ -22,7 +22,7 @@ namespace FlightControl
         public override bool Equals(object obj)
         {
             Point point = obj as Point;
-            if (!(point is Point))
+            if (point == null)
                 return false;
             return (point.X == X && point.Y == Y);
         }

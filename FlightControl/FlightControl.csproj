@@ -128,9 +128,9 @@
     <Resource Include="PlaneBackground.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="obstacles.txt">
+    <Content Include="obstacles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="musicfinal.wav">

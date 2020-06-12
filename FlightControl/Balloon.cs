@@ -24,7 +24,7 @@ namespace FlightControl
             Route.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
         }
 
-        public static Balloon GetRandom(int mapWidth, int mapHeight, Random rng, int refreshingRate)
+        public static Balloon GetRandom(int mapWidth, int mapHeight, Random rng)
         {
             Flight flight = Flight.GetRandom(
                 rng.Next(5, 10),
@@ -33,7 +33,6 @@ namespace FlightControl
                 mapHeight - 1 - 15,
                 50, 100, 20, 100, rng);
             Balloon balloon = new Balloon(flight);
-            balloon.ScaleVelocity(1.0 / refreshingRate);
             return balloon;
         }
     }
