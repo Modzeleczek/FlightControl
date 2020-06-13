@@ -26,69 +26,21 @@ namespace FlightControl
             Rng = new Random();
             radar = new Radar("obstacles.txt", 32, MapImage, RoutesImage, AircraftsImage);
 
-            /*List<Stage> stages = new List<Stage>
-            {
-                new Stage(new Line(50, 50, 500, 600), 195, 10)
-            };
-            Flight flight = new Flight(stages);
-            Plane plane = new Plane(flight);
-            plane.ScaleVelocity(32 / 1024.0);
-            radar.AddAircraft(plane);
-
-            stages.Clear();
-            stages.Add(new Stage(new Line(50, 50, 500, 400), 160, 10));
-            flight = new Flight(stages);
-
-            Helicopter helicopter = new Helicopter(flight);
-            helicopter.ScaleVelocity(32 / 1024.0);
-            radar.AddAircraft(helicopter);*/
-
-            WriteableBitmap b = AircraftsImage.Source as WriteableBitmap;
-            b.Lock();
-            DistanceMeter = new Line(0, 0, 1279, 300);
-            DistanceMeter.Draw(b, (255 << 24) | (255 << 16));
-            b.Unlock();
-
-            AircraftsImage.MouseLeftButtonDown += ImagesLeftClick;
-            AircraftsImage.MouseRightButtonDown += ImagesRightClick;
-
-            radar.Start();
+            AircraftsImage.MouseLeftButtonDown += ImageLeftClick;
+            radar.Stop();
         }
 
-        Line DistanceMeter;
-        private void ImagesLeftClick(object sender, MouseButtonEventArgs e)
+        private void ImageLeftClick(object sender, MouseButtonEventArgs e)
         {
-            WriteableBitmap b = AircraftsImage.Source as WriteableBitmap;
-            b.Lock();
-            DistanceMeter.Draw(b, 0);
-
-            int x = (int)e.GetPosition(AircraftsImage).X,
-                y = (int)e.GetPosition(AircraftsImage).Y;
-            DistanceMeter.Start.X = x;
-            DistanceMeter.Start.Y = y;
-            debugTB.Text = $"{DistanceMeter}, {DistanceMeter.Length}";
-
-            DistanceMeter.Draw(b, (255 << 24) | (255 << 16));
-            b.Unlock();
+            
         }
-
-        private void ImagesRightClick(object sender, MouseButtonEventArgs e)
+        
+        private void ImageRightClick(object sender, MouseButtonEventArgs e)
         {
-            WriteableBitmap b = AircraftsImage.Source as WriteableBitmap;
-            b.Lock();
-            DistanceMeter.Draw(b, 0);
-
-            int x = (int)e.GetPosition(AircraftsImage).X,
-                y = (int)e.GetPosition(AircraftsImage).Y;
-            DistanceMeter.End.X = x;
-            DistanceMeter.End.Y = y;
-            debugTB.Text = $"{DistanceMeter}, {DistanceMeter.Length}";
-
-            DistanceMeter.Draw(b, (255 << 24) | (255 << 16));
-            b.Unlock();
+            
         }
 
-        private void PauseButtonClick(object sender, RoutedEventArgs e)
+        private void PauseClick(object sender, RoutedEventArgs e)
         {
             if (radar.IsEnabled)
             {
@@ -112,7 +64,7 @@ namespace FlightControl
             catch(FormatException ex)
             {
                 MessageBox.Show(
-                    $"Nieprawidłowy format liczby statków.\nSzczegóły:\n{ex.Message}",
+                    $"Nieprawidłowy format liczby statków.\nSzczegóły: {ex.Message}",
                     "Błąd",
                     MessageBoxButton.OK);
             }
@@ -120,11 +72,30 @@ namespace FlightControl
 
         public void Dispose()
         {
-            AircraftsImage.MouseLeftButtonDown -= ImagesLeftClick;
-            AircraftsImage.MouseRightButtonDown -= ImagesRightClick;
+            AircraftsImage.MouseLeftButtonDown -= ImageLeftClick;
+            PauseButton.Click -= PauseClick;
+            RandomizeAircraftsButton.Click -= RandomizeAircraftsClick;
+            AddAircraftButton.Click -= AddAircraftClick;
+            ResetButton.Click -= ResetClick;
             radar.Dispose();
             radar = null;
             Rng = null;
         }
+
+        private void AddAircraftClick(object sender, RoutedEventArgs e)
+        {
+            bool running = radar.IsEnabled;
+            if(running)
+                radar.Stop();
+            AdditionWindow additionWindow = new AdditionWindow();
+            additionWindow.ShowDialog();
+            if(additionWindow.Result != null)
+                radar.AddAircraft(additionWindow.Result);
+            additionWindow.Dispose();
+            if(running)
+                radar.Start();
+        }
+
+        private void ResetClick(object sender, RoutedEventArgs e) => radar.ClearAircrafts();
     }
 }

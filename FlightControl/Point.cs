@@ -29,6 +29,10 @@ namespace FlightControl
 
         public override string ToString() => $"({X},{Y})";
         
-        public void Draw(WriteableBitmap bitmap, int color) => bitmap.DrawPoint((int)X, (int)Y, color);
+        unsafe public void Draw(WriteableBitmap bitmap, int color)
+        {
+            *((int*)bitmap.BackBuffer + (int)X + (int)Y * bitmap.PixelWidth) = color;
+            bitmap.AddDirtyRect(new System.Windows.Int32Rect((int)X, (int)Y, 1, 1));
+        }
     }
 }

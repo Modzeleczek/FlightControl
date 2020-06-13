@@ -13,8 +13,8 @@ namespace FlightControl
         protected Aircraft(Flight route, double width, double height)
         {
             Route = new Flight(route);
-            Hitbox = new Rectangle(new Point(Route.CurrentStage.Track.Start.X - width / 2, 
-                Route.CurrentStage.Track.Start.Y - height / 2), width, height);
+            Hitbox = new Rectangle(new Point(Route.CurrentStage.Track.Start.X, 
+                Route.CurrentStage.Track.Start.Y), width, height);
             StageProgress = 0;
             Colliding = false;
         }
@@ -27,20 +27,13 @@ namespace FlightControl
             if (StageProgress >= Route.CurrentStage.Length)
             {
                 Hitbox.Place(Route.CurrentStage.Track.End);
-                if (!Route.RemoveStage(0))
+                if (!Route.RemoveCurrent())
                     return false;
                 StageProgress = 0;
             }
             Colliding = false;
             return true;
         }
-
-        public void AppendStage(Point destination, double velocity, double altitude) =>
-            Route.AppendStage(destination, velocity, altitude);
-
-        public int StagesCount => Route.StagesCount;
-
-        public bool RemoveStage(int index) => Route.RemoveStage(index);
 
         public bool Collides(Aircraft aircraft)
         {

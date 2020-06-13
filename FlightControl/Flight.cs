@@ -10,33 +10,16 @@ namespace FlightControl
         private List<Stage> Stages;
 
         private Flight() => Stages = new List<Stage>();
-        public Flight(List<Stage> stages) : this()
+        public Flight(Flight o)
         {
-            if (stages.Count == 0)
-                throw new NotEnoughElementsException("Flight cannot be created, because stages' list is empty.");
-
-            Stages.Add(new Stage(stages[0]));
-            for (int i = 1; i < stages.Count; ++i)
-            {
-                if(!stages[i - 1].Track.IsContinuedBy(stages[i].Track))
-                    throw new LinesNotConnectedException($"Line {stages[i - 1].Track} is not continued by {stages[i].Track}");
-                Stages.Add(new Stage(stages[i]));
-            }
-        }
-        public Flight(Flight o) : this(o.Stages) { }
-
-        public void AppendStage(Point destination, double velocity, double altitude)
-        {
-            Line line = new Line(Stages[Stages.Count - 1].Track.End.X, Stages[Stages.Count - 1].Track.End.Y,
-                destination.X, destination.Y);
-            Stages.Add(new Stage(line, velocity, altitude));
+            Stages = new List<Stage>(o.Stages.Count);
+            for (int i = 0; i < o.Stages.Count; ++i)
+                Stages.Add(new Stage(o.Stages[i]));
         }
 
-        public int StagesCount => Stages.Count;
-
-        public bool RemoveStage(int index)
+        public bool RemoveCurrent()
         {
-            Stages.RemoveAt(index);
+            Stages.RemoveAt(0);
             return Stages.Count > 0;
         }
 
@@ -73,20 +56,61 @@ namespace FlightControl
             double fromAltitude, double toAltitude,
             Random rng)
         {
-            Flight result = new Flight();
-            int x, y, prevX = rng.Next(beginX, endX), prevY = rng.Next(beginY, endY);
+            Builder builder = new Builder();
             for (int i = 0; i < stagesCount; ++i)
-            {
-                x = rng.Next(beginX, endX);
-                y = rng.Next(beginY, endY);
-                result.Stages.Add(new Stage(
-                    new Line(prevX, prevY, x, y),
+                builder.Add(
+                    rng.Next(beginX, endX),
+                    rng.Next(beginY, endY),
                     fromVelocity + (toVelocity - fromVelocity) * rng.NextDouble(),
-                    fromAltitude + (toAltitude - fromAltitude) * rng.NextDouble()));
-                prevX = x;
-                prevY = y;
+                    fromAltitude + (toAltitude - fromAltitude) * rng.NextDouble());
+            return builder.Route;
+        }
+
+        public class Builder
+        {
+            public Flight Route { get; protected set; } = new Flight();
+
+            protected Point End;
+
+            public int Count => Route.Stages.Count;
+
+            public void Add(double x, double y, double velocity, double altitude)
+            {
+                if (End == null)
+                    End = new Point(x, y);
+                else
+                {
+                    Line line = new Line(End.X, End.Y, x, y);
+                    Route.Stages.Add(new Stage(line, velocity, altitude));
+                    End.X = x;
+                    End.Y = y;
+                }
             }
-            return result;
+
+            public void RemoveLast()
+            {
+                if (End != null)
+                {
+                    Route.Stages[Route.Stages.Count - 1].Dispose();
+                    Route.Stages[Route.Stages.Count - 1] = null;
+                    Route.Stages.RemoveAt(Route.Stages.Count - 1);
+                    if (Route.Stages.Count == 0)
+                        End = null;
+                    else
+                    {
+                        End.X = Route.Stages[Route.Stages.Count - 1].Track.End.X;
+                        End.Y = Route.Stages[Route.Stages.Count - 1].Track.End.Y;
+                    }
+                }
+            }
+
+            public void ReplaceLast(double x, double y)
+            {
+                Route.Stages[Route.Stages.Count - 1].Track.End.X = x;
+                Route.Stages[Route.Stages.Count - 1].Track.End.Y = y;
+                End.X = x;
+                End.Y = y;
+            }
         }
     }
 }

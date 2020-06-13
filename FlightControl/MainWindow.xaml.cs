@@ -23,10 +23,8 @@ namespace FlightControl
         private SimulationWindow SecondWindow;
         private bool MusicPlaying = false;
         private SoundPlayer Player = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav");
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        
+        public MainWindow() => InitializeComponent();
 
         private void StartSimulation(object sender, RoutedEventArgs e)
         {
@@ -42,7 +40,7 @@ namespace FlightControl
                 catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
                 {
                     MessageBox.Show(
-                        $"Program zakończy się, ponieważ nie udało się wczytać mapy.\nSzczegóły:\n{ex.Message}",
+                        $"Program zakończy się, ponieważ nie udało się wczytać mapy.\nSzczegóły: {ex.Message}",
                         "Błąd",
                         MessageBoxButton.OK);
                     this.Close();
@@ -60,16 +58,7 @@ namespace FlightControl
             GC.Collect();
         }
 
-        private void Egg(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
-        }
-
-        private void CloseProgram(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                this.Close();
-        }
+        private void EasterEggClick(object sender, RoutedEventArgs e) => MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
 
         private void MusicStartStop(object sender, RoutedEventArgs e)
         {
@@ -84,6 +73,16 @@ namespace FlightControl
                 MusicButton.Content = "Włącz muzykę";
             }
             MusicPlaying = !MusicPlaying;
+        }
+
+        private void CloseProgram(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?", MessageBoxButton.YesNo)
+                == MessageBoxResult.Yes)
+            {
+                Player.Stop();
+                this.Close();
+            }
         }
     }
 }

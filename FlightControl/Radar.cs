@@ -17,12 +17,7 @@ namespace FlightControl
         public int Framerate
         {
             get => (int)Interval.TotalMilliseconds;
-            set
-            {
-                Stop();
-                Interval = TimeSpan.FromMilliseconds(value);
-                Start();
-            }
+            set => Interval = TimeSpan.FromMilliseconds(value);
         }
 
         public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image routesImage, Image aircraftsImage) : base()
@@ -88,26 +83,26 @@ namespace FlightControl
                 Aircrafts[i].DrawRoute(RoutesBitmap);
                 Aircrafts[i].Draw(AircraftsBitmap);
             }
-            //RoutesBitmap.AddDirtyRect(new Int32Rect(0, 0, 1280, 720));
             RoutesBitmap.Unlock();
-            //AircraftsBitmap.AddDirtyRect(new Int32Rect(0, 0, 1280, 720));
             AircraftsBitmap.Unlock();
         }
 
-        public void AddAircraft(Plane plane) => Aircrafts.Add(new Plane(plane));
-        public void AddAircraft(Helicopter helicopter) => Aircrafts.Add(new Helicopter(helicopter));
-        public void AddAircraft(Glider glider) => Aircrafts.Add(new Glider(glider));
-        public void AddAircraft(Balloon balloon) => Aircrafts.Add(new Balloon(balloon));
+        public void AddAircraft(Aircraft aircraft)
+        {
+            Aircrafts.Add(aircraft);
+            AircraftsBitmap.Lock();
+            RoutesBitmap.Lock();
+            aircraft.Draw(AircraftsBitmap);
+            aircraft.DrawRoute(RoutesBitmap);
+            RoutesBitmap.Unlock();
+            AircraftsBitmap.Unlock();
+        }
 
-        public int AircraftsCount => Aircrafts.Count;
-
-        public void RemoveAircraft(int index) => Aircrafts.RemoveAt(index);
-
-        public void RandomizeAircrafts(int count, Random rng)
+        public void ClearAircrafts()
         {
             AircraftsBitmap.Lock();
             RoutesBitmap.Lock();
-            for(int i = 0; i < Aircrafts.Count; ++i)
+            for (int i = 0; i < Aircrafts.Count; ++i)
             {
                 Aircrafts[i].ClearRouteGraphics(RoutesBitmap);
                 Aircrafts[i].ClearGraphics(AircraftsBitmap);
@@ -115,6 +110,15 @@ namespace FlightControl
                 Aircrafts[i] = null;
             }
             Aircrafts.Clear();
+            RoutesBitmap.Unlock();
+            AircraftsBitmap.Unlock();
+        }
+
+        public void RandomizeAircrafts(int count, Random rng)
+        {
+            AircraftsBitmap.Lock();
+            RoutesBitmap.Lock();
+            ClearAircrafts();
 
             for (int i = 0; i < count; ++i)
             {

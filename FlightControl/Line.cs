@@ -21,9 +21,7 @@ namespace FlightControl
 
         public override string ToString() => $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y}))";
 
-        /*public void Draw(WriteableBitmap bitmap, int color) =>
-            bitmap.DrawLine((int)Start.X, (int)Start.Y, (int)End.X, (int)End.Y, color);*/
-
+        //Algorithm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             int x1 = (int)Start.X, y1 = (int)Start.Y, x2 = (int)End.X, y2 = (int)End.Y;

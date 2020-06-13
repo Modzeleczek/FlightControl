@@ -7,14 +7,65 @@
         mc:Ignorable="d"
         Title="Kontrola lotów" Height="360" Width="640"
         Background="Black" ResizeMode="CanMinimize">
-    <Grid x:Name="MainGrid">
-        <Image x:Name="BackgroundImage" VerticalAlignment="Top" HorizontalAlignment="Left" Source="PlaneBackground.jpg" Stretch="UniformToFill">
-        </Image>
-        <Button x:Name="StartSimulationButton" Content="Uruchom symulację" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="250" Margin="0,50,0,0" Foreground="Black" Background="LightBlue" BorderBrush="#FF0080FF" FontSize="28"
-          Click="StartSimulation"/>
-        <!-- <TextBlock x:Name="Header" HorizontalAlignment="Right" VerticalAlignment="Top" TextAlignment="Center" Height="70" Width="345" Margin="0,0,0,0" Background="LightBlue" FontSize="56" Text="Kontrola lotów" /> -->
-        <Button x:Name="EEggButton" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Height="30" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="Egg"/>
-        <Button x:Name="EndProgramButton" Content="Zakończ program" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="250" Margin="0,0,0,50" Foreground="Black" Background="LightBlue" BorderBrush="#FF0080FF" FontSize="28" Click="CloseProgram"/>
-        <Button x:Name="MusicButton" Content="Włącz muzykę" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40" Width="250" Margin="0,0,0,100" Foreground="Black" Background="LightBlue" BorderBrush="#FF0080FF" FontSize="28" Click="MusicStartStop"/>
+    <Grid>
+        <Image x:Name="BackgroundImage"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Source="PlaneBackground.jpg"
+               Stretch="UniformToFill"/>
+
+        <Button x:Name="StartSimulationButton"
+                Content="Uruchom symulację"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Height="40"
+                Width="250"
+                Margin="0,50,0,0"
+                Foreground="Black"
+                Background="LightBlue"
+                BorderBrush="#FF0080FF"
+                FontSize="28"
+                Click="StartSimulation"/>
+        
+        <Button x:Name="EasterEggButton"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Width="30"
+                Height="30"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Foreground="{x:Null}"
+                Click="EasterEggClick"/>
+        
+        <Button x:Name="EndProgramButton"
+                Content="Zakończ program"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Height="40" Width="250"
+                Margin="0,0,0,50"
+                Foreground="Black"
+                Background="LightBlue"
+                BorderBrush="#FF0080FF"
+                FontSize="28"
+                Click="CloseProgram"/>
+        
+        <Button x:Name="MusicButton"
+                Content="Włącz muzykę"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Height="40"
+                Width="250"
+                Margin="0,0,0,100"
+                Foreground="Black"
+                Background="LightBlue"
+                BorderBrush="#FF0080FF"
+                FontSize="28"
+                Click="MusicStartStop"/>
     </Grid>
 </Window>
