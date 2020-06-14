@@ -6,23 +6,14 @@ namespace FlightControl
     public class Balloon : Aircraft
     {
         public Balloon(Flight route)
-            : base(route, 15, 15)
+            : base(route, 15)
         {
         }
         public Balloon(Balloon o) : base(o) { }
 
-        public override void Draw(WriteableBitmap bitmap)
-        {
-            if (!Colliding)
-                Hitbox.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
-            else
-                Hitbox.Draw(bitmap, (255 << 24) | (255 << 16));//red
-        }
+        public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
 
-        public override void DrawRoute(WriteableBitmap bitmap)
-        {
-            Route.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
-        }
+        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
 
         public static Balloon GetRandom(int mapWidth, int mapHeight, Random rng)
         {

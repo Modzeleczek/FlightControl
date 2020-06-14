@@ -18,22 +18,46 @@ namespace FlightControl
     {
         public Aircraft Result { get; private set; }
         protected WriteableBitmap BackgroundBitmap, PreviewBitmap;
-        private Flight.Builder Builder;
+        private Flight.Editor Editor;
 
-        public AdditionWindow()
+        unsafe public AdditionWindow(WriteableBitmap mapBitmap, WriteableBitmap routesBitmap, WriteableBitmap aircraftsBitmap)
         {
             InitializeComponent();
-
-            Builder = new Flight.Builder();
 
             TypeComboBox.Items.Add("Samolot");
             TypeComboBox.Items.Add("Helikopter");
             TypeComboBox.Items.Add("Szybowiec");
             TypeComboBox.Items.Add("Balon");
 
-            PreviewBitmap = new WriteableBitmap((int)PreviewImage.Width, (int)PreviewImage.Height,
+            BackgroundBitmap = new WriteableBitmap((int)BackgroundImage.Width, (int)BackgroundImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
+            BackgroundImage.Source = BackgroundBitmap;
+
+            PreviewBitmap = new WriteableBitmap((int)PreviewImage.Width, (int)PreviewImage.Height,
+            96, 96, PixelFormats.Bgra32, null);
             PreviewImage.Source = PreviewBitmap;
+
+            BackgroundBitmap.Lock();
+            uint* pDest = (uint*)BackgroundBitmap.BackBuffer, pEnd = pDest + BackgroundBitmap.PixelWidth * BackgroundBitmap.PixelHeight;
+            uint* pMap = (uint*)mapBitmap.BackBuffer;
+            uint* pRoutes = (uint*)routesBitmap.BackBuffer;
+            uint* pAircrafts = (uint*)aircraftsBitmap.BackBuffer;
+            for (; pDest < pEnd; ++pDest)
+            {
+                if (*pAircrafts != 0)
+                    System.Diagnostics.Debug.Write($"{*pAircrafts} ");
+                if (*pAircrafts != 0)
+                    *pDest = *(pAircrafts++);//Stack three layers.
+                else if (*pRoutes != 0)
+                    *pDest = *(pRoutes++);
+                else
+                    *pDest = *(pMap++);
+                //*pDest -= (128 << 24);//Subtract half of opacity (alpha channel).
+            }
+            BackgroundBitmap.AddDirtyRect(new Int32Rect(0, 0, BackgroundBitmap.PixelWidth, BackgroundBitmap.PixelHeight));
+            BackgroundBitmap.Unlock();
+
+            Editor = new Flight.Editor();
         }
 
         private void ImageLeftClick(object sender, MouseButtonEventArgs e)
@@ -43,43 +67,33 @@ namespace FlightControl
                 double altitude = double.Parse(AltitudeTextBox.Text),
                     velocity = double.Parse(VelocityTextBox.Text);
 
-                double x = e.GetPosition(PreviewImage).X,
-                       y = e.GetPosition(PreviewImage).Y;
-
                 PreviewBitmap.Lock();
-                Builder.Route.Draw(PreviewBitmap, 0);
-
-                Builder.Add(x, y, velocity, altitude);
-
-                Builder.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
+                Editor.Route.Draw(PreviewBitmap, 0);
+                Editor.AddLast(e.GetPosition(PreviewImage).X, e.GetPosition(PreviewImage).Y, velocity, altitude);
+                Editor.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
                 PreviewBitmap.Unlock();
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
-                MessageBox.Show(
-                    $"Nieprawidłowy format wysokości lub prędkości.\nSzczegóły: {ex.Message}",
-                    "Błąd",
-                    MessageBoxButton.OK);
+                MessageBox.Show($"Nieprawidłowy format wysokości lub prędkości.", "Błąd", MessageBoxButton.OK);
             }
         }
 
         private void ImageRightClick(object sender, MouseButtonEventArgs e)
         {
-            PreviewBitmap.Lock();
-            Builder.Route.Draw(PreviewBitmap, 0);
-
-            double x = e.GetPosition(PreviewImage).X,
-                   y = e.GetPosition(PreviewImage).Y;
-
-            Builder.ReplaceLast(x, y);
-
-            Builder.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
-            PreviewBitmap.Unlock();
+            if (Editor.Count > 0)
+            {
+                PreviewBitmap.Lock();
+                Editor.Route.Draw(PreviewBitmap, 0);
+                Editor.ReplaceLast(e.GetPosition(PreviewImage).X, e.GetPosition(PreviewImage).Y);
+                Editor.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
+                PreviewBitmap.Unlock();
+            }
         }
 
         private void ConfirmClick(object sender, RoutedEventArgs e)
         {
-            if (Builder.Count == 0)
+            if (Editor.Count == 0)
             {
                 MessageBox.Show("Trasa jest pusta. Stwórz trasę lub wybierz 'Anuluj'.", "Błąd", MessageBoxButton.OK);
                 return;
@@ -87,38 +101,41 @@ namespace FlightControl
             switch (TypeComboBox.SelectedIndex)
             {
                 case 0:
-                    Result = new Plane(Builder.Route);
+                    Result = new Plane(Editor.Route);
                     break;
                 case 1:
-                    Result = new Helicopter(Builder.Route);
+                    Result = new Helicopter(Editor.Route);
                     break;
                 case 2:
-                    Result = new Glider(Builder.Route);
+                    Result = new Glider(Editor.Route);
                     break;
                 case 3:
-                    Result = new Balloon(Builder.Route);
+                    Result = new Balloon(Editor.Route);
                     break;
                 default:
                     MessageBox.Show("Wybierz rodzaj statku", "Błąd", MessageBoxButton.OK);
                     return;
             }
-            Builder = null;
-            this.Close();
+            Editor = null;
+            Close();
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)
         {
-            Builder = null;
-            this.Close();
+            Editor = null;
+            Close();
         }
 
         private void UndoClick(object sender, RoutedEventArgs e)
         {
-            PreviewBitmap.Lock();
-            Builder.Route.Draw(PreviewBitmap, 0);
-            Builder.RemoveLast();
-            Builder.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
-            PreviewBitmap.Unlock();
+            if (Editor.Count > 0)
+            {
+                PreviewBitmap.Lock();
+                Editor.Route.Draw(PreviewBitmap, 0);
+                Editor.Undo();
+                Editor.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
+                PreviewBitmap.Unlock();
+            }
         }
 
         protected /*virtual*/ void HelpClick(object sender, RoutedEventArgs e)
@@ -127,8 +144,7 @@ namespace FlightControl
                 "Kliknięcie prawego przycisku myszy przesuwa w wybrane miejsce koniec ostatnio dodanego odcinka.\n" +
                 "Przycisk 'Cofnij' usuwa ostatni dodany odcinek.\n" +
                 "Przycisk 'Zatwierdź' powoduje zamknięcie edytora i dodanie statku do symulacji.\n",
-                "Pomoc",
-                MessageBoxButton.OK);
+                "Pomoc", MessageBoxButton.OK);
         }
 
         public void Dispose()
@@ -139,7 +155,7 @@ namespace FlightControl
             CancelButton.Click -= CancelClick;
             UndoButton.Click -= UndoClick;
             HelpButton.Click -= HelpClick;
-            Builder = null;
+            Editor = null;
         }
     }
 }

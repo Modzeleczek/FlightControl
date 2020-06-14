@@ -3,15 +3,11 @@ using System;
 
 namespace FlightControl
 {
-    public abstract class Obstacle : IDisposable
+    public abstract class Obstacle : Collidable, IDisposable
     {
-        public double Height { get; protected set; }
-        public Rectangle Hitbox { get; protected set; }
-        protected Obstacle(double height, Rectangle hitbox)
-        {
-            Height = height;
-            Hitbox = new Rectangle(hitbox);
-        }
+        public int Height { get; protected set; }
+        protected Obstacle(Point position, int size, int height) : base(position, size) => Height = height;
+
         public void Dispose()
         {
             Hitbox.Dispose();
@@ -21,17 +17,13 @@ namespace FlightControl
 
     public class Building : Obstacle
     {
-        public Building(double height, Rectangle hitbox, WriteableBitmap bitmap) : base(height, hitbox)
-        {
-            Hitbox.Draw(bitmap, (255 << 24) | (128 << 16) | (128 << 8) | 128);
-        }
+        public Building(Point position, int size, int height, WriteableBitmap bitmapToDraw) : base(position, size, height) =>
+            Hitbox.Draw(bitmapToDraw, (255 << 24) | (128 << 16) | (128 << 8) | 128);
     }
 
     public class Tree : Obstacle
     {
-        public Tree(double height, Rectangle hitbox, WriteableBitmap bitmap) : base(height, hitbox)
-        {
-            Hitbox.Draw(bitmap, (255 << 24) | (255 << 8));
-        }
+        public Tree(Point position, int size, int height, WriteableBitmap bitmapToDraw) : base(position, size, height) =>
+            Hitbox.Draw(bitmapToDraw, (255 << 24) | (255 << 8));
     }
 }

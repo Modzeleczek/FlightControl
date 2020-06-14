@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
+using System.Collections;
 
 namespace FlightControl
 {
@@ -13,6 +14,7 @@ namespace FlightControl
         private Map ObstaclesMap;
         private List<Aircraft> Aircrafts;
         private WriteableBitmap MapBitmap, RoutesBitmap, AircraftsBitmap;
+        public double DangerousDistance { get; set; } = 50;
 
         public int Framerate
         {
@@ -20,7 +22,7 @@ namespace FlightControl
             set => Interval = TimeSpan.FromMilliseconds(value);
         }
 
-        public Radar(string mapFileName, int refreshingRateInMilliseconds, Image mapImage, Image routesImage, Image aircraftsImage) : base()
+        public Radar(string mapFileName, int refreshingRateInMilliseconds, double dangerousDistance, Image mapImage, Image routesImage, Image aircraftsImage) : base()
         {
             MapBitmap = new WriteableBitmap((int)mapImage.Width, (int)mapImage.Height,
                 96, 96, PixelFormats.Bgra32, null);
@@ -38,6 +40,8 @@ namespace FlightControl
             aircraftsImage.Source = AircraftsBitmap;
             Aircrafts = new List<Aircraft>();
 
+            DangerousDistance = dangerousDistance;
+
             Tick += TimerTick;
             Framerate = refreshingRateInMilliseconds;
         }
@@ -46,12 +50,11 @@ namespace FlightControl
         {
             AircraftsBitmap.Lock();
             RoutesBitmap.Lock();
-            int i = 0, j;
-            IEnumerator<Obstacle> obstacles = ObstaclesMap.GetEnumerator();
+            int i = 0;
             while (i < Aircrafts.Count)
             {
-                Aircrafts[i].ClearGraphics(AircraftsBitmap);
                 Aircrafts[i].ClearRouteGraphics(RoutesBitmap);
+                Aircrafts[i].ClearHitboxGraphics(AircraftsBitmap);
                 if (!Aircrafts[i].Advance())
                 {
                     Aircrafts[i].Dispose();
@@ -59,29 +62,54 @@ namespace FlightControl
                     Aircrafts.RemoveAt(i);
                 }
                 else
-                    ++i;
-            }
-            for(i = 0; i < Aircrafts.Count; ++i)
-            {
-                if (!Aircrafts[i].Colliding)
                 {
-                    for (j = i + 1; j < Aircrafts.Count; ++j)
+                    Aircrafts[i].DrawRoute(RoutesBitmap);
+                    Aircrafts[i].CollisionState = Aircraft.State.Normal;
+                    ++i;
+                }
+            }
+            IEnumerator<Obstacle> obstacles = ObstaclesMap.GetEnumerator();
+            double distance; int j;
+            for (i = 0; i < Aircrafts.Count; ++i)
+            {
+                for (j = 0; j < i; ++j)
+                {
+                    distance = Aircrafts[i].DistanceBetween(Aircrafts[j]);
+                    if (distance == 0)
                     {
-                        if (Aircrafts[i].Collides(Aircrafts[j]))
-                            break;
+                        Aircrafts[i].CollisionState = Aircraft.State.Colliding;
+                        break;
                     }
-                    if (!Aircrafts[i].Colliding)
+                    if (distance <= DangerousDistance)
+                        Aircrafts[i].CollisionState = Aircraft.State.Close;
+                }
+                for (++j; j < Aircrafts.Count; ++j)
+                {
+                    distance = Aircrafts[i].DistanceBetween(Aircrafts[j]);
+                    if (distance == 0)
                     {
-                        obstacles.Reset();
-                        while (obstacles.MoveNext())
+                        Aircrafts[i].CollisionState = Aircraft.State.Colliding;
+                        break;
+                    }
+                    if (distance <= DangerousDistance)
+                        Aircrafts[i].CollisionState = Aircraft.State.Close;
+                }
+                if (Aircrafts[i].CollisionState != Aircraft.State.Colliding)
+                {
+                    obstacles.Reset();
+                    while (obstacles.MoveNext())
+                    {
+                        distance = Aircrafts[i].DistanceBetween(obstacles.Current);
+                        if (distance == 0)
                         {
-                            if (Aircrafts[i].Collides(obstacles.Current))
-                                break;
+                            Aircrafts[i].CollisionState = Aircraft.State.Colliding;
+                            break;
                         }
+                        if (distance <= DangerousDistance)
+                            Aircrafts[i].CollisionState = Aircraft.State.Close;
                     }
                 }
-                Aircrafts[i].DrawRoute(RoutesBitmap);
-                Aircrafts[i].Draw(AircraftsBitmap);
+                Aircrafts[i].DrawHitbox(AircraftsBitmap);
             }
             RoutesBitmap.Unlock();
             AircraftsBitmap.Unlock();
@@ -92,7 +120,7 @@ namespace FlightControl
             Aircrafts.Add(aircraft);
             AircraftsBitmap.Lock();
             RoutesBitmap.Lock();
-            aircraft.Draw(AircraftsBitmap);
+            aircraft.DrawHitbox(AircraftsBitmap);
             aircraft.DrawRoute(RoutesBitmap);
             RoutesBitmap.Unlock();
             AircraftsBitmap.Unlock();
@@ -105,7 +133,7 @@ namespace FlightControl
             for (int i = 0; i < Aircrafts.Count; ++i)
             {
                 Aircrafts[i].ClearRouteGraphics(RoutesBitmap);
-                Aircrafts[i].ClearGraphics(AircraftsBitmap);
+                Aircrafts[i].ClearHitboxGraphics(AircraftsBitmap);
                 Aircrafts[i].Dispose();
                 Aircrafts[i] = null;
             }
@@ -132,7 +160,7 @@ namespace FlightControl
                     generated = Glider.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng);
                 else
                     generated = Balloon.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng);
-                generated.Draw(AircraftsBitmap);
+                generated.DrawHitbox(AircraftsBitmap);
                 generated.DrawRoute(RoutesBitmap);
                 generated.ScaleVelocity(Framerate / 1024.0);
                 Aircrafts.Add(generated);

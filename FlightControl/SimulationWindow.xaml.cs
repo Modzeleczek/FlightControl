@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlightControl.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,7 +25,15 @@ namespace FlightControl
             InitializeComponent();
 
             Rng = new Random();
-            radar = new Radar("obstacles.txt", 32, MapImage, RoutesImage, AircraftsImage);
+            try
+            {
+                radar = new Radar("obstacles.txt", 32, 50, MapImage, RoutesImage, AircraftsImage);
+            }
+            catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
+            {
+                this.Close();
+                throw;
+            }
 
             AircraftsImage.MouseLeftButtonDown += ImageLeftClick;
             radar.Stop();
@@ -61,12 +70,9 @@ namespace FlightControl
                 int count = int.Parse(AircraftsCountInputTextBox.Text);
                 radar.RandomizeAircrafts(count, Rng);
             }
-            catch(FormatException ex)
+            catch(FormatException)
             {
-                MessageBox.Show(
-                    $"Nieprawidłowy format liczby statków.\nSzczegóły: {ex.Message}",
-                    "Błąd",
-                    MessageBoxButton.OK);
+                MessageBox.Show($"Nieprawidłowy format liczby statków.", "Błąd", MessageBoxButton.OK);
             }
         }
 
@@ -87,7 +93,8 @@ namespace FlightControl
             bool running = radar.IsEnabled;
             if(running)
                 radar.Stop();
-            AdditionWindow additionWindow = new AdditionWindow();
+            AdditionWindow additionWindow = new AdditionWindow(MapImage.Source as WriteableBitmap,
+                RoutesImage.Source as WriteableBitmap, AircraftsImage.Source as WriteableBitmap);
             additionWindow.ShowDialog();
             if(additionWindow.Result != null)
                 radar.AddAircraft(additionWindow.Result);

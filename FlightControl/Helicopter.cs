@@ -6,23 +6,14 @@ namespace FlightControl
     public class Helicopter : Aircraft
     {
         public Helicopter(Flight route)
-            : base(route, 20, 20)
+            : base(route, 20)
         {
         }
         public Helicopter(Helicopter o) : base(o) { }
 
-        public override void Draw(WriteableBitmap bitmap)
-        {
-            if (!Colliding)
-                Hitbox.Draw(bitmap, (255 << 24) | (102 << 16) | (145 << 8) | 255);
-            else
-                Hitbox.Draw(bitmap, (255 << 24) | (255 << 16));//red
-        }
+        public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (102 << 16) | (145 << 8) | 255);
 
-        public override void DrawRoute(WriteableBitmap bitmap)
-        {
-            Route.Draw(bitmap, (255 << 24) | (102 << 16) | (145 << 8) | 255);
-        }
+        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (255 << 24) | (102 << 16) | (145 << 8) | 255);
 
         public static Helicopter GetRandom(int mapWidth, int mapHeight, Random rng)
         {

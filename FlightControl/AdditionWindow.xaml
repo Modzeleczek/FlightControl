@@ -8,6 +8,10 @@
         Title="Kreator statku" Height="751" Width="1400"
         Background="Black" ResizeMode="CanMinimize">
     <Grid>
+        <Image x:Name="BackgroundImage"
+               HorizontalAlignment="Left"
+               Width="1280"
+               Height="720"/>
         <Image x:Name="PreviewImage"
                HorizontalAlignment="Left"
                Width="1280"

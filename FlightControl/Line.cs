@@ -21,7 +21,7 @@ namespace FlightControl
 
         public override string ToString() => $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y}))";
 
-        //Algorithm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
+        //Algorytm: https://stackoverflow.com/questions/11678693/all-cases-covered-bresenhams-line-algorithm
         unsafe public void Draw(WriteableBitmap bitmap, int color)
         {
             int x1 = (int)Start.X, y1 = (int)Start.Y, x2 = (int)End.X, y2 = (int)End.Y;
@@ -45,31 +45,25 @@ namespace FlightControl
             int numerator = longest >> 1;
 
             int width = bitmap.PixelWidth;
-            //int* pBackBuffer = (int*)bitmap.BackBuffer;// + x + y * width;
             int* pBackBuffer = (int*)bitmap.BackBuffer + x + y * width;
             for (int i = 0; i <= longest; i++)
             {
-                //*(pBackBuffer + x + y * width) = color;
                 *pBackBuffer = color;
 
                 numerator += shortest;
                 if (!(numerator < longest))
                 {
                     numerator -= longest;
-                    //x += dx1;
                     pBackBuffer += dx1;
-                    //y += dy1;
                     pBackBuffer += width * dy1;
                 }
                 else
                 {
-                    //x += dx2;
                     pBackBuffer += dx2;
-                    //y += dy2;
                     pBackBuffer += width * dy2;
                 }
             }
-            //It is essential to update locked WriteableBitmap after editing its BackBuffer and before unlocking it.
+            //Po zmianie pikseli jest konieczne wywołanie metody AddDirtyRect, która wizualnie aktualizuje bitmapę.
             if (w >= 0)
             {
                 if (h >= 0)

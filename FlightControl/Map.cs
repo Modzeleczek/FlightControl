@@ -9,10 +9,11 @@ namespace FlightControl
 {
     public class Map : IDisposable, IEnumerable<Obstacle>
     {
-        protected List<Obstacle> Obstacles { get; set; }
+        private List<Obstacle> Obstacles { get; set; }
+
         public Map(string fileName, WriteableBitmap bitmapToDraw)
         {
-            /* Loading immobile obstacles from file. */
+            /* Ładowanie nieruchomych przeszkód z pliku. */
             if (!File.Exists(fileName))
                 throw new MapLoadingException($"Cannot open file {fileName}.");
             Obstacles = new List<Obstacle>();
@@ -27,23 +28,20 @@ namespace FlightControl
                         throw new MapLoadingException("Ambiguous obstacle type.");
 
                     char type = parts[0][0];
-                    int h = int.Parse(parts[1]),
+                    int height = int.Parse(parts[1]),
                         x = int.Parse(parts[2]),
                         y = int.Parse(parts[3]),
-                        rectangleWidth = int.Parse(parts[4]),
-                        rectangleHeight = int.Parse(parts[5]);
+                        squareSide = int.Parse(parts[4]);
 
-                    if (x - rectangleWidth < 0 || x + rectangleWidth >= bitmapToDraw.PixelWidth)
+                    if (x - squareSide / 2 < 0 || x + squareSide / 2 >= bitmapToDraw.PixelWidth)
                         throw new MapLoadingException("Obstacle's hitbox is out of bitmap's bounds (x).");
-                    if (y - rectangleHeight < 0 || y + rectangleHeight >= bitmapToDraw.PixelHeight)
+                    if (y - squareSide / 2 < 0 || y + squareSide / 2 >= bitmapToDraw.PixelHeight)
                         throw new MapLoadingException("Obstacle's hitbox is out of bitmap's bounds (y).");
 
-                    Rectangle hitbox = new Rectangle(new Point(x, y), rectangleWidth, rectangleHeight);
-
                     if (type == 't')
-                        Obstacles.Add(new Tree(h, hitbox, bitmapToDraw));
+                        Obstacles.Add(new Tree(new Point(x, y), squareSide, height, bitmapToDraw));
                     else if (type == 'b')
-                        Obstacles.Add(new Building(h, hitbox, bitmapToDraw));
+                        Obstacles.Add(new Building(new Point(x, y), squareSide, height, bitmapToDraw));
                     else
                         throw new MapLoadingException("Unknown obstacle type.");
                 } while (!reader.EndOfStream);

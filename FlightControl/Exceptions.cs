@@ -9,16 +9,6 @@ namespace FlightControl
             public MapLoadingException() { }
             public MapLoadingException(string message) : base(message) { }
         }
-        public class NotEnoughElementsException : Exception
-        {
-            public NotEnoughElementsException() { }
-            public NotEnoughElementsException(string message) : base(message) { }
-        }
-        public class LinesNotConnectedException : Exception
-        {
-            public LinesNotConnectedException() { }
-            public LinesNotConnectedException(string message) : base(message) { }
-        }
         public class StageOutOfBoundsException : Exception
         {
             public StageOutOfBoundsException() { }

@@ -66,13 +66,15 @@
     <Compile Include="AdditionWindow.xaml.cs">
       <DependentUpon>AdditionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Collidable.cs" />
+    <Compile Include="EditorChanges.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Radar.cs" />
     <Compile Include="Flight.cs" />
-    <Compile Include="Rectangle.cs" />
+    <Compile Include="Square.cs" />
     <Compile Include="Stage.cs" />
     <Compile Include="SimulationWindow.xaml.cs">
       <DependentUpon>SimulationWindow.xaml</DependentUpon>

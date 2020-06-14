@@ -22,7 +22,7 @@ namespace FlightControl
     {
         private SimulationWindow SecondWindow;
         private bool MusicPlaying = false;
-        private SoundPlayer Player = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + "\\musicfinal.wav");
+        private SoundPlayer Player = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + "musicfinal.wav");
         
         public MainWindow() => InitializeComponent();
 
@@ -30,21 +30,16 @@ namespace FlightControl
         {
             if (StartSimulationButton.IsEnabled)
             {
-                StartSimulationButton.IsEnabled = false;
                 try
                 {
                     SecondWindow = new SimulationWindow();
+                    StartSimulationButton.IsEnabled = false;
                     SecondWindow.Show();
                     SecondWindow.Closing += SecondWindowClosing;
                 }
                 catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
                 {
-                    MessageBox.Show(
-                        $"Program zakończy się, ponieważ nie udało się wczytać mapy.\nSzczegóły: {ex.Message}",
-                        "Błąd",
-                        MessageBoxButton.OK);
-                    this.Close();
-                    App.Current.Shutdown();
+                    MessageBox.Show($"Nie można uruchomić symulacji, ponieważ nie udało się wczytać mapy.", "Błąd", MessageBoxButton.OK);
                 }
             }
         }
@@ -57,8 +52,6 @@ namespace FlightControl
             SecondWindow = null;
             GC.Collect();
         }
-
-        private void EasterEggClick(object sender, RoutedEventArgs e) => MessageBox.Show("Gratulacje! Odkryłeś EasterEgg'a.", "EasterEgg");
 
         private void MusicStartStop(object sender, RoutedEventArgs e)
         {

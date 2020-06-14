@@ -28,17 +28,7 @@
                 BorderBrush="#FF0080FF"
                 FontSize="28"
                 Click="StartSimulation"/>
-        
-        <Button x:Name="EasterEggButton"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Width="30"
-                Height="30"
-                Background="{x:Null}"
-                BorderBrush="{x:Null}"
-                Foreground="{x:Null}"
-                Click="EasterEggClick"/>
-        
+
         <Button x:Name="EndProgramButton"
                 Content="Zakończ program"
                 HorizontalAlignment="Center"
