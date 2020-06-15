@@ -59,8 +59,13 @@ namespace FlightControl
                 {
                     List<Stage> stages = editor.Route.Stages;
                     stages.RemoveAt(stages.Count - 1);
-                    editor.End.X = stages[stages.Count - 1].Track.End.X;
-                    editor.End.Y = stages[stages.Count - 1].Track.End.Y;
+                    if (stages.Count == 0)
+                        editor.End = null;
+                    else
+                    {
+                        editor.End.X = stages[stages.Count - 1].Track.End.X;
+                        editor.End.Y = stages[stages.Count - 1].Track.End.Y;
+                    }
                 }
             }
 

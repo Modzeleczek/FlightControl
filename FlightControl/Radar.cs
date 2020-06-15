@@ -19,7 +19,13 @@ namespace FlightControl
         public int Framerate
         {
             get => (int)Interval.TotalMilliseconds;
-            set => Interval = TimeSpan.FromMilliseconds(value);
+            set
+            {
+                int oldInterval = Framerate;
+                Interval = TimeSpan.FromMilliseconds(value);
+                foreach (var a in Aircrafts)
+                    a.ScaleVelocity(value / (double)oldInterval);
+            }
         }
 
         public Radar(string mapFileName, int refreshingRateInMilliseconds, double dangerousDistance, Image mapImage, Image routesImage, Image aircraftsImage) : base()
@@ -99,7 +105,7 @@ namespace FlightControl
                     obstacles.Reset();
                     while (obstacles.MoveNext())
                     {
-                        distance = Aircrafts[i].DistanceBetween(obstacles.Current);
+                        distance = obstacles.Current.DistanceBetween(Aircrafts[i]);
                         if (distance == 0)
                         {
                             Aircrafts[i].CollisionState = Aircraft.State.Colliding;

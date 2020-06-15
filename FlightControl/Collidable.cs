@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace FlightControl
 {
     public abstract class Collidable

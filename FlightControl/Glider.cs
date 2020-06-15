@@ -8,9 +8,9 @@ namespace FlightControl
         public Glider(Flight route) : base(route, 30) { }
         public Glider(Glider o) : base(o) { }
 
-        public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (255 << 16) | (191 << 8));
+        public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (255 << 16) | (102 << 8) | 255);
 
-        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (255 << 24) | (255 << 16) | (191 << 8));
+        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (128 << 24) | (255 << 16) | (102 << 8) | 255);
 
         public static Glider GetRandom(int mapWidth, int mapHeight, Random rng)
         {

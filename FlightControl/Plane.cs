@@ -10,7 +10,7 @@ namespace FlightControl
 
         public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (255 << 8));
 
-        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (255 << 24) | (255 << 8));
+        public override void DrawRoute(WriteableBitmap bitmap) => Route.Draw(bitmap, (128 << 24) | (255 << 8));
 
         public static Plane GetRandom(int mapWidth, int mapHeight, Random rng)
         {

@@ -52,8 +52,6 @@ namespace FlightControl
                 ++pAircrafts;
                 ++pRoutes;
                 ++pMap;
-                //Odejmujemy połowę nieprzezroczystości (kanału alfa).
-                *pDest -= 128u << 24;
             }
             BackgroundBitmap.Lock();
             BackgroundBitmap.AddDirtyRect(new Int32Rect(0, 0, BackgroundBitmap.PixelWidth, BackgroundBitmap.PixelHeight));
