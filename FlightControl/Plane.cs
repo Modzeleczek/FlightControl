@@ -5,10 +5,7 @@ namespace FlightControl
 {
     public class Plane : Aircraft
     {
-        public Plane(Flight route)
-            : base(route, 40)
-        {
-        }
+        public Plane(Flight route) : base(route, 40) { }
         public Plane(Plane o) : base(o) { }
 
         public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (255 << 8));
@@ -23,8 +20,7 @@ namespace FlightControl
                 mapWidth - 1 - 40,
                 mapHeight - 1 - 40,
                 100, 300, 300, 1000, rng);
-            Plane plane = new Plane(flight);
-            return plane;
+            return new Plane(flight);
         }
     }
 }

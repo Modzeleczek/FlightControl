@@ -5,10 +5,7 @@ namespace FlightControl
 {
     public class Helicopter : Aircraft
     {
-        public Helicopter(Flight route)
-            : base(route, 20)
-        {
-        }
+        public Helicopter(Flight route) : base(route, 20) { }
         public Helicopter(Helicopter o) : base(o) { }
 
         public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (102 << 16) | (145 << 8) | 255);
@@ -23,8 +20,7 @@ namespace FlightControl
                 mapWidth - 1 - 20,
                 mapHeight - 1 - 20,
                 120, 200, 100, 500, rng);
-            Helicopter helicopter = new Helicopter(flight);
-            return helicopter;
+            return new Helicopter(flight);
         }
     }
 }

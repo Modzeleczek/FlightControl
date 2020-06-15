@@ -109,7 +109,7 @@ namespace FlightControl
                             Aircrafts[i].CollisionState = Aircraft.State.Close;
                     }
                 }
-                Aircrafts[i].DrawHitbox(AircraftsBitmap);
+                Aircrafts[i].Draw(AircraftsBitmap);
             }
             RoutesBitmap.Unlock();
             AircraftsBitmap.Unlock();

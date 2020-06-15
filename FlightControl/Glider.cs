@@ -5,10 +5,7 @@ namespace FlightControl
 {
     public class Glider : Aircraft
     {
-        public Glider(Flight route)
-            : base(route, 30)
-        {
-        }
+        public Glider(Flight route) : base(route, 30) { }
         public Glider(Glider o) : base(o) { }
 
         public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (255 << 16) | (191 << 8));
@@ -23,8 +20,7 @@ namespace FlightControl
                 mapWidth - 1 - 30,
                 mapHeight - 1 - 30,
                 80, 150, 100, 300, rng);
-            Glider glider = new Glider(flight);
-            return glider;
+            return new Glider(flight);
         }
     }
 }

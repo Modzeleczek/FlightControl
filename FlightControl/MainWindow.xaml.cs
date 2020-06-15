@@ -20,9 +20,9 @@ namespace FlightControl
 {
     public partial class MainWindow : Window
     {
-        private SimulationWindow SecondWindow;
+        private SimulationWindow Simulation;
         private bool MusicPlaying = false;
-        private SoundPlayer Player = new SoundPlayer(AppDomain.CurrentDomain.BaseDirectory + "musicfinal.wav");
+        private SoundPlayer Player = new SoundPlayer("musicfinal.wav");
         
         public MainWindow() => InitializeComponent();
 
@@ -32,10 +32,10 @@ namespace FlightControl
             {
                 try
                 {
-                    SecondWindow = new SimulationWindow();
+                    Simulation = new SimulationWindow();
                     StartSimulationButton.IsEnabled = false;
-                    SecondWindow.Show();
-                    SecondWindow.Closing += SecondWindowClosing;
+                    Simulation.Show();
+                    Simulation.Closing += SecondWindowClosing;
                 }
                 catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
                 {
@@ -47,9 +47,9 @@ namespace FlightControl
         private void SecondWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StartSimulationButton.IsEnabled = true;
-            SecondWindow.Closing -= SecondWindowClosing;
-            SecondWindow.Dispose();
-            SecondWindow = null;
+            Simulation.Closing -= SecondWindowClosing;
+            Simulation.Dispose();
+            Simulation = null;
             GC.Collect();
         }
 

@@ -1,5 +1,4 @@
-﻿using FlightControl.Exceptions;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using System;
 using System.Windows;
 
@@ -16,8 +15,6 @@ namespace FlightControl
             End = new Point(x2, y2);
         }
         public Line(Line o) : this(o.Start.X, o.Start.Y, o.End.X, o.End.Y) { }
-
-        public bool IsContinuedBy(Line next) => End.Equals(next.Start);
 
         public override string ToString() => $"(Line: ({Start.X},{Start.Y})->({End.X},{End.Y}))";
 

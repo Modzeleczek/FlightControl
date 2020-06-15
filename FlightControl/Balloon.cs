@@ -5,10 +5,7 @@ namespace FlightControl
 {
     public class Balloon : Aircraft
     {
-        public Balloon(Flight route)
-            : base(route, 15)
-        {
-        }
+        public Balloon(Flight route) : base(route, 15) { }
         public Balloon(Balloon o) : base(o) { }
 
         public override void DrawHitbox(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, (255 << 24) | (153 << 8) | 255);
@@ -23,8 +20,7 @@ namespace FlightControl
                 mapWidth - 1 - 15,
                 mapHeight - 1 - 15,
                 50, 100, 20, 100, rng);
-            Balloon balloon = new Balloon(flight);
-            return balloon;
+            return new Balloon(flight);
         }
     }
 }

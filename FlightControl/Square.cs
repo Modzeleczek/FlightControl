@@ -18,9 +18,9 @@ namespace FlightControl
         public double DistanceBetween(Square square)
         {
             double distance = 0;
-            if(!(Position.X + Side > square.Position.X && Position.X < square.Position.X + square.Side))//nie przecinają się w osi X
+            if(!(Position.X + Side > square.Position.X && Position.X < square.Position.X + square.Side))//nie nachodzą na siebie w osi X
                 distance += Math.Abs(Position.X + Side / 2 - (square.Position.X + square.Side / 2)) - (Side + square.Side) / 2;
-            if (!(Position.Y + Side > square.Position.Y && Position.Y < square.Position.Y + square.Side))//nie przecinają się w osi Y
+            if (!(Position.Y + Side > square.Position.Y && Position.Y < square.Position.Y + square.Side))//nie nachodzą na siebie w osi Y
                 distance += Math.Abs(Position.Y + Side / 2 - (square.Position.Y + square.Side / 2)) - (Side + square.Side) / 2;
             return distance;
         }

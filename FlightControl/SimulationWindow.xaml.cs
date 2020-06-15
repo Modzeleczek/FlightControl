@@ -17,7 +17,7 @@ namespace FlightControl
 {
     public partial class SimulationWindow : Window, IDisposable
     {
-        private Radar radar;
+        private Radar RadarInstance;
         private Random Rng;
 
         public SimulationWindow()
@@ -27,7 +27,7 @@ namespace FlightControl
             Rng = new Random();
             try
             {
-                radar = new Radar("obstacles.txt", 32, 50, MapImage, RoutesImage, AircraftsImage);
+                RadarInstance = new Radar("obstacles.txt", 32, 50, MapImage, RoutesImage, AircraftsImage);
             }
             catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
             {
@@ -36,7 +36,7 @@ namespace FlightControl
             }
 
             AircraftsImage.MouseLeftButtonDown += ImageLeftClick;
-            radar.Stop();
+            RadarInstance.Stop();
         }
 
         private void ImageLeftClick(object sender, MouseButtonEventArgs e)
@@ -51,14 +51,14 @@ namespace FlightControl
 
         private void PauseClick(object sender, RoutedEventArgs e)
         {
-            if (radar.IsEnabled)
+            if (RadarInstance.IsEnabled)
             {
-                radar.Stop();
+                RadarInstance.Stop();
                 PauseButton.Content = "Start";
             }
             else
             {
-                radar.Start();
+                RadarInstance.Start();
                 PauseButton.Content = "Stop";
             }
         }
@@ -68,7 +68,7 @@ namespace FlightControl
             try
             {
                 int count = int.Parse(AircraftsCountInputTextBox.Text);
-                radar.RandomizeAircrafts(count, Rng);
+                RadarInstance.RandomizeAircrafts(count, Rng);
             }
             catch(FormatException)
             {
@@ -83,26 +83,26 @@ namespace FlightControl
             RandomizeAircraftsButton.Click -= RandomizeAircraftsClick;
             AddAircraftButton.Click -= AddAircraftClick;
             ResetButton.Click -= ResetClick;
-            radar.Dispose();
-            radar = null;
+            RadarInstance.Dispose();
+            RadarInstance = null;
             Rng = null;
         }
 
         private void AddAircraftClick(object sender, RoutedEventArgs e)
         {
-            bool running = radar.IsEnabled;
+            bool running = RadarInstance.IsEnabled;
             if(running)
-                radar.Stop();
+                RadarInstance.Stop();
             AdditionWindow additionWindow = new AdditionWindow(MapImage.Source as WriteableBitmap,
                 RoutesImage.Source as WriteableBitmap, AircraftsImage.Source as WriteableBitmap);
             additionWindow.ShowDialog();
             if(additionWindow.Result != null)
-                radar.AddAircraft(additionWindow.Result);
+                RadarInstance.AddAircraft(additionWindow.Result);
             additionWindow.Dispose();
             if(running)
-                radar.Start();
+                RadarInstance.Start();
         }
 
-        private void ResetClick(object sender, RoutedEventArgs e) => radar.ClearAircrafts();
+        private void ResetClick(object sender, RoutedEventArgs e) => RadarInstance.ClearAircrafts();
     }
 }

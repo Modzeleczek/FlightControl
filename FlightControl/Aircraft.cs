@@ -23,7 +23,7 @@ namespace FlightControl
             StageProgress += Route.CurrentStage.Velocity.Length;
             if (StageProgress >= Route.CurrentStage.Length)
             {
-                Hitbox.Place(Route.CurrentStage.Track.End);//wyrównanie hitboxa po zakończeniu odcinka (bez tego zbacza z trasy)
+                Hitbox.Place(Route.CurrentStage.Track.End);//Wyrównanie hitboxa po zakończeniu odcinka (bez tego zbacza z trasy)
                 if (!Route.RemoveCurrent())
                     return false;
                 StageProgress = 0;
@@ -38,7 +38,7 @@ namespace FlightControl
             switch (CollisionState)
             {
                 case State.Normal:
-                    DrawHitbox(bitmap);
+                    DrawHitbox(bitmap);//kolor zależny od rodzaju statku
                     break;
                 case State.Close:
                     Hitbox.Draw(bitmap, (255 << 24) | (255 << 16) | (165 << 8));//pomarańczowy
@@ -53,9 +53,9 @@ namespace FlightControl
       
         public abstract void DrawRoute(WriteableBitmap bitmap);
 
-        public void ClearHitboxGraphics(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, 0);//transparent
+        public void ClearHitboxGraphics(WriteableBitmap bitmap) => Hitbox.Draw(bitmap, 0);//przezroczysty
 
-        public void ClearRouteGraphics(WriteableBitmap bitmap) => Route.Draw(bitmap, 0);//transparent
+        public void ClearRouteGraphics(WriteableBitmap bitmap) => Route.Draw(bitmap, 0);//przezroczysty
 
         public void Dispose()
         {
