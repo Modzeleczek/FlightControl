@@ -22,7 +22,7 @@ namespace FlightControl
     {
         private SimulationWindow Simulation;
         private bool MusicPlaying = false;
-        private SoundPlayer Player = new SoundPlayer("musicfinal.wav");
+        //private SoundPlayer Player = new SoundPlayer("Resources/musicfinal.wav");//Muzyka ważyła 35 MB, więc usunęliśmy ją, żeby zmieścić projekt na CEZ.
         
         public MainWindow() => InitializeComponent();
 
@@ -57,12 +57,12 @@ namespace FlightControl
         {
             if (!MusicPlaying)
             {
-                Player.PlayLooping();
+                //Player.PlayLooping();
                 MusicButton.Content = "Wyłącz muzykę";
             }
             else
             {
-                Player.Stop();
+                //Player.Stop();
                 MusicButton.Content = "Włącz muzykę";
             }
             MusicPlaying = !MusicPlaying;
@@ -73,7 +73,7 @@ namespace FlightControl
             if (MessageBox.Show("Na pewno chcesz opuścić program?", "Na pewno chcesz kontynuować?", MessageBoxButton.YesNo)
                 == MessageBoxResult.Yes)
             {
-                Player.Stop();
+                //Player.Stop();
                 this.Close();
             }
         }

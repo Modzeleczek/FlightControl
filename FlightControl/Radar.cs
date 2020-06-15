@@ -5,7 +5,6 @@ using System.Windows.Threading;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
-using System.Collections;
 
 namespace FlightControl
 {
@@ -127,7 +126,7 @@ namespace FlightControl
             Aircrafts.Add(aircraft);
             AircraftsBitmap.Lock();
             RoutesBitmap.Lock();
-            aircraft.DrawHitbox(AircraftsBitmap);
+            aircraft.Draw(AircraftsBitmap);
             aircraft.DrawRoute(RoutesBitmap);
             RoutesBitmap.Unlock();
             AircraftsBitmap.Unlock();
@@ -195,7 +194,7 @@ namespace FlightControl
                     generated = Glider.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng);
                 else
                     generated = Balloon.GetRandom(AircraftsBitmap.PixelWidth, AircraftsBitmap.PixelHeight, rng);
-                generated.DrawHitbox(AircraftsBitmap);
+                generated.Draw(AircraftsBitmap);
                 generated.DrawRoute(RoutesBitmap);
                 generated.ScaleVelocity(Framerate / 1024.0);
                 Aircrafts.Add(generated);

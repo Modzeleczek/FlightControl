@@ -63,23 +63,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AdditionWindow.xaml.cs">
+    <Compile Include="Windows\AdditionWindow.xaml.cs">
       <DependentUpon>AdditionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Collidable.cs" />
-    <Compile Include="EditorChanges.cs" />
+    <Compile Include="Geometry\Collidable.cs" />
+    <Compile Include="Aircraft\EditorChanges.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="Line.cs" />
-    <Compile Include="Obstacle.cs" />
-    <Compile Include="Point.cs" />
+    <Compile Include="Geometry\Line.cs" />
+    <Compile Include="Map\Obstacle.cs" />
+    <Compile Include="Geometry\Point.cs" />
     <Compile Include="Radar.cs" />
-    <Compile Include="Flight.cs" />
-    <Compile Include="Square.cs" />
-    <Compile Include="Stage.cs" />
-    <Compile Include="SimulationWindow.xaml.cs">
+    <Compile Include="Aircraft\Flight.cs" />
+    <Compile Include="Geometry\Square.cs" />
+    <Compile Include="Aircraft\Stage.cs" />
+    <Compile Include="Windows\SimulationWindow.xaml.cs">
       <DependentUpon>SimulationWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="AdditionWindow.xaml">
+    <Page Include="Windows\AdditionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -87,26 +87,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Aircraft.cs" />
+    <Compile Include="Aircraft\Aircraft.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Balloon.cs" />
-    <Compile Include="Glider.cs" />
-    <Compile Include="Helicopter.cs" />
+    <Compile Include="Aircraft\Types\Balloon.cs" />
+    <Compile Include="Aircraft\Types\Glider.cs" />
+    <Compile Include="Aircraft\Types\Helicopter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SimulationWindow.xaml">
+    <Page Include="Windows\SimulationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map.cs" />
-    <Compile Include="Plane.cs" />
+    <Compile Include="Map\Map.cs" />
+    <Compile Include="Aircraft\Types\Plane.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,15 +133,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PlaneBackground.jpg" />
+    <Resource Include="Resources\PlaneBackground.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="obstacles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="musicfinal.wav">
+    <Content Include="Resources\obstacles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

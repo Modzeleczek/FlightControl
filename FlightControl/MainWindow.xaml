@@ -11,7 +11,7 @@
         <Image x:Name="BackgroundImage"
                VerticalAlignment="Top"
                HorizontalAlignment="Left"
-               Source="PlaneBackground.jpg"
+               Source="Resources/PlaneBackground.jpg"
                Stretch="UniformToFill"/>
 
         <Button x:Name="StartSimulationButton"
