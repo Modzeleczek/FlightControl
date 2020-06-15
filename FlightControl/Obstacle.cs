@@ -5,13 +5,20 @@ namespace FlightControl
 {
     public abstract class Obstacle : Collidable, IDisposable
     {
-        public int Height { get; protected set; }
+        protected override int Height { get; }
         protected Obstacle(Point position, int size, int height) : base(position, size) => Height = height;
 
         public void Dispose()
         {
             Hitbox.Dispose();
             Hitbox = null;
+        }
+
+        protected override int DistanceY(int altitude)
+        {
+            if (altitude <= Height)
+                return 0;
+            return altitude - Height;
         }
     }
 

@@ -117,6 +117,7 @@ namespace FlightControl
 
         public void AddAircraft(Aircraft aircraft)
         {
+            aircraft.ScaleVelocity(Framerate / 1024.0);
             Aircrafts.Add(aircraft);
             AircraftsBitmap.Lock();
             RoutesBitmap.Lock();
@@ -124,6 +125,34 @@ namespace FlightControl
             aircraft.DrawRoute(RoutesBitmap);
             RoutesBitmap.Unlock();
             AircraftsBitmap.Unlock();
+        }
+
+        public void RemoveAircraft(double x, double y)
+        {
+            if (Aircrafts.Count == 0) return;
+            Square cursor = new Square(new Point(x, y), 1);
+            AircraftsBitmap.Lock();
+            RoutesBitmap.Lock();
+            for (int i = 0; i < Aircrafts.Count; ++i)
+            {
+                if (Aircrafts[i].DistanceBetween(cursor) == 0)
+                {
+                    Aircrafts[i].ClearRouteGraphics(RoutesBitmap);
+                    Aircrafts[i].ClearHitboxGraphics(AircraftsBitmap);
+                    Aircrafts[i].Dispose();
+                    Aircrafts[i] = null;
+                    Aircrafts.RemoveAt(i);
+                    break;
+                }
+            }
+            foreach (var a in Aircrafts)
+            {
+                a.DrawRoute(RoutesBitmap);
+                a.Draw(AircraftsBitmap);
+            }
+            RoutesBitmap.Unlock();
+            AircraftsBitmap.Unlock();
+            cursor.Dispose();
         }
 
         public void ClearAircrafts()

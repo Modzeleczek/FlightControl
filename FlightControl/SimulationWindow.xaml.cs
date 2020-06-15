@@ -28,6 +28,8 @@ namespace FlightControl
             try
             {
                 RadarInstance = new Radar("obstacles.txt", 32, 50, MapImage, RoutesImage, AircraftsImage);
+                FramerateTextBox.Text = 32.ToString();
+                DangerousDistanceTextBox.Text = 50.ToString();
             }
             catch (Exception ex) when (ex is MapLoadingException || ex is FormatException)
             {
@@ -35,18 +37,14 @@ namespace FlightControl
                 throw;
             }
 
-            AircraftsImage.MouseLeftButtonDown += ImageLeftClick;
+            AircraftsImage.MouseRightButtonDown += ImageRightClick;
             RadarInstance.Stop();
-        }
-
-        private void ImageLeftClick(object sender, MouseButtonEventArgs e)
-        {
-            
         }
         
         private void ImageRightClick(object sender, MouseButtonEventArgs e)
         {
-            
+            var position = e.GetPosition(AircraftsImage);
+            RadarInstance.RemoveAircraft(position.X, position.Y);
         }
 
         private void PauseClick(object sender, RoutedEventArgs e)
@@ -67,25 +65,12 @@ namespace FlightControl
         {
             try
             {
-                int count = int.Parse(AircraftsCountInputTextBox.Text);
-                RadarInstance.RandomizeAircrafts(count, Rng);
+                RadarInstance.RandomizeAircrafts(int.Parse(AircraftsCountTextBox.Text), Rng);
             }
             catch(FormatException)
             {
                 MessageBox.Show($"Nieprawidłowy format liczby statków.", "Błąd", MessageBoxButton.OK);
             }
-        }
-
-        public void Dispose()
-        {
-            AircraftsImage.MouseLeftButtonDown -= ImageLeftClick;
-            PauseButton.Click -= PauseClick;
-            RandomizeAircraftsButton.Click -= RandomizeAircraftsClick;
-            AddAircraftButton.Click -= AddAircraftClick;
-            ResetButton.Click -= ResetClick;
-            RadarInstance.Dispose();
-            RadarInstance = null;
-            Rng = null;
         }
 
         private void AddAircraftClick(object sender, RoutedEventArgs e)
@@ -104,5 +89,57 @@ namespace FlightControl
         }
 
         private void ResetClick(object sender, RoutedEventArgs e) => RadarInstance.ClearAircrafts();
+
+        private void HelpClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("'Start/Stop' uruchamia/zatrzymuje symulację.\n" +
+                "'Reset' usuwa wszystkie statki.\n" +
+                "Wpisz liczbę statków, a następnie kliknij 'Losuj statki', aby wygenerować statki.\n" +
+                "'Dodaj statek' otwiera kreator nowego statku.\n" +
+                "Kliknięcie prawym przyciskiem myszy na statku usuwa go.\n" +
+                "'Niebezpieczna odległość' oznacza maksymalną odległość między dwoma obiektami, " +
+                "aby ich zbliżenie było uznane za niebezpieczne.\n" +
+                "'Częstotliwość' oznacza odstęp pomiędzy kolejnymi dwoma odświeżeniami radaru w milisekundach.",
+                "Pomoc", MessageBoxButton.OK);
+        }
+
+        private void DangerousDistanceChange(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RadarInstance.DangerousDistance = double.Parse(DangerousDistanceTextBox.Text);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show($"Nieprawidłowy format niebezpiecznej odległości.", "Błąd", MessageBoxButton.OK);
+            }
+        }
+
+        private void FramerateChange(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RadarInstance.Framerate = int.Parse(FramerateTextBox.Text);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show($"Nieprawidłowy format częstotliwości.", "Błąd", MessageBoxButton.OK);
+            }
+        }
+
+        public void Dispose()
+        {
+            AircraftsImage.MouseRightButtonDown -= ImageRightClick;
+            PauseButton.Click -= PauseClick;
+            RandomizeAircraftsButton.Click -= RandomizeAircraftsClick;
+            AddAircraftButton.Click -= AddAircraftClick;
+            ResetButton.Click -= ResetClick;
+            HelpButton.Click -= HelpClick;
+            DangerousDistanceButton.Click -= DangerousDistanceChange;
+            FramerateButton.Click -= FramerateChange;
+            RadarInstance.Dispose();
+            RadarInstance = null;
+            Rng = null;
+        }
     }
 }

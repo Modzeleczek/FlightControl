@@ -29,31 +29,33 @@ namespace FlightControl
             TypeComboBox.Items.Add("Szybowiec");
             TypeComboBox.Items.Add("Balon");
 
-            BackgroundBitmap = new WriteableBitmap((int)BackgroundImage.Width, (int)BackgroundImage.Height,
+            BackgroundBitmap = new WriteableBitmap(mapBitmap.PixelWidth, mapBitmap.PixelHeight,
                 96, 96, PixelFormats.Bgra32, null);
             BackgroundImage.Source = BackgroundBitmap;
 
-            PreviewBitmap = new WriteableBitmap((int)PreviewImage.Width, (int)PreviewImage.Height,
+            PreviewBitmap = new WriteableBitmap(mapBitmap.PixelWidth, mapBitmap.PixelHeight,
             96, 96, PixelFormats.Bgra32, null);
             PreviewImage.Source = PreviewBitmap;
 
-            BackgroundBitmap.Lock();
             uint* pDest = (uint*)BackgroundBitmap.BackBuffer, pEnd = pDest + BackgroundBitmap.PixelWidth * BackgroundBitmap.PixelHeight;
-            uint* pMap = (uint*)mapBitmap.BackBuffer;
-            uint* pRoutes = (uint*)routesBitmap.BackBuffer;
             uint* pAircrafts = (uint*)aircraftsBitmap.BackBuffer;
+            uint* pRoutes = (uint*)routesBitmap.BackBuffer;
+            uint* pMap = (uint*)mapBitmap.BackBuffer;
             for (; pDest < pEnd; ++pDest)
             {
-                if (*pAircrafts != 0)
-                    System.Diagnostics.Debug.Write($"{*pAircrafts} ");
-                if (*pAircrafts != 0)
-                    *pDest = *(pAircrafts++);//Stack three layers.
-                else if (*pRoutes != 0)
-                    *pDest = *(pRoutes++);
-                else
-                    *pDest = *(pMap++);
-                //*pDest -= (128 << 24);//Subtract half of opacity (alpha channel).
+                //Nakładamy na siebie 3 warstwy bitmap.
+                *pDest = *pAircrafts;
+                if (*pDest == 0)
+                    *pDest = *pRoutes;
+                if(*pDest == 0)
+                    *pDest = *pMap;
+                ++pAircrafts;
+                ++pRoutes;
+                ++pMap;
+                //Odejmujemy połowę nieprzezroczystości (kanału alfa).
+                *pDest -= 128u << 24;
             }
+            BackgroundBitmap.Lock();
             BackgroundBitmap.AddDirtyRect(new Int32Rect(0, 0, BackgroundBitmap.PixelWidth, BackgroundBitmap.PixelHeight));
             BackgroundBitmap.Unlock();
 
@@ -64,12 +66,13 @@ namespace FlightControl
         {
             try
             {
-                double altitude = double.Parse(AltitudeTextBox.Text),
-                    velocity = double.Parse(VelocityTextBox.Text);
+                int altitude = int.Parse(AltitudeTextBox.Text);
+                double velocity = double.Parse(VelocityTextBox.Text);
 
                 PreviewBitmap.Lock();
                 Editor.Route.Draw(PreviewBitmap, 0);
-                Editor.AddLast(e.GetPosition(PreviewImage).X, e.GetPosition(PreviewImage).Y, velocity, altitude);
+                var position = e.GetPosition(PreviewImage);
+                Editor.AddLast(position.X, position.Y, velocity, altitude);
                 Editor.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
                 PreviewBitmap.Unlock();
             }
@@ -85,7 +88,8 @@ namespace FlightControl
             {
                 PreviewBitmap.Lock();
                 Editor.Route.Draw(PreviewBitmap, 0);
-                Editor.ReplaceLast(e.GetPosition(PreviewImage).X, e.GetPosition(PreviewImage).Y);
+                var position = e.GetPosition(PreviewImage);
+                Editor.ReplaceLast(position.X, position.Y);
                 Editor.Route.Draw(PreviewBitmap, (255 << 24) | (255 << 16));
                 PreviewBitmap.Unlock();
             }
@@ -138,11 +142,11 @@ namespace FlightControl
             }
         }
 
-        protected /*virtual*/ void HelpClick(object sender, RoutedEventArgs e)
+        protected void HelpClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Wpisz prędkość i wysokość, a następnie kliknij lewy przycisk myszy, aby wstawić nowy odcinek lotu.\n" +
                 "Kliknięcie prawego przycisku myszy przesuwa w wybrane miejsce koniec ostatnio dodanego odcinka.\n" +
-                "Przycisk 'Cofnij' usuwa ostatni dodany odcinek.\n" +
+                "Przycisk 'Cofnij' cofa ostatnią wykonaną operację.\n" +
                 "Przycisk 'Zatwierdź' powoduje zamknięcie edytora i dodanie statku do symulacji.\n",
                 "Pomoc", MessageBoxButton.OK);
         }

@@ -7,7 +7,7 @@ namespace FlightControl
     {
         protected Flight Route;
         protected double StageProgress;
-        public enum State { Normal, Close, Colliding }
+        public enum State : byte { Normal, Close, Colliding }
         public State CollisionState { get; set; }
 
         protected Aircraft(Flight route, int size) : base(route.CurrentStage.Track.Start, size)
@@ -32,6 +32,10 @@ namespace FlightControl
         }
 
         public void ScaleVelocity(double factor) => Route.ScaleVelocity(factor);
+
+        protected override int Height => Route.CurrentStage.Altitude;
+
+        protected override int DistanceY(int altitude) => Math.Abs(this.Route.CurrentStage.Altitude - altitude);
 
         public void Draw(WriteableBitmap bitmap)
         {

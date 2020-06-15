@@ -10,9 +10,9 @@ namespace FlightControl
         public Line Track { get; private set; }
         public double Length { get; private set; }
         public Vector Velocity { get; private set; }
-        public double Altitude { get; private set; }
+        public int Altitude { get; private set; }
 
-        public Stage(Line track, double velocityValue, double altitude)
+        public Stage(Line track, double velocityValue, int altitude)
         {
             if (track.Start.X < 0 || track.Start.X >= 1280 || track.Start.Y < 0 || track.Start.Y >= 720)
                 throw new StageOutOfBoundsException($"Track.Start: {Track.Start} is beyond map's boundaries.");

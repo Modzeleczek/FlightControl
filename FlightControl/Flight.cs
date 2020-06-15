@@ -52,7 +52,7 @@ namespace FlightControl
             int beginX, int beginY,
             int endX, int endY,
             double fromVelocity, double toVelocity,
-            double fromAltitude, double toAltitude,
+            int fromAltitude, int toAltitude,
             Random rng)
         {
             Editor editor = new Editor();
@@ -61,7 +61,7 @@ namespace FlightControl
                     rng.Next(beginX, endX),
                     rng.Next(beginY, endY),
                     fromVelocity + (toVelocity - fromVelocity) * rng.NextDouble(),
-                    fromAltitude + (toAltitude - fromAltitude) * rng.NextDouble());
+                    rng.Next(fromAltitude, toAltitude));
             return editor.Route;
         }
 
@@ -93,7 +93,7 @@ namespace FlightControl
 
             public int Count => Route.Stages.Count;
 
-            public void AddLast(double x, double y, double velocity, double altitude)
+            public void AddLast(double x, double y, double velocity, int altitude)
             {
                 if (End == null)
                     End = new Point(x, y);

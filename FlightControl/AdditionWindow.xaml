@@ -27,6 +27,7 @@
                 VerticalContentAlignment="Center"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                Margin="0,5,0,0"
                 Width="114"
                 Foreground="Black"
                 Background="LightBlue"
